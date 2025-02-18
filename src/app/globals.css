@@ -3,19 +3,43 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --light-background-color: rgb(236, 240, 243);
+  --light-text-color: #3B3D43;
+  --light-light-shadow-color: rgb(255, 255, 255);
+  --light-dark-shadow-color: rgb(209, 217, 230);
+
+  --dark-background-color: rgb(48, 49, 53);
+  --dark-text-color: rgb(232, 232, 232);
+  --dark-light-shadow-color: rgb(62, 63, 70);
+  --dark-dark-shadow-color: rgb(35, 35, 35);
+
+  --background-color: var(--dark-background-color);
+  --text-color: var(--dark-text-color);
+  --light-shadow-color: var(--dark-light-shadow-color);
+  --dark-shadow-color: var(--dark-dark-shadow-color);
+
+
+  --shadow-distance-neumorphic-medium: 13px;
+  --shadow-blur-neumorphic-medium: 20px;
+
+  --shadow-distance-neumorphic-small: 5px;
+  --shadow-blur-neumorphic-small: 8px;
+
+  --shadow-distance-neumorphic-button-medium: 5px;
+  --shadow-blur-neumorphic-button-medium: 10px;
+
+  --shadow-distance-neumorphic-button-small: 2px;
+  --shadow-blur-neumorphic-button-small: 4px;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+
+@font-face {
+  font-family: 'Cascadia Code';
+  src: url('/fonts/CascadiaCode.woff2') format('woff2');
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  color: var(--text-color);
+  background: var(--background-color);
+  font-family: 'Cascadia Code', sans-serif;
 }

@@ -1,0 +1,10 @@
+
+
+.neumorphic {
+    margin: 18px;
+    padding: 18px;
+    border-radius: 40px;
+    background: var(--background-color);
+    box-shadow: var(--shadow-distance-neumorphic-medium) var(--shadow-distance-neumorphic-medium) var(--shadow-blur-neumorphic-medium) var(--dark-shadow-color),
+    calc(-1 * var(--shadow-distance-neumorphic-medium)) calc(-1 * var(--shadow-distance-neumorphic-medium)) var(--shadow-blur-neumorphic-medium) var(--light-shadow-color);
+}

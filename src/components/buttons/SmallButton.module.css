@@ -1,0 +1,18 @@
+
+.smallNeumorphicButton {
+    font-size: 12px;
+    padding: 5px;
+    margin: 5px;
+    border-radius: 10px;
+    border: none;
+
+    background: var(--background-color);
+
+    box-shadow: var(--shadow-distance-neumorphic-button-small) var(--shadow-distance-neumorphic-button-small) var(--shadow-blur-neumorphic-button-small) var(--dark-shadow-color),
+    calc(-1 * var(--shadow-distance-neumorphic-button-small)) calc(-1 * var(--shadow-distance-neumorphic-button-small)) var(--shadow-blur-neumorphic-button-small) var(--light-shadow-color);
+}
+
+.smallNeumorphicButton:active {
+    box-shadow: inset var(--shadow-distance-neumorphic-button-small) var(--shadow-distance-neumorphic-button-small) var(--shadow-blur-neumorphic-button-small) var(--dark-shadow-color),
+    inset calc(-1 * var(--shadow-distance-neumorphic-button-small)) calc(-1 * var(--shadow-distance-neumorphic-button-small)) var(--shadow-blur-neumorphic-button-small) var(--light-shadow-color);
+}
