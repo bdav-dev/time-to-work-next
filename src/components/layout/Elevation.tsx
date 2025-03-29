@@ -1,11 +1,22 @@
-import styles from './Elevation.module.css'
 import { HTMLAttributes } from "react";
+import NeumorphicDiv from "@/components/neumorphic/NeumorphicDiv";
+import { NeumorphicBlueprintFactory } from "@/neumorphic/neumorphic";
 
 type ElevationProps = HTMLAttributes<HTMLDivElement>;
 export default function Elevation({ className, children, ...rest }: ElevationProps) {
+
     return (
-        <div className={`${styles.neumorphic} ${className}`} {...rest}>
+        <NeumorphicDiv
+            blueprint={NeumorphicBlueprintFactory.createLarge()}
+            className={`
+                neumorphic-large
+                p-4
+                rounded-2xl
+                ${className}
+            `}
+            {...rest}
+        >
             {children}
-        </div>
+        </NeumorphicDiv>
     )
 }

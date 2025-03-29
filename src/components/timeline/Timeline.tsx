@@ -1,0 +1,84 @@
+import TimeLabel from '@/components/timeline/components/TimeLabel';
+import ThickLine from '@/components/timeline/components/lines/ThickLine';
+import ThinLine from '@/components/timeline/components/lines/ThinLine';
+import NowLine from '@/components/timeline/components/lines/NowLine';
+import { useTheme } from "@/hooks/UseTheme";
+import Time from "@/time/Time";
+import TimelineBlock from "@/components/timeline/components/TimelineBlock";
+import { TimelineCalculator } from "@/components/timeline/TimelineCalculator";
+import { DefaultTimelineBlockColor, TimelineBlockColor } from "@/components/timeline/TimelineBlockColor";
+import NeumorphicDiv from "@/components/neumorphic/NeumorphicDiv";
+import { NeumorphicBlueprintFactory } from "@/neumorphic/neumorphic";
+
+export type TimelineData = {
+    startTime: Time,
+    endTime?: Time,
+    title?: string,
+    color?: TimelineBlockColor | DefaultTimelineBlockColor
+};
+
+type TimelineProps = {
+    height?: number,
+    data: TimelineData[],
+    currentTime: Time,
+    startTime?: Time,
+    endTime?: Time,
+    offTimeSize?: number,
+    amountOfTimeSteps?: number,
+    amountOfSubTimeSteps?: number
+}
+
+export default function Timeline(props: TimelineProps) {
+    const { darkTheme } = useTheme();
+
+    const height = props.height ?? 8;
+
+    const calculator = new TimelineCalculator({
+        startTime: props.startTime ?? Time.ofString('07:00'),
+        endTime: props.endTime ?? Time.ofString('18:00'),
+        offTimeSize: props.offTimeSize ?? 3.5,
+        amountOfTimeSteps: props.amountOfTimeSteps ?? 12,
+        amountOfSubTimeSteps: props.amountOfSubTimeSteps ?? 3,
+    });
+
+    const subTimeSteps = calculator.createSubTimeSteps();
+    const timeSteps = calculator.createTimeSteps();
+    const blockBlueprints = calculator.createTimelineBlockBlueprints(props.data, props.currentTime, darkTheme);
+
+    const offTimeColor = darkTheme ? '#27282b' : '#d1d4d7';
+    const thickLineColor = darkTheme ? '#494b51' : '#b3b6b8';
+    const thinLineColor = darkTheme ? '#393a3f' : '#dbdee1';
+    const nowLineColor = darkTheme ? '#ff4d4d' : '#FF3F3F';
+
+    return (
+        <NeumorphicDiv
+            blueprint={NeumorphicBlueprintFactory.createLarge()}
+            className={'rounded-3xl relative'}
+            style={{
+                backgroundImage: calculator.createTimelineBackgroundImageGradient(offTimeColor),
+                height: `${height}rem`,
+                marginBottom: '36px',
+                marginTop: '33px',
+            }}
+        >
+            <div className={'absolute rounded-3xl overflow-hidden w-full h-full'}>
+                {
+                    subTimeSteps.map((step, i) => <ThinLine key={i} position={step.position} color={thinLineColor}/>)
+                }
+                {
+                    timeSteps.map((step, i) => <ThickLine key={i} position={step.position} color={thickLineColor}/>)
+                }
+            </div>
+            {
+                timeSteps.map((step, i) => <TimeLabel key={i} {...step}/>)
+            }
+            {
+                blockBlueprints.map((block, i) => <TimelineBlock key={i} {...block}/>)
+            }
+            {
+                calculator.isCurrentTimeInsideActiveArea(props.currentTime) &&
+                <NowLine position={calculator.calculateNowLinePosition(props.currentTime)} color={nowLineColor}/>
+            }
+        </NeumorphicDiv>
+    );
+}

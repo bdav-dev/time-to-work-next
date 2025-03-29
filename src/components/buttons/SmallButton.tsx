@@ -1,10 +1,28 @@
-import styles from './SmallButton.module.css'
-import { ButtonProps } from "@/components/buttons/Button";
+'use client';
 
-export default function SmallButton({ className, children, ...rest }: ButtonProps) {
+import { ButtonHTMLAttributes } from "react";
+import { NeumorphicBlueprintFactory } from "@/neumorphic/neumorphic";
+import NeumorphicButton from "@/components/neumorphic/NeumorphicButton";
+
+export type SmallButtonProps = ButtonHTMLAttributes<HTMLButtonElement>;
+
+export default function SmallButton({ className, children, ...rest }: SmallButtonProps) {
+    const blueprint = NeumorphicBlueprintFactory.createSmall();
+    blueprint.active = true;
+
     return (
-        <button className={`${styles.smallNeumorphicButton} ${className}`} {...rest}>
+        <NeumorphicButton
+            blueprint={blueprint}
+            className={`
+                p-2.5
+                rounded-full
+                border-none
+                ${className}
+            `}
+            {...rest}
+        >
             {children}
-        </button>
-    )
+        </NeumorphicButton>
+    );
+
 }

@@ -1,0 +1,22 @@
+:root {
+    --white-neumorphic-text-color: #3B3D43;
+    --white-neumorphic-background-color: rgb(236, 240, 243);
+    --white-neumorphic-light-shadow-color: rgb(255, 255, 255);
+    --white-neumorphic-dark-shadow-color: rgb(209, 217, 230);
+
+    --gray-neumorphic-text-color: rgb(232, 232, 232);
+    --gray-neumorphic-background-color: rgb(48, 49, 53);
+    --gray-neumorphic-light-shadow-color: rgb(62, 63, 70);
+    --gray-neumorphic-dark-shadow-color: rgb(35, 35, 35);
+
+    --neumorphic-text-color: var(--gray-neumorphic-text-color);
+    --neumorphic-background-color: var(--gray-neumorphic-background-color);
+    --neumorphic-light-shadow-color: var(--gray-neumorphic-light-shadow-color);
+    --neumorphic-dark-shadow-color: var(--gray-neumorphic-dark-shadow-color);
+}
+
+html {
+    stroke: var(--neumorphic-text-color);
+    color: var(--neumorphic-text-color);
+    background-color: var(--neumorphic-background-color);
+}
