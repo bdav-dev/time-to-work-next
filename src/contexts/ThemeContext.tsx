@@ -23,9 +23,6 @@ export default function ThemeProvider(props: ThemeProviderProps) {
 
     useEffect(() => {
         document.documentElement.style.setProperty(
-            '--neumorphic-text-color', (darkTheme ? "var(--gray-neumorphic-text-color)" : "var(--white-neumorphic-text-color)")
-        );
-        document.documentElement.style.setProperty(
             '--neumorphic-background-color', (darkTheme ? "var(--gray-neumorphic-background-color)" : "var(--white-neumorphic-background-color)")
         );
         document.documentElement.style.setProperty(

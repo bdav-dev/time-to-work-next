@@ -22,15 +22,12 @@ export default function TimeToWork() {
     // UseLocalStorage<T, S>(fallback: T, setter: T => S, getter: S => T)
     // .ttwc time to work config file
     // stempel hook => falls gestempelt wird
-    //  -> POST https://jazz.coop.ch/api/...
 
 
     const [lang, setLang] = React.useState<string>();
 
     return (
         <div>
-
-
             <Button
                 onClick={() => {
                     console.log(
@@ -38,9 +35,7 @@ export default function TimeToWork() {
                     );
                 }}
             >
-
                 Test Time Conversion
-
             </Button>
 
             <ThemeToggle/>
@@ -48,7 +43,15 @@ export default function TimeToWork() {
             <br/>
 
             <Elevation>
-                test
+                Hello this is atest
+
+                <div className={'p-2.5 dark:bg-neumorphic-800 bg-neumorphic-200 rounded-lg'}>
+                    test<br/>
+                    test<br/>
+                    test<br/>
+                    test
+                </div>
+
             </Elevation>
 
             <br/>
@@ -97,7 +100,7 @@ export default function TimeToWork() {
 
 
             <SegmentedControls
-                segmentClassName={'w-32 flex flex-row justify-start'}
+                segmentClassName={'w-32 flex flex-row justify-center'}
                 orientation={"horizontal"}
                 segments={[
                     "German",

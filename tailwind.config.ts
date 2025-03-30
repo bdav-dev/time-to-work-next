@@ -9,15 +9,21 @@ export default {
     theme: {
         extend: {
             colors: {
-                background: "var(--background)",
-
-
-                whiteNeumorphicLightShadow: 'rgb(255, 255, 255)',
-                whiteNeumorphicDarkShadow: 'rgb(209, 217, 230)',
-
-
-                grayNeumorphicLightShadow: 'rgb(62, 63, 70)',
-                grayNeumorphicDarkShadow: 'rgb(35, 35, 35)'
+                neumorphic: {
+                    50: '#f5f8fa',
+                    100: '#ecf0f3',
+                    150: '#e8e8e8',
+                    200: '#dbdfe3',
+                    300: '#c9ced4',
+                    400: '#9a9ca1',
+                    500: '#6a6c73',
+                    600: '#4a4c52',
+                    700: '#3b3d43',
+                    750: '#303135',
+                    800: '#232428',
+                    900: '#111217',
+                    950: '#04050a'
+                }
             },
         },
     },

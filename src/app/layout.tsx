@@ -19,13 +19,21 @@ export default function RootLayout(
         <html lang="en">
         <ThemeProvider>
             <body>
-            <StyledJsxRegistry>
-                <ThemeApplier>
-                    <div className={'antialiased h-screen'}>
+            <ThemeApplier className={'h-screen w-screen'}>
+                <StyledJsxRegistry>
+                    <div
+                        className={`
+                            antialiased
+                            h-screen w-screen
+                            bg-neumorphic-100 dark:bg-neumorphic-750 
+                            text-neumorphic-700 dark:text-neumorphic-150 
+                            stroke-neumorphic-700 dark:stroke-neumorphic-150
+                        `}
+                    >
                         {children}
                     </div>
-                </ThemeApplier>
-            </StyledJsxRegistry>
+                </StyledJsxRegistry>
+            </ThemeApplier>
             </body>
         </ThemeProvider>
         </html>

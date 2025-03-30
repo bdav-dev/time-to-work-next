@@ -1,5 +1,5 @@
 export function extractValue(any: any, ...keys: string[]) {
-    for (const key in keys) {
+    for (const key of keys) {
         // @ts-ignore
         const value = any[key];
 
@@ -10,3 +10,4 @@ export function extractValue(any: any, ...keys: string[]) {
 
     return undefined;
 }
+
