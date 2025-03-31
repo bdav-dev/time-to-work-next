@@ -7,7 +7,11 @@ import Timeline from "@/components/timeline/Timeline";
 import Time from "@/time/Time";
 import { DefaultTimelineBlockColor } from "@/components/timeline/TimelineBlockColor";
 import React from "react";
-import SegmentedControls from "@/components/SegmentedControls";
+import SegmentedControls from "@/components/control/SegmentedControls";
+import Section from "@/components/layout/Section";
+import Toggle from "@/components/control/Toggle";
+import AddTime from "@/components/AddTime";
+
 
 export default function TimeToWork() {
 
@@ -22,7 +26,10 @@ export default function TimeToWork() {
     // UseLocalStorage<T, S>(fallback: T, setter: T => S, getter: S => T)
     // .ttwc time to work config file
     // stempel hook => falls gestempelt wird
+    // Hook: useStateWithLocalStorage
+    // make margin on button optional -> default is NO Margin
 
+    const [on, setOn] = React.useState(false);
 
     const [lang, setLang] = React.useState<string>();
 
@@ -42,17 +49,21 @@ export default function TimeToWork() {
 
             <br/>
 
-            <Elevation>
-                Hello this is atest
+            <AddTime/>
+            <Toggle isOn={on} onChange={setOn}/>
 
-                <div className={'p-2.5 dark:bg-neumorphic-800 bg-neumorphic-200 rounded-lg'}>
-                    test<br/>
-                    test<br/>
-                    test<br/>
-                    test
-                </div>
+            <Elevation>
+
+                This is an Elevation!
+                <Section>
+                    And this is a Section!
+                </Section>
+
+                Test
+
 
             </Elevation>
+
 
             <br/>
 
@@ -100,8 +111,8 @@ export default function TimeToWork() {
 
 
             <SegmentedControls
-                segmentClassName={'w-32 flex flex-row justify-center'}
-                orientation={"horizontal"}
+                segmentClassName={(isSelection) => `w-40 flex flex-row justify-center ${isSelection && 'font-bold'}`}
+                orientation={"vertical"}
                 segments={[
                     "German",
                     "French",

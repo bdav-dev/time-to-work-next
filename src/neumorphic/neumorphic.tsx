@@ -46,7 +46,7 @@ export class NeumorphicBlueprintFactory {
 
     static createLarge(): NeumorphicBlueprint {
         return {
-            margin: 17,
+            margin: 19,
             shadow: {
                 distance: 13,
                 blur: 20

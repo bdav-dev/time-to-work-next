@@ -15,3 +15,7 @@
 html {
     background-color: var(--neumorphic-background-color);
 }
+
+.testclass {
+    color: red;
+}

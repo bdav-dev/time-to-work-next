@@ -2,7 +2,7 @@
 
 import { ButtonHTMLAttributes } from "react";
 import { NeumorphicBlueprintFactory } from "@/neumorphic/neumorphic";
-import NeumorphicButton from "@/components/neumorphic/NeumorphicButton";
+import NeumorphicButton from "@/components/neumorphic-primitives/NeumorphicButton";
 
 export type SmallButtonProps = ButtonHTMLAttributes<HTMLButtonElement>;
 

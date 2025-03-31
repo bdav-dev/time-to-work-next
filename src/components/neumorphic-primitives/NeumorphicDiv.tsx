@@ -1,17 +1,16 @@
 import { HTMLAttributes } from "react";
 import flattenNeumorphicBlueprint, { NeumorphicBlueprint } from "@/neumorphic/neumorphic";
 
-type NeumorphicDivProps = { blueprint: NeumorphicBlueprint } & HTMLAttributes<HTMLDivElement>;
+type NeumorphicDivProps = { blueprint: NeumorphicBlueprint, overrideBackground?: boolean } & HTMLAttributes<HTMLDivElement>;
 
-export default function NeumorphicDiv({blueprint, children, ...rest}: NeumorphicDivProps) {
+export default function NeumorphicDiv({blueprint, overrideBackground, className, children, ...rest}: NeumorphicDivProps) {
     const bp = flattenNeumorphicBlueprint(blueprint);
 
     return (
-        <div {...rest}>
+        <div className={`${!overrideBackground && 'bg-neumorphic-100 dark:bg-neumorphic-750'} ${className}`} {...rest}>
             {children}
             <style jsx>{`
                 div {
-                    background-color: var(--neumorphic-background-color);
                     ${bp.margin ? `margin: ${bp.margin}px;` : ''}
                     box-shadow:
                         ${bp.inverted ? 'inset' : ''} ${bp.right}px ${bp.bottom}px ${bp.blur}px var(--neumorphic-dark-shadow-color),

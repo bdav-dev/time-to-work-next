@@ -2,9 +2,7 @@ import type { Config } from "tailwindcss";
 
 export default {
     content: [
-        "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
-        "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
-        "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+        "./src/**/*.{js,ts,jsx,tsx,mdx}",
     ],
     theme: {
         extend: {
@@ -20,7 +18,7 @@ export default {
                     600: '#4a4c52',
                     700: '#3b3d43',
                     750: '#303135',
-                    800: '#232428',
+                    800: '#242528',
                     900: '#111217',
                     950: '#04050a'
                 }

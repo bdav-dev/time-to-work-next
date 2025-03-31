@@ -1,13 +1,13 @@
 import { HTMLAttributes } from "react";
 import flattenNeumorphicBlueprint, { NeumorphicBlueprint } from "@/neumorphic/neumorphic";
 
-type NeumorphicButtonProps = { blueprint: NeumorphicBlueprint } & HTMLAttributes<HTMLButtonElement>;
+type NeumorphicButtonProps = { blueprint: NeumorphicBlueprint, overrideBackground?: boolean } & HTMLAttributes<HTMLButtonElement>;
 
-export default function NeumorphicButton({ blueprint, children, className, ...rest }: NeumorphicButtonProps) {
+export default function NeumorphicButton({ blueprint, overrideBackground, children, className, ...rest }: NeumorphicButtonProps) {
     const bp = flattenNeumorphicBlueprint(blueprint);
 
     return (
-        <button className={`bg-neumorphic-100 dark:bg-neumorphic-750 ${className}`} {...rest}>
+        <button className={`${!overrideBackground && 'bg-neumorphic-100 dark:bg-neumorphic-750'} ${className}`} {...rest}>
             {children}
             <style jsx>{`
                 button {
