@@ -5,6 +5,7 @@ import React from "react";
 import ThemeProvider from "@/contexts/ThemeContext";
 import ThemeApplier from "@/components/theme/ThemeApplier";
 import StyledJsxRegistry from "@/app/registry";
+import { TimeProvider } from "@/contexts/TimeContext";
 
 
 export const metadata: Metadata = {
@@ -18,23 +19,25 @@ export default function RootLayout(
     return (
         <html lang="en">
         <ThemeProvider>
-            <body>
-            <ThemeApplier className={'h-screen w-screen'}>
-                <StyledJsxRegistry>
-                    <div
-                        className={`
+            <TimeProvider>
+                <body>
+                <ThemeApplier className={'h-screen w-screen'}>
+                    <StyledJsxRegistry>
+                        <div
+                            className={`
                             antialiased
                             h-screen w-screen
                             bg-neumorphic-100 dark:bg-neumorphic-750 
                             text-neumorphic-700 dark:text-neumorphic-150 
                             stroke-neumorphic-700 dark:stroke-neumorphic-150
                         `}
-                    >
-                        {children}
-                    </div>
-                </StyledJsxRegistry>
-            </ThemeApplier>
-            </body>
+                        >
+                            {children}
+                        </div>
+                    </StyledJsxRegistry>
+                </ThemeApplier>
+                </body>
+            </TimeProvider>
         </ThemeProvider>
         </html>
     );

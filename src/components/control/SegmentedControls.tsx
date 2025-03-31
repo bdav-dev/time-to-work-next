@@ -17,11 +17,12 @@ type SegmentedControlsProps<T extends Segment> = {
     segmentClassName?: SegmentClassName,
     segments: T[];
     selection: T | undefined,
-    onSelectionChanged: (selection?: T) => void,
+    onSelectionChange: (selection?: T) => void,
     deselectable?: boolean,
     className?: string,
     widthFull?: boolean,
-    roundedFull?: boolean
+    roundedFull?: boolean,
+    disabled?: boolean
 }
 
 const BLUR = 10;
@@ -67,9 +68,10 @@ export default function SegmentedControls<T extends Segment>(props: SegmentedCon
                             }
 
                             <NeumorphicButton
-                                onClick={() => props.onSelectionChanged(isSelection ? undefined : segment)}
+                                onClick={() => props.onSelectionChange(isSelection ? undefined : segment)}
                                 blueprint={createNeumorphicBlueprint(position, isSelection, orientation)}
                                 style={createBorderRadiusStyle(position, orientation, borderRadius)}
+                                disabled={props.disabled}
                                 className={`
                                     px-3 py-2
                                     ${isSelection && props.deselectable == false && 'pointer-events-none'}

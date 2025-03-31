@@ -1,13 +1,21 @@
-import { HTMLAttributes } from "react";
+import { InputHTMLAttributes, Ref } from "react";
 import flattenNeumorphicBlueprint, { NeumorphicBlueprint } from "@/neumorphic/neumorphic";
 
-type NeumorphicInputProps = { blueprint: NeumorphicBlueprint, overrideBackground?: boolean, type: string } & HTMLAttributes<HTMLInputElement>;
+type NeumorphicInputProps = {
+    blueprint: NeumorphicBlueprint,
+    overrideBackground?: boolean,
+    type: string,
+    ref?: Ref<HTMLInputElement>
+} & InputHTMLAttributes<HTMLInputElement>;
 
-export default function NeumorphicInput({ blueprint, overrideBackground, className, children, type, ...rest }: NeumorphicInputProps) {
+export default function NeumorphicInput(
+    { blueprint, overrideBackground, className, children, type, ref, ...rest }: NeumorphicInputProps
+) {
     const bp = flattenNeumorphicBlueprint(blueprint);
 
     return (
         <input
+            ref={ref}
             type={type}
             className={`${!overrideBackground && 'bg-neumorphic-100 dark:bg-neumorphic-750'} ${className}`}
             {...rest}

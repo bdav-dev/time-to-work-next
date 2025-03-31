@@ -4,16 +4,21 @@ import Button from "@/components/buttons/Button";
 import ThemeToggle from "@/components/theme/ThemeToggle";
 import Elevation from "@/components/layout/Elevation";
 import Timeline from "@/components/timeline/Timeline";
-import Time from "@/time/Time";
 import { DefaultTimelineBlockColor } from "@/components/timeline/TimelineBlockColor";
 import React from "react";
 import SegmentedControls from "@/components/control/SegmentedControls";
 import Section from "@/components/layout/Section";
 import Toggle from "@/components/control/Toggle";
 import AddTime from "@/components/AddTime";
+import useTime from "@/hooks/useTime";
+import Time from "@/components/Time";
+import TimeClass from '@/time/Time'
 
 
 export default function TimeToWork() {
+
+    const time = useTime();
+
 
     function not() {
         //Notification.requestPermission();
@@ -38,30 +43,33 @@ export default function TimeToWork() {
             <Button
                 onClick={() => {
                     console.log(
-                        Time.ofString('13:01').toString(true)
+                        //Time.ofString('13:01').toString(true)
                     );
                 }}
             >
                 Test Time Conversion
             </Button>
 
+
+
             <ThemeToggle/>
 
+
+
             <br/>
+
+            <Time time={time}/>
 
             <AddTime/>
             <Toggle isOn={on} onChange={setOn}/>
 
             <Elevation>
-
                 This is an Elevation!
                 <Section>
                     And this is a Section!
                 </Section>
 
                 Test
-
-
             </Elevation>
 
 
@@ -71,23 +79,23 @@ export default function TimeToWork() {
                 Notification
             </Button>
             <Timeline
-                currentTime={Time.ofString('10:45')}
+                currentTime={TimeClass.ofString('10:45')}
                 height={9}
                 data={[
                     {
-                        startTime: Time.ofString('08:00'),
-                        endTime: Time.ofString('08:30'),
+                        startTime: TimeClass.ofString('08:00'),
+                        endTime: TimeClass.ofString('08:30'),
                         title: "Break",
                         color: DefaultTimelineBlockColor.GREEN,
                     },
                     {
-                        startTime: Time.ofString('10:30'),
+                        startTime: TimeClass.ofString('10:30'),
                         color: DefaultTimelineBlockColor.BLUE,
                         title: "Work"
                     },
                     {
-                        startTime: Time.ofString('15:00'),
-                        endTime: Time.ofString('16:30'),
+                        startTime: TimeClass.ofString('15:00'),
+                        endTime: TimeClass.ofString('16:30'),
                         title: "Work",
                         color: DefaultTimelineBlockColor.YELLOW
                     }
@@ -120,7 +128,7 @@ export default function TimeToWork() {
                     "Polish",
                     "Spanish"
                 ]}
-                onSelectionChanged={setLang}
+                onSelectionChange={setLang}
                 selection={lang}
                 deselectable={true}
             />

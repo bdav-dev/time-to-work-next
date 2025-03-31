@@ -25,7 +25,7 @@ export default function Toggle(props: ToggleProps) {
             segments={[onSegment, offSegment]}
             selection={props.isOn ? onSegment : offSegment}
             segmentClassName={(isSelection) => `min-w-14 ${isSelection && 'font-bold'}`}
-            onSelectionChanged={(selection) => props.onChange(selection == onSegment)}
+            onSelectionChange={(selection) => props.onChange(selection == onSegment)}
             deselectable={false}
         />
     );

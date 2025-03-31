@@ -6,7 +6,10 @@ import TimePicker from "@/components/control/TimePicker";
 import Section from "@/components/layout/Section";
 import Button from "@/components/buttons/Button";
 import Elevation from "@/components/layout/Elevation";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
+import Time from "@/time/Time";
+import TimeComponent from '@/components/Time';
+
 
 export default function AddTime() {
     const tabs: { [key: string]: Segment } = {
@@ -19,7 +22,6 @@ export default function AddTime() {
             displayAs: 'Zeitintervall'
         }
     };
-
     const [tab, setTab] = useState<Segment | undefined>(tabs.timestamp);
 
     const timeOptions: { [key: string]: Segment } = {
@@ -34,8 +36,27 @@ export default function AddTime() {
             className: isSelection => `${isSelection && 'text-emerald-500 dark:text-emerald-400'}`
         }
     }
-
     const [timeOption, setTimeOption] = useState<Segment | undefined>(timeOptions.workTime);
+
+    const addButtonText = useMemo(() => {
+        if (tab == undefined || typeof tab !== 'object') {
+            return '';
+        }
+
+        return tab.id == 0 ? 'Zeitstempel schließen' : 'Hinzufügen'; // öffnen
+    }, [tab])
+
+
+    const [startTime, setStartTime] = useState<Time>();
+    const [endTime, setEndTime] = useState<Time>();
+
+    const timeDifference = useMemo(() => {
+        if (!startTime || !endTime || startTime.compareTo(endTime) >= 1) {
+            return undefined;
+        }
+
+        return endTime.asTimeSpan().subtract(startTime.asTimeSpan()).asTime();
+    }, [startTime, endTime]);
 
     return (
         <Elevation overridePadding className={'w-fit'}>
@@ -47,7 +68,7 @@ export default function AddTime() {
                         orientation={'horizontal'}
                         segments={Object.values(tabs)}
                         selection={tab}
-                        onSelectionChanged={setTab}
+                        onSelectionChange={setTab}
                         deselectable={false}
                         widthFull
                         roundedFull
@@ -59,16 +80,25 @@ export default function AddTime() {
 
 
             <div className={'flex justify-center items-center gap-2.5 py-3'}>
-                <TimePicker/> bis <TimePicker/>
+
+                <TimePicker
+                    value={startTime}
+                    onValueChange={setStartTime}
+                />
+                bis
+                <TimePicker
+                    value={endTime}
+                    onValueChange={setEndTime}
+                />
             </div>
 
             <div className={'px-4'}>
                 <Section className={'flex justify-between my-4'}>
                     <div className={'font-bold'}>
-                        Differenz
+                        Zeitdifferenz
                     </div>
                     <div>
-                        21:22
+                        <TimeComponent time={timeDifference}/>
                     </div>
                 </Section>
             </div>
@@ -79,14 +109,15 @@ export default function AddTime() {
                 <SegmentedControls
                     segments={Object.values(timeOptions)}
                     selection={timeOption}
-                    onSelectionChanged={setTimeOption}
+                    onSelectionChange={setTimeOption}
                     orientation={'horizontal'}
                     segmentClassName={(isSelection) => `${isSelection && 'font-bold'}`}
                     deselectable={false}
+                    disabled
                 />
 
-                <Button className={'flex-1 min-w-56'}>
-                    Zeitstempel erfassen
+                <Button className={'flex-1 min-w-56'} onClick={() => { setStartTime(Time.now()) }}>
+                    {addButtonText}
                 </Button>
             </div>
 
