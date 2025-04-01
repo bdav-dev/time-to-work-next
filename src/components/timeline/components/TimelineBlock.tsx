@@ -2,7 +2,7 @@ import React from "react";
 import Time from "@/time/Time";
 import { applyThemeToThemedColorPair } from "@/color/color";
 import TimelineBlockTimeLabel from "@/components/timeline/components/TimelineBlockTimeLabel";
-import { DefaultTimelineBlockColor, realizeTimelineBlockColor, TimelineBlockColor } from "@/components/timeline/TimelineBlockColor";
+import { TimelineBlockColor, TimelineBlockColors } from "@/components/timeline/TimelineBlockColor";
 
 
 export type BookingBlockProps = {
@@ -14,15 +14,14 @@ export type BookingBlockProps = {
     rightOverflow?: boolean,
     position: number,
     size: number,
-    color?: TimelineBlockColor | DefaultTimelineBlockColor,
+    color?: TimelineBlockColor,
     isDarkTheme: boolean
 }
 
 const HEIGHT = 94;
-const DEFAULT_COLOR = DefaultTimelineBlockColor.BLUE;
 
 export default function TimelineBlock(props: BookingBlockProps) {
-    const color = realizeTimelineBlockColor(props.color ?? DEFAULT_COLOR);
+    const color = props.color ?? TimelineBlockColors.BLUE;
     const blockColor = applyThemeToThemedColorPair(color.block, props.isDarkTheme);
     const timeLabelColor = applyThemeToThemedColorPair(color.timeLabel, props.isDarkTheme);
 

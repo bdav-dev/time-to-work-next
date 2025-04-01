@@ -6,7 +6,7 @@ import { useTheme } from "@/hooks/UseTheme";
 import Time from "@/time/Time";
 import TimelineBlock from "@/components/timeline/components/TimelineBlock";
 import { TimelineCalculator } from "@/components/timeline/TimelineCalculator";
-import { DefaultTimelineBlockColor, TimelineBlockColor } from "@/components/timeline/TimelineBlockColor";
+import { TimelineBlockColor } from "@/components/timeline/TimelineBlockColor";
 import NeumorphicDiv from "@/components/neumorphic-primitives/NeumorphicDiv";
 import { NeumorphicBlueprintFactory } from "@/neumorphic/neumorphic";
 
@@ -14,7 +14,7 @@ export type TimelineData = {
     startTime: Time,
     endTime?: Time,
     title?: string,
-    color?: TimelineBlockColor | DefaultTimelineBlockColor
+    color?: TimelineBlockColor
 };
 
 type TimelineProps = {

@@ -15,7 +15,7 @@ export default function TimeInterval(props: TimeIntervalProps) {
     const timeDifference = (
         !props.startTime || !props.endTime || props.startTime.compareTo(props.endTime) > 0
             ? undefined
-            : props.endTime.asTimeSpan().subtract(props.startTime.asTimeSpan()).asTime()
+            : props.endTime.asTimeSpan().subtract(props.startTime.asTimeSpan())
     );
 
     return (

@@ -17,7 +17,7 @@ export default function TimeStamp(props: TimeStampProps) {
                 props.openTimeStamp
                     ? <KeyValueSection
                         first={'Offener Zeitstempel'}
-                        second={<TimeComponent time={props.openTimeStamp}/>}
+                        second={<><TimeComponent time={props.openTimeStamp}/> - ...</>}
                     />
                     : <Section className={'flex justify-center italic'}>
                         Kein offener Zeitstempel vorhanden

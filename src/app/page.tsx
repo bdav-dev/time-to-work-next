@@ -4,48 +4,36 @@ import ThemeToggle from "@/components/theme/ThemeToggle";
 import Elevation from "@/components/layout/Elevation";
 import React from "react";
 import Section from "@/components/layout/Section";
-import AddTime from "@/components/AddTime";
+import AddScheduleBlockPanel from "@/components/AddScheduleBlockPanel";
 import useTime from "@/hooks/useTime";
 import Time from "@/components/Time";
 import VerticalRuler from "@/components/layout/VerticalRuler";
 import Timeline, { TimelineData } from "@/components/timeline/Timeline";
-import { DefaultTimelineBlockColor } from "@/components/timeline/TimelineBlockColor";
 import TimeClass from '@/time/Time';
 import Table from "@/components/layout/Table";
 import useStateWithLocalStorage from "@/hooks/UseStateWithLocalStorage";
-import { WorkTime, WorkTimeSerialization } from "@/WorkTime";
-import Button from "@/components/buttons/Button";
+import { Schedule, ScheduleSerialization } from "@/Schedule";
 
 
-function mapWorkTimeToTimelineData(workTime: WorkTime): TimelineData[] {
-    return workTime.map(
-        it => (
-            {
-                startTime: it.startTime,
-                endTime: it.endTime,
-                color: it.type == "work" ? DefaultTimelineBlockColor.BLUE : DefaultTimelineBlockColor.GREEN,
-                title: it.type == "work" ? "Arbeit" : "Pause"
-            }
-        )
-    )
+function mapScheduleToTimelineData(schedule: Schedule): TimelineData[] {
+    return schedule.map(
+        scheduleBlock => ({
+            startTime: scheduleBlock.startTime,
+            endTime: scheduleBlock.endTime,
+            color: scheduleBlock.type.timelineBlock.color,
+            title: scheduleBlock.type.timelineBlock.title
+        })
+    );
 }
+
+// concepts:
+// .ttwc time to work config file
+// stempel hook => falls gestempelt wird
+// maybe make Schedule (immutable) class, any changes to schedule results in new object
 
 export default function TimeToWork() {
     const time = useTime();
-
-    // concepts:
-    // UseLocalStorage<T, S>(fallback: T, setter: T => S, getter: S => T)
-    // .ttwc time to work config file
-    // stempel hook => falls gestempelt wird
-    // Hook: useStateWithLocalStorage
-    // make margin on button optional -> default is NO Margin
-
-
-
-
-
-
-    const [workTime, setWorkTime] = useStateWithLocalStorage<WorkTime>('worktime', [], WorkTimeSerialization);
+    const [schedule, setSchedule] = useStateWithLocalStorage<Schedule>('schedule', [], ScheduleSerialization);
 
 
     return (
@@ -71,33 +59,33 @@ export default function TimeToWork() {
 
             </Elevation>
 
-            <Button className={'w-fit'}
-                    onClick={() => {
-                        setWorkTime([
-                            {
-                                startTime: TimeClass.ofString('08:00'),
-                                endTime: TimeClass.ofString('09:00'),
-                                type: "work"
-                            },
-                            {
-                                startTime: TimeClass.ofString('11:00'),
-                                type: 'break'
-                            }
-                        ]);
-                    }}
+            {/*<Button className={'w-fit'}*/}
+            {/*        onClick={() => {*/}
+            {/*            setSchedule([*/}
+            {/*                {*/}
+            {/*                    startTime: TimeClass.ofString('08:00'),*/}
+            {/*                    endTime: TimeClass.ofString('09:00'),*/}
+            {/*                    type: ScheduleBlockTypes.WORK_TIME*/}
+            {/*                },*/}
+            {/*                {*/}
+            {/*                    startTime: TimeClass.ofString('11:00'),*/}
+            {/*                    type: ScheduleBlockTypes.WORK_TIME*/}
+            {/*                }*/}
+            {/*            ]);*/}
+            {/*        }}*/}
 
-            >test</Button>
+            {/*>test</Button>*/}
 
 
             <div className={'flex-1 flex flex-col justify-between'}>
                 <div className={'flex justify-center'}>
-                    <AddTime workTime={workTime}/>
+                    <AddScheduleBlockPanel workTime={schedule}/>
                 </div>
 
                 <Timeline
                     currentTime={time}
-                    height={11}
-                    data={mapWorkTimeToTimelineData(workTime)}
+                    height={12}
+                    data={mapScheduleToTimelineData(schedule)}
                 />
 
                 <Table
