@@ -1,7 +1,7 @@
 'use client';
 
 import React, { Dispatch, SetStateAction, useEffect } from "react";
-import useLocalStorage from "../hooks/UseLocalStorage";
+import useStateWithLocalStorage from "@/hooks/UseStateWithLocalStorage";
 
 
 type ThemeContextType = {
@@ -19,7 +19,7 @@ type ThemeProviderProps = {
 }
 
 export default function ThemeProvider(props: ThemeProviderProps) {
-    const [darkTheme, setDarkTheme] = useLocalStorage("useDarkTheme", true);
+    const [darkTheme, setDarkTheme] = useStateWithLocalStorage("useDarkTheme", true);
 
     useEffect(() => {
         document.documentElement.style.setProperty(

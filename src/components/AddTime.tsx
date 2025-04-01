@@ -2,121 +2,130 @@
 
 import SegmentedControls, { Segment } from "@/components/control/SegmentedControls";
 import HorizontalRuler from "@/components/layout/HorizontalRuler";
-import TimePicker from "@/components/control/TimePicker";
-import Section from "@/components/layout/Section";
 import Button from "@/components/buttons/Button";
 import Elevation from "@/components/layout/Elevation";
 import React, { useMemo, useState } from "react";
 import Time from "@/time/Time";
-import TimeComponent from '@/components/Time';
+import TimeInterval from "@/components/TimeInterval";
+import TimeStamp from "@/components/TimeStamp";
+import { getOpenTimestamp, WorkTime } from "@/WorkTime";
 
 
-export default function AddTime() {
-    const tabs: { [key: string]: Segment } = {
-        timestamp: {
+type AddTimeProps = {
+    workTime: WorkTime;
+}
+
+enum Type {
+    TIME_STAMP,
+    TIME_INTERVAL
+}
+
+enum TimeOption {
+    WORK,
+    BREAK
+}
+
+
+export default function AddTime(props: AddTimeProps) {
+    const types: { [key in Type]: Segment<Type> } = {
+        [Type.TIME_STAMP]: {
             id: 0,
+            value: Type.TIME_STAMP,
             displayAs: 'Zeitstempel'
         },
-        timeInterval: {
+        [Type.TIME_INTERVAL]: {
             id: 1,
+            value: Type.TIME_INTERVAL,
             displayAs: 'Zeitintervall'
         }
     };
-    const [tab, setTab] = useState<Segment | undefined>(tabs.timestamp);
+    const [type, setType] = useState<Segment<Type>>(types[Type.TIME_STAMP]);
 
-    const timeOptions: { [key: string]: Segment } = {
-        workTime: {
+    const timeOptions: { [key in TimeOption]: Segment<TimeOption> } = {
+        [TimeOption.WORK]: {
             id: 0,
+            value: TimeOption.WORK,
             displayAs: 'Arbeitszeit',
             className: isSelection => `${isSelection && 'text-blue-500 dark:text-blue-400'}`
         },
-        breakTime: {
+        [TimeOption.BREAK]: {
             id: 1,
+            value: TimeOption.BREAK,
             displayAs: 'Pausenzeit',
             className: isSelection => `${isSelection && 'text-emerald-500 dark:text-emerald-400'}`
         }
     }
-    const [timeOption, setTimeOption] = useState<Segment | undefined>(timeOptions.workTime);
+    const [timeOption, setTimeOption] = useState<Segment<TimeOption> | undefined>(timeOptions[TimeOption.WORK]);
 
     const addButtonText = useMemo(() => {
-        if (tab == undefined || typeof tab !== 'object') {
-            return '';
-        }
-
-        return tab.id == 0 ? 'Zeitstempel schließen' : 'Hinzufügen'; // öffnen
-    }, [tab])
+        return type.value == Type.TIME_STAMP ? 'Zeitstempel schließen' : 'Hinzufügen'; // öffnen
+    }, [type]);
 
 
     const [startTime, setStartTime] = useState<Time>();
     const [endTime, setEndTime] = useState<Time>();
 
-    const timeDifference = useMemo(() => {
-        if (!startTime || !endTime || startTime.compareTo(endTime) >= 1) {
-            return undefined;
-        }
+    const openTimeStamp = getOpenTimestamp(props.workTime);
 
-        return endTime.asTimeSpan().subtract(startTime.asTimeSpan()).asTime();
-    }, [startTime, endTime]);
+    const isWorkTimeTypeInputDisabled = openTimeStamp != undefined && (type.value == Type.TIME_STAMP);
+
+    const forced = useMemo(() => {
+        if (isWorkTimeTypeInputDisabled) {
+            return timeOptions[openTimeStamp.type == 'work' ? TimeOption.WORK : TimeOption.BREAK];
+        }
+        return undefined;
+    }, [isWorkTimeTypeInputDisabled]);
+
 
     return (
         <Elevation overridePadding className={'w-fit'}>
 
-            <div className={'py-2 px-2'}>
-                <div className={'flex justify-center'}>
-                    <SegmentedControls
-                        segmentClassName={(isSelection) => `${isSelection && 'font-bold'}`}
-                        orientation={'horizontal'}
-                        segments={Object.values(tabs)}
-                        selection={tab}
-                        onSelectionChange={setTab}
-                        deselectable={false}
-                        widthFull
-                        roundedFull
-                    />
-                </div>
+            <div className={'p-3 flex'}>
+                <SegmentedControls
+                    segmentClassName={(isSelection) => `${isSelection && 'font-bold'}`}
+                    orientation={'horizontal'}
+                    segments={Object.values(types)}
+                    selection={type}
+                    onSelectionChange={selected => setType(selected ?? types[Type.TIME_STAMP])}
+                    deselectable={false}
+                    widthFull
+                    roundedFull
+                />
             </div>
 
             <HorizontalRuler/>
 
+            <div className={'p-3 min-h-32 flex items-center'}>
+                {
+                    type != undefined && typeof type === 'object' && (
+                        type.id == 0
+                            ? <TimeStamp className={'flex-1'} openTimeStamp={openTimeStamp?.startTime ?? undefined}/>
+                            : <TimeInterval
+                                className={'flex-1'}
+                                startTime={startTime}
+                                setStartTime={setStartTime}
+                                endTime={endTime}
+                                setEndTime={setEndTime}
+                            />
+                    )
+                }
 
-            <div className={'flex justify-center items-center gap-2.5 py-3'}>
-
-                <TimePicker
-                    value={startTime}
-                    onValueChange={setStartTime}
-                />
-                bis
-                <TimePicker
-                    value={endTime}
-                    onValueChange={setEndTime}
-                />
-            </div>
-
-            <div className={'px-4'}>
-                <Section className={'flex justify-between my-4'}>
-                    <div className={'font-bold'}>
-                        Zeitdifferenz
-                    </div>
-                    <div>
-                        <TimeComponent time={timeDifference}/>
-                    </div>
-                </Section>
             </div>
 
             <HorizontalRuler/>
 
-            <div className={'px-2 py-2 flex sm:flex-row flex-col items-center'}>
+            <div className={'p-3 flex sm:flex-row flex-col items-center'}>
                 <SegmentedControls
                     segments={Object.values(timeOptions)}
-                    selection={timeOption}
+                    selection={forced ?? timeOption}
                     onSelectionChange={setTimeOption}
                     orientation={'horizontal'}
                     segmentClassName={(isSelection) => `${isSelection && 'font-bold'}`}
                     deselectable={false}
-                    disabled
+                    disabled={isWorkTimeTypeInputDisabled}
                 />
 
-                <Button className={'flex-1 min-w-56'} onClick={() => { setStartTime(Time.now()) }}>
+                <Button className={'min-w-56'}>
                     {addButtonText}
                 </Button>
             </div>

@@ -6,13 +6,13 @@ import NeumorphicButton from "@/components/neumorphic-primitives/NeumorphicButto
 
 export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
     circular?: boolean;
-    noMargin?: boolean;
+    overrideMargin?: boolean;
 };
 
-export default function Button({ className, children, noMargin, circular, ...rest }: ButtonProps) {
+export default function Button({ className, children, overrideMargin, circular, ...rest }: ButtonProps) {
     const blueprint = NeumorphicBlueprintFactory.createMedium();
     blueprint.active = true;
-    if (noMargin) {
+    if (overrideMargin) {
         blueprint.margin = undefined;
     }
 

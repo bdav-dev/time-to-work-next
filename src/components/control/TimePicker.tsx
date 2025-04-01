@@ -28,7 +28,7 @@ export default function TimePicker(props: TimePickerProps) {
             defaultValue={props.value?.toString() ?? ''}
             onChange={event => {
                 const value = event.currentTarget.value;
-                props.onValueChange(value ? Time.ofString(value) : undefined);
+                props.onValueChange(value != '' ? Time.ofString(value) : undefined);
             }}
             className={'px-2 py-1.5 rounded-full outline-none'}
             onKeyUp={(e) => {

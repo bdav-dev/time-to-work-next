@@ -26,7 +26,7 @@ export default function NowLine(props: NowLineProps) {
                 `}
                 style={{ color: props.color }}
             >
-                Now
+                Jetzt
             </span>
         </div>
     );

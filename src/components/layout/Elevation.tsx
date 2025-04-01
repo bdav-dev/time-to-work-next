@@ -2,16 +2,26 @@ import { HTMLAttributes } from "react";
 import NeumorphicDiv from "@/components/neumorphic-primitives/NeumorphicDiv";
 import { NeumorphicBlueprintFactory } from "@/neumorphic/neumorphic";
 
-type ElevationProps = { overridePadding?: boolean } & HTMLAttributes<HTMLDivElement>;
-export default function Elevation({ className, overridePadding, children, ...rest }: ElevationProps) {
+type ElevationProps = {
+    overridePadding?: boolean,
+    overrideRounded?: boolean,
+    overrideMargin?: boolean,
+} & HTMLAttributes<HTMLDivElement>;
+
+export default function Elevation(
+    { className, overridePadding, overrideRounded, overrideMargin, children, ...rest }: ElevationProps
+) {
+    const blueprint = NeumorphicBlueprintFactory.createLarge();
+    if (overrideMargin) {
+        blueprint.margin = 0;
+    }
 
     return (
         <NeumorphicDiv
-            blueprint={NeumorphicBlueprintFactory.createLarge()}
+            blueprint={blueprint}
             className={`
-                neumorphic-large
                 ${!overridePadding && 'p-4'}
-                rounded-2xl
+                ${!overrideRounded && 'rounded-3xl'}
                 ${className}
             `}
             {...rest}

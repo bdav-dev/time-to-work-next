@@ -21,18 +21,22 @@ export default function RootLayout(
         <ThemeProvider>
             <TimeProvider>
                 <body>
-                <ThemeApplier className={'h-screen w-screen'}>
+                <ThemeApplier>
                     <StyledJsxRegistry>
                         <div
                             className={`
-                            antialiased
-                            h-screen w-screen
-                            bg-neumorphic-100 dark:bg-neumorphic-750 
-                            text-neumorphic-700 dark:text-neumorphic-150 
-                            stroke-neumorphic-700 dark:stroke-neumorphic-150
-                        `}
+                                flex flex-col min-h-screen
+                                antialiased
+                                bg-neumorphic-100 dark:bg-neumorphic-750 
+                                text-neumorphic-700 dark:text-neumorphic-150 
+                                stroke-neumorphic-700 dark:stroke-neumorphic-150
+                            `}
                         >
-                            {children}
+                            <div className={'flex-1 flex flex-col'}>
+                                {children}
+                            </div>
+                            <div>footer</div>
+
                         </div>
                     </StyledJsxRegistry>
                 </ThemeApplier>

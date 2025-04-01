@@ -2,22 +2,23 @@ import React, { CSSProperties } from "react";
 import { NeumorphicBlueprint } from "@/neumorphic/neumorphic";
 import NeumorphicButton from "@/components/neumorphic-primitives/NeumorphicButton";
 
-export type Segment = {
+export type Segment<T> = {
     id: number,
+    value: T,
     displayAs: string | React.ReactNode,
     className?: string | ((isSelection: boolean) => string),
-} | string;
+};
 
 type Orientation = 'horizontal' | 'vertical';
 type Position = 'leading' | 'inBetween' | 'trailing';
 type SegmentClassName = string | ((isSelection: boolean) => string);
 
-type SegmentedControlsProps<T extends Segment> = {
+type SegmentedControlsProps<T> = {
     orientation?: Orientation;
     segmentClassName?: SegmentClassName,
-    segments: T[];
-    selection: T | undefined,
-    onSelectionChange: (selection?: T) => void,
+    segments: Segment<T>[];
+    selection: Segment<T> | undefined,
+    onSelectionChange: (selection?: Segment<T>) => void,
     deselectable?: boolean,
     className?: string,
     widthFull?: boolean,
@@ -28,7 +29,7 @@ type SegmentedControlsProps<T extends Segment> = {
 const BLUR = 10;
 const DISTANCE = 7;
 
-export default function SegmentedControls<T extends Segment>(props: SegmentedControlsProps<T>) {
+export default function SegmentedControls<T>(props: SegmentedControlsProps<T>) {
     const orientation = props.orientation ?? 'vertical';
     const flexDirection = orientation == 'vertical' ? "flex-col" : "flex-row";
     const borderRadius = props.roundedFull ? '9999px' : '0.75rem';
@@ -91,7 +92,7 @@ export default function SegmentedControls<T extends Segment>(props: SegmentedCon
 }
 
 
-function areSegmentsEqual(a: Segment | undefined, b: Segment | undefined): boolean {
+function areSegmentsEqual(a: Segment<any> | undefined, b: Segment<any> | undefined): boolean {
     if (a == undefined || b == undefined) {
         return false;
     }
@@ -102,7 +103,7 @@ function areSegmentsEqual(a: Segment | undefined, b: Segment | undefined): boole
     return identifierOfA == identifierOfB;
 }
 
-function realizeSegment(segment: Segment) {
+function realizeSegment(segment: Segment<any>) {
     return (
         typeof segment == "object"
             ? segment.displayAs
@@ -122,7 +123,7 @@ function realizeSegmentClassName(segmentClassName: SegmentClassName | undefined,
     );
 }
 
-function realizeSpecificSegmentClassName(segment: Segment | undefined, isSelection: boolean): string {
+function realizeSpecificSegmentClassName(segment: Segment<any> | undefined, isSelection: boolean): string {
     if (segment == undefined) {
         return '';
     }

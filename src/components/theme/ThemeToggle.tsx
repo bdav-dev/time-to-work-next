@@ -6,7 +6,7 @@ import { useTheme } from "@/hooks/UseTheme";
 import Button from "@/components/buttons/Button";
 
 type ThemeToggleProps = {
-    selected?: boolean
+    overrideMargin?: boolean
 }
 
 export default function ThemeToggle(props: ThemeToggleProps) {
@@ -14,13 +14,15 @@ export default function ThemeToggle(props: ThemeToggleProps) {
 
     return (
         <Button
+            overrideMargin={props.overrideMargin}
             circular
             onClick={() => setDarkTheme(curr => !curr)}
+            className={'size-12 flex items-center justify-center'}
         >
             {
                 darkTheme
-                    ? <DarkModeIcon className="stroke-[7] h-6 w-6"/>
-                    : <LightModeIcon className="stroke-[7] h-6 w-6"/>
+                    ? <DarkModeIcon className="stroke-[7] size-6"/>
+                    : <LightModeIcon className="stroke-[7] size-6"/>
             }
         </Button>
     );

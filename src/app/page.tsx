@@ -1,31 +1,37 @@
 'use client';
 
-import Button from "@/components/buttons/Button";
 import ThemeToggle from "@/components/theme/ThemeToggle";
 import Elevation from "@/components/layout/Elevation";
-import Timeline from "@/components/timeline/Timeline";
-import { DefaultTimelineBlockColor } from "@/components/timeline/TimelineBlockColor";
 import React from "react";
-import SegmentedControls from "@/components/control/SegmentedControls";
 import Section from "@/components/layout/Section";
-import Toggle from "@/components/control/Toggle";
 import AddTime from "@/components/AddTime";
 import useTime from "@/hooks/useTime";
 import Time from "@/components/Time";
-import TimeClass from '@/time/Time'
+import VerticalRuler from "@/components/layout/VerticalRuler";
+import Timeline, { TimelineData } from "@/components/timeline/Timeline";
+import { DefaultTimelineBlockColor } from "@/components/timeline/TimelineBlockColor";
+import TimeClass from '@/time/Time';
+import Table from "@/components/layout/Table";
+import useStateWithLocalStorage from "@/hooks/UseStateWithLocalStorage";
+import { WorkTime, WorkTimeSerialization } from "@/WorkTime";
+import Button from "@/components/buttons/Button";
 
+
+function mapWorkTimeToTimelineData(workTime: WorkTime): TimelineData[] {
+    return workTime.map(
+        it => (
+            {
+                startTime: it.startTime,
+                endTime: it.endTime,
+                color: it.type == "work" ? DefaultTimelineBlockColor.BLUE : DefaultTimelineBlockColor.GREEN,
+                title: it.type == "work" ? "Arbeit" : "Pause"
+            }
+        )
+    )
+}
 
 export default function TimeToWork() {
-
     const time = useTime();
-
-
-    function not() {
-        //Notification.requestPermission();
-        const notification = new Notification("Hi there!", { body: "test", icon: "https://www.bdav.dev/favicon.ico", badge: "https://www.bdav.dev/favicon.ico" });
-    }
-
-    const [active, setActive] = React.useState(false);
 
     // concepts:
     // UseLocalStorage<T, S>(fallback: T, setter: T => S, getter: S => T)
@@ -34,112 +40,73 @@ export default function TimeToWork() {
     // Hook: useStateWithLocalStorage
     // make margin on button optional -> default is NO Margin
 
-    const [on, setOn] = React.useState(false);
 
-    const [lang, setLang] = React.useState<string>();
+
+
+
+
+    const [workTime, setWorkTime] = useStateWithLocalStorage<WorkTime>('worktime', [], WorkTimeSerialization);
+
 
     return (
-        <div>
-            <Button
-                onClick={() => {
-                    console.log(
-                        //Time.ofString('13:01').toString(true)
-                    );
-                }}
+        <div className={'relative flex-1 flex flex-col'}>
+            <Elevation
+                overridePadding overrideMargin overrideRounded
+                className={'w-fit p-5 rounded-br-2xl flex items-center gap-5 mb-4'}
             >
-                Test Time Conversion
-            </Button>
+                <ThemeToggle overrideMargin/>
 
+                <VerticalRuler className={'h-8'}/>
 
+                <div>
+                    <div className={'text-2xl font-bold'}>time-to-work</div>
+                    Arbeitszeitdashboard
+                </div>
 
-            <ThemeToggle/>
+                <VerticalRuler className={'h-8'}/>
 
-
-
-            <br/>
-
-            <Time time={time}/>
-
-            <AddTime/>
-            <Toggle isOn={on} onChange={setOn}/>
-
-            <Elevation>
-                This is an Elevation!
-                <Section>
-                    And this is a Section!
+                <Section className={'text-xl font-bold flex items-center px-5'}>
+                    <Time time={time}/>
                 </Section>
 
-                Test
             </Elevation>
 
+            <Button className={'w-fit'}
+                    onClick={() => {
+                        setWorkTime([
+                            {
+                                startTime: TimeClass.ofString('08:00'),
+                                endTime: TimeClass.ofString('09:00'),
+                                type: "work"
+                            },
+                            {
+                                startTime: TimeClass.ofString('11:00'),
+                                type: 'break'
+                            }
+                        ]);
+                    }}
 
-            <br/>
-
-            <Button onClick={not}>
-                Notification
-            </Button>
-            <Timeline
-                currentTime={TimeClass.ofString('10:45')}
-                height={9}
-                data={[
-                    {
-                        startTime: TimeClass.ofString('08:00'),
-                        endTime: TimeClass.ofString('08:30'),
-                        title: "Break",
-                        color: DefaultTimelineBlockColor.GREEN,
-                    },
-                    {
-                        startTime: TimeClass.ofString('10:30'),
-                        color: DefaultTimelineBlockColor.BLUE,
-                        title: "Work"
-                    },
-                    {
-                        startTime: TimeClass.ofString('15:00'),
-                        endTime: TimeClass.ofString('16:30'),
-                        title: "Work",
-                        color: DefaultTimelineBlockColor.YELLOW
-                    }
-                ]}
-            />
+            >test</Button>
 
 
-            <Elevation>
-                <div className={'flex flex-row items-center gap-1'}>
-                    <div
-                        className={`${active ? 'neumorphic-medium-inset neumorphic-reverse-active-medium' : 'neumorphic-medium neumorphic-active-medium'}  rounded-lg size-8 dark:border-zinc-600 border-zinc-400 border-2 text-center content-center text-xl select-none`}
-                        onClick={() => setActive(current => !current)}
-                    >
-                        {active ? '✓' : ''}
-                    </div>
-
-                    Use Dark Mode
-
+            <div className={'flex-1 flex flex-col justify-between'}>
+                <div className={'flex justify-center'}>
+                    <AddTime workTime={workTime}/>
                 </div>
-            </Elevation>
 
+                <Timeline
+                    currentTime={time}
+                    height={11}
+                    data={mapWorkTimeToTimelineData(workTime)}
+                />
 
-            <SegmentedControls
-                segmentClassName={(isSelection) => `w-40 flex flex-row justify-center ${isSelection && 'font-bold'}`}
-                orientation={"vertical"}
-                segments={[
-                    "German",
-                    "French",
-                    "English",
-                    "Polish",
-                    "Spanish"
-                ]}
-                onSelectionChange={setLang}
-                selection={lang}
-                deselectable={true}
-            />
-
-
-            <div>
-                t
-                t <br/>
-                te
+                <Table
+                    header={['Summe der Arbeitszeit', 'restliche Arbeitszeit', 'Arbeitsende', 'neuer Zeitsaldo', 'Pause', 'nächster Zug']}
+                    data={[
+                        [<Section><Time time={TimeClass.of(11, 1)}/></Section>, '--:--', '--:--', '--:--', '--:--', '--:--']
+                    ]}
+                />
             </div>
-
 
         </div>
     );
