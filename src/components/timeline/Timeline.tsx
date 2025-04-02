@@ -7,8 +7,8 @@ import Time from "@/time/Time";
 import TimelineBlock from "@/components/timeline/components/TimelineBlock";
 import { TimelineCalculator } from "@/components/timeline/TimelineCalculator";
 import { TimelineBlockColor } from "@/components/timeline/TimelineBlockColor";
-import NeumorphicDiv from "@/components/neumorphic-primitives/NeumorphicDiv";
-import { NeumorphicBlueprintFactory } from "@/neumorphic/neumorphic";
+import NeumorphicDiv from "@/components/neumorphicPrimitives/NeumorphicDiv";
+import { NeumorphicBlueprintFactory } from "@/neumorphic/NeumorphicStyle";
 
 export type TimelineData = {
     startTime: Time,
@@ -45,17 +45,12 @@ export default function Timeline(props: TimelineProps) {
     const timeSteps = calculator.createTimeSteps();
     const blockBlueprints = calculator.createTimelineBlockBlueprints(props.data, props.currentTime, darkTheme);
 
-    const offTimeColor = darkTheme ? '#27282b' : '#d1d4d7';
-    const thickLineColor = darkTheme ? '#494b51' : '#b3b6b8';
-    const thinLineColor = darkTheme ? '#393a3f' : '#dbdee1';
-    const nowLineColor = darkTheme ? '#ff4d4d' : '#FF3F3F';
-
     return (
         <NeumorphicDiv
             blueprint={NeumorphicBlueprintFactory.createLarge()}
             className={'rounded-3xl relative'}
             style={{
-                backgroundImage: calculator.createTimelineBackgroundImageGradient(offTimeColor),
+                backgroundImage: calculator.createTimelineBackgroundImageGradient(darkTheme ? '#27282b' : '#d1d4d7'),
                 height: `${height}rem`,
                 marginBottom: '36px',
                 marginTop: '33px',
@@ -63,10 +58,10 @@ export default function Timeline(props: TimelineProps) {
         >
             <div className={'absolute rounded-3xl overflow-hidden w-full h-full'}>
                 {
-                    subTimeSteps.map((step, i) => <ThinLine key={i} position={step.position} color={thinLineColor}/>)
+                    subTimeSteps.map((step, i) => <ThinLine key={i} position={step.position}/>)
                 }
                 {
-                    timeSteps.map((step, i) => <ThickLine key={i} position={step.position} color={thickLineColor}/>)
+                    timeSteps.map((step, i) => <ThickLine key={i} position={step.position}/>)
                 }
             </div>
             {
@@ -77,7 +72,7 @@ export default function Timeline(props: TimelineProps) {
             }
             {
                 calculator.isCurrentTimeInsideActiveArea(props.currentTime) &&
-                <NowLine position={calculator.calculateNowLinePosition(props.currentTime)} color={nowLineColor}/>
+                <NowLine position={calculator.calculateNowLinePosition(props.currentTime)}/>
             }
         </NeumorphicDiv>
     );

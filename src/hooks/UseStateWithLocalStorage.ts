@@ -14,6 +14,7 @@ function createObjectSerialization<T>(): Serialization<T> {
     }
 }
 
+// This hook currently has a limitation: It cannot handle storing / retrieving undefined or null values to / from LocalStorage
 export default function useStateWithLocalStorage<T>(key: string, fallback: T, serialization: Serialization<T> = createObjectSerialization<T>()): [T, Dispatch<SetStateAction<T>>] {
     const [value, setValue] = useState<T>(fallback);
 

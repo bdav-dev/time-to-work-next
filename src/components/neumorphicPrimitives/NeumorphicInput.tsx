@@ -1,5 +1,5 @@
 import { InputHTMLAttributes, Ref } from "react";
-import flattenNeumorphicBlueprint, { NeumorphicBlueprint } from "@/neumorphic/neumorphic";
+import flattenNeumorphicBlueprint, { NeumorphicBlueprint } from "@/neumorphic/NeumorphicStyle";
 
 type NeumorphicInputProps = {
     blueprint: NeumorphicBlueprint,

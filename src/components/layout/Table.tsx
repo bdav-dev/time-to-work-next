@@ -1,6 +1,7 @@
 import React from "react";
-import NeumorphicDiv from "@/components/neumorphic-primitives/NeumorphicDiv";
-import { NeumorphicBlueprintFactory } from "@/neumorphic/neumorphic";
+import NeumorphicDiv from "@/components/neumorphicPrimitives/NeumorphicDiv";
+import { NeumorphicBlueprintFactory } from "@/neumorphic/NeumorphicStyle";
+import { createIsLast, isFirst } from "@/util/ArrayUtils";
 
 type TableProps = {
     header?: (string | React.ReactNode)[] | (string | React.ReactNode),
@@ -8,14 +9,16 @@ type TableProps = {
     className?: string
 }
 
+const borderClassName = 'border-neumorphic-400 dark:border-neumorphic-600';
+const headerClassName = (isFirst: boolean = true, isLast: boolean = true, columnIndex: number = 0) => `
+    text-lg p-3 dark:bg-neumorphic-800 bg-neumorphic-200
+    ${isFirst && 'rounded-tl-3xl'} ${isLast && 'rounded-tr-3xl'}
+    ${columnIndex != 0 && 'border-l'} ${borderClassName}
+`;
+
 export default function Table(props: TableProps) {
+    const isLastInHeader = createIsLast(Array.isArray(props.header) ? props.header : []);
     const amountOfColumns = Math.max(...props.data.map(row => row.length));
-    const borderClassName = 'border-neumorphic-400 dark:border-neumorphic-600';
-    const headerClassName = (isFirst: boolean, isLast: boolean, columnIndex: number) => `
-        text-lg p-3 dark:bg-neumorphic-800 bg-neumorphic-200
-        ${isFirst && 'rounded-tl-3xl'} ${isLast && 'rounded-tr-3xl'}
-        ${columnIndex != 0 && 'border-l'} ${borderClassName}
-    `;
 
     return (
         <NeumorphicDiv blueprint={NeumorphicBlueprintFactory.createLarge()} className={'rounded-3xl'}>
@@ -29,14 +32,12 @@ export default function Table(props: TableProps) {
                             Array.isArray(props.header)
                                 ? props.header.map(
                                     (columnHeader, i) => (
-                                        <th key={i}
-                                            className={headerClassName(i == 0, Array.isArray(props.header) && props.header.length - 1 == i, i)}
-                                        >
+                                        <th key={i} className={headerClassName(isFirst(i), isLastInHeader(i), i)}>
                                             {columnHeader}
                                         </th>
                                     )
                                 )
-                                : <th colSpan={amountOfColumns} className={headerClassName(true, true, 0)}>{props.header}</th>
+                                : <th colSpan={amountOfColumns} className={headerClassName()}>{props.header}</th>
                         }
                     </tr>
                     </thead>
@@ -47,13 +48,7 @@ export default function Table(props: TableProps) {
                         .filter(row => row.length != 0)
                         .map(
                             (row, rowIndex) => (
-                                <tr key={rowIndex}
-                                    className={
-                                        !(rowIndex == 0 && props.header == undefined)
-                                            ? `border-t ${borderClassName}`
-                                            : ''
-                                    }
-                                >
+                                <tr key={rowIndex} className={`border-t ${borderClassName}`}>
                                     {
                                         row.map(
                                             (column, columnIndex) => (

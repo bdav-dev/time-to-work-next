@@ -1,6 +1,6 @@
 import React, { CSSProperties } from "react";
-import { NeumorphicBlueprint } from "@/neumorphic/neumorphic";
-import NeumorphicButton from "@/components/neumorphic-primitives/NeumorphicButton";
+import { NeumorphicBlueprint } from "@/neumorphic/NeumorphicStyle";
+import NeumorphicButton from "@/components/neumorphicPrimitives/NeumorphicButton";
 
 export type Segment<T> = {
     id: number,
@@ -9,12 +9,11 @@ export type Segment<T> = {
     className?: string | ((isSelection: boolean) => string),
 };
 
-type Orientation = 'horizontal' | 'vertical';
 type Position = 'leading' | 'inBetween' | 'trailing';
 type SegmentClassName = string | ((isSelection: boolean) => string);
 
 type SegmentedControlsProps<T> = {
-    orientation?: Orientation;
+    orientation?: 'horizontal' | 'vertical';
     segmentClassName?: SegmentClassName,
     segments: Segment<T>[];
     selection: Segment<T> | undefined,

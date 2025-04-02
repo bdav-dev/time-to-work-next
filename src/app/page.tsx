@@ -4,15 +4,15 @@ import ThemeToggle from "@/components/theme/ThemeToggle";
 import Elevation from "@/components/layout/Elevation";
 import React from "react";
 import Section from "@/components/layout/Section";
-import AddScheduleBlockPanel from "@/components/AddScheduleBlockPanel";
-import useTime from "@/hooks/useTime";
+import ScheduleControlPanel from "@/components/ScheduleControlPanel";
+import useTime from "@/hooks/UseTime";
 import Time from "@/components/Time";
 import VerticalRuler from "@/components/layout/VerticalRuler";
 import Timeline, { TimelineData } from "@/components/timeline/Timeline";
 import TimeClass from '@/time/Time';
 import Table from "@/components/layout/Table";
 import useStateWithLocalStorage from "@/hooks/UseStateWithLocalStorage";
-import { Schedule, ScheduleSerialization } from "@/Schedule";
+import { Schedule, ScheduleSerialization } from "@/schedule/Schedule";
 
 
 function mapScheduleToTimelineData(schedule: Schedule): TimelineData[] {
@@ -76,10 +76,9 @@ export default function TimeToWork() {
 
             {/*>test</Button>*/}
 
-
             <div className={'flex-1 flex flex-col justify-between'}>
                 <div className={'flex justify-center'}>
-                    <AddScheduleBlockPanel workTime={schedule}/>
+                    <ScheduleControlPanel schedule={schedule}/>
                 </div>
 
                 <Timeline

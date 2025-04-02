@@ -1,5 +1,5 @@
 import { HTMLAttributes } from "react";
-import flattenNeumorphicBlueprint, { NeumorphicBlueprint } from "@/neumorphic/neumorphic";
+import flattenNeumorphicBlueprint, { NeumorphicBlueprint } from "@/neumorphic/NeumorphicStyle";
 
 type NeumorphicDivProps = { blueprint: NeumorphicBlueprint, overrideBackground?: boolean } & HTMLAttributes<HTMLDivElement>;
 

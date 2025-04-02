@@ -1,11 +1,11 @@
 import Time from "@/time/Time";
 import { Serialization } from "@/hooks/UseStateWithLocalStorage";
-import { ScheduleBlockType, ScheduleBlockTypeIdentifier, ScheduleBlockTypes } from "@/ScheduleBlockType";
+import { ScheduleBlockTime, ScheduleBlockTimeIdentifier, ScheduleBlockTimes } from "@/schedule/ScheduleBlockTime";
 
 type ScheduleBlock = {
     startTime: Time,
     endTime?: Time,
-    type: ScheduleBlockType,
+    type: ScheduleBlockTime,
 }
 
 export type Schedule = ScheduleBlock[];
@@ -30,21 +30,7 @@ export const ScheduleSerialization: Serialization<Schedule> = {
         return (JSON.parse(target) as SerializableSchedule).map(block => ({
             startTime: Time.ofString(block.startTime),
             endTime: block.endTime ? Time.ofString(block.endTime) : undefined,
-            type: ScheduleBlockTypes.ofIdentifier(block.typeIdentifier as ScheduleBlockTypeIdentifier)
+            type: ScheduleBlockTimes.ofIdentifier(block.typeIdentifier as ScheduleBlockTimeIdentifier)
         }));
     }
-}
-
-export function getOpenTimestamp(workTime: Schedule) {
-    for (const block of workTime) {
-        if (!block.endTime) {
-            return block;
-        }
-    }
-
-    return null;
-}
-
-export function closeTimeStamp() {
-
 }

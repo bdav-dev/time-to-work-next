@@ -1,8 +1,8 @@
 'use client';
 
 import { ButtonHTMLAttributes } from "react";
-import { NeumorphicBlueprintFactory } from "@/neumorphic/neumorphic";
-import NeumorphicButton from "@/components/neumorphic-primitives/NeumorphicButton";
+import { NeumorphicBlueprintFactory } from "@/neumorphic/NeumorphicStyle";
+import NeumorphicButton from "@/components/neumorphicPrimitives/NeumorphicButton";
 
 export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
     circular?: boolean;

@@ -4,18 +4,13 @@ import React, { createContext, useEffect, useState } from "react";
 import Time from "@/time/Time";
 
 
-const ONE_MINUTE = 60 * 1000;
-
 export const TimeContext = createContext<Time>(Time.now());
 
 export function TimeProvider({ children }: { children?: React.ReactNode }) {
     const [time, setTime] = useState<Time>(Time.now());
 
     useEffect(() => {
-        repeatEvery(
-            () => setTime(Time.now()),
-            ONE_MINUTE
-        );
+        runEveryTimeWhenMinuteChanges(() => setTime(Time.now()));
     }, []);
 
     return (
@@ -26,15 +21,18 @@ export function TimeProvider({ children }: { children?: React.ReactNode }) {
 
 }
 
-function repeatEvery(func: () => void, interval: number) {
+const ONE_MINUTE_IN_MS = 60 * 1000;
+
+function runEveryTimeWhenMinuteChanges(callback: () => void) {
     const now = new Date();
-    const delay = interval - now.valueOf() % interval;
+    const delayInMs = ONE_MINUTE_IN_MS - now.valueOf() % ONE_MINUTE_IN_MS;
 
-    function start() {
-        func();
-        repeatEvery(func, interval);
-    }
-
-    setTimeout(start, delay);
+    setTimeout(
+        () => {
+            callback();
+            runEveryTimeWhenMinuteChanges(callback);
+        },
+        delayInMs
+    );
 }
 

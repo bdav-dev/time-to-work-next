@@ -1,20 +1,20 @@
-export type AddScheduleBlockModeIdentifier = 'timeStamp' | 'timeInterval';
+export type ScheduleBlockTypeIdentifier = 'timeStamp' | 'timeInterval';
 
-export type AddScheduleBlockMode = {
-    identifier: AddScheduleBlockModeIdentifier,
+export type ScheduleBlockType = {
+    identifier: ScheduleBlockTypeIdentifier,
     segment: {
         displayAs: string
     }
 };
 
-export class AddScheduleBlockModes {
-    static readonly TIME_STAMP: AddScheduleBlockMode = {
+export class ScheduleBlockTypes {
+    static readonly TIME_STAMP: ScheduleBlockType = {
         identifier: 'timeStamp',
         segment: {
             displayAs: 'Zeitstempel'
         }
     }
-    static readonly TIME_INTERVAL: AddScheduleBlockMode = {
+    static readonly TIME_INTERVAL: ScheduleBlockType = {
         identifier: 'timeInterval',
         segment: {
             displayAs: 'Zeitintervall'
@@ -25,7 +25,7 @@ export class AddScheduleBlockModes {
         return [this.TIME_STAMP, this.TIME_INTERVAL];
     }
 
-    static ofIdentifier(identifier: AddScheduleBlockModeIdentifier) {
+    static ofIdentifier(identifier: ScheduleBlockTypeIdentifier) {
         return this.values().find(type => type.identifier === identifier)!;
     }
 }

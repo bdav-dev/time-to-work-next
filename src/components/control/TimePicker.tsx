@@ -1,5 +1,5 @@
-import NeumorphicInput from "@/components/neumorphic-primitives/NeumorphicInput";
-import { NeumorphicBlueprintFactory } from "@/neumorphic/neumorphic";
+import NeumorphicInput from "@/components/neumorphicPrimitives/NeumorphicInput";
+import { NeumorphicBlueprintFactory } from "@/neumorphic/NeumorphicStyle";
 import Time from "@/time/Time";
 import { useEffect, useRef } from "react";
 

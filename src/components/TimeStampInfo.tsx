@@ -4,12 +4,12 @@ import Time from "@/time/Time";
 import React from "react";
 import KeyValueSection from "@/components/layout/KeyValueSection";
 
-type TimeStampProps = {
+type TimeStampInfoProps = {
     openTimeStamp: Time | undefined,
     className?: string;
 }
 
-export default function TimeStamp(props: TimeStampProps) {
+export default function TimeStampInfo(props: TimeStampInfoProps) {
 
     return (
         <div className={`flex flex-col gap-2.5 ${props.className}`}>

@@ -1,9 +1,9 @@
 import { TimelineBlockColor, TimelineBlockColors } from "@/components/timeline/TimelineBlockColor";
 
-export type ScheduleBlockTypeIdentifier = 'workTime' | 'breakTime';
+export type ScheduleBlockTimeIdentifier = 'workTime' | 'breakTime';
 
-export type ScheduleBlockType = {
-    identifier: ScheduleBlockTypeIdentifier,
+export type ScheduleBlockTime = {
+    identifier: ScheduleBlockTimeIdentifier,
     timelineBlock: {
         title: string,
         color: TimelineBlockColor
@@ -14,8 +14,8 @@ export type ScheduleBlockType = {
     }
 };
 
-export class ScheduleBlockTypes {
-    static readonly WORK_TIME: ScheduleBlockType = {
+export class ScheduleBlockTimes {
+    static readonly WORK: ScheduleBlockTime = {
         identifier: 'workTime',
         timelineBlock: {
             title: 'Arbeit',
@@ -26,7 +26,7 @@ export class ScheduleBlockTypes {
             className: 'text-blue-500 dark:text-blue-400',
         }
     }
-    static readonly BREAK_TIME: ScheduleBlockType = {
+    static readonly BREAK: ScheduleBlockTime = {
         identifier: 'breakTime',
         timelineBlock: {
             title: 'Pause',
@@ -39,10 +39,10 @@ export class ScheduleBlockTypes {
     }
 
     static values() {
-        return [this.WORK_TIME, this.BREAK_TIME];
+        return [this.WORK, this.BREAK];
     }
 
-    static ofIdentifier(identifier: ScheduleBlockTypeIdentifier) {
+    static ofIdentifier(identifier: ScheduleBlockTimeIdentifier) {
         return this.values().find(type => type.identifier === identifier)!;
     }
 }

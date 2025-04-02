@@ -1,6 +1,6 @@
 import { HTMLAttributes } from "react";
-import NeumorphicDiv from "@/components/neumorphic-primitives/NeumorphicDiv";
-import { NeumorphicBlueprintFactory } from "@/neumorphic/neumorphic";
+import NeumorphicDiv from "@/components/neumorphicPrimitives/NeumorphicDiv";
+import { NeumorphicBlueprintFactory } from "@/neumorphic/NeumorphicStyle";
 
 type ElevationProps = {
     overridePadding?: boolean,

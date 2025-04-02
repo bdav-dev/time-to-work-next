@@ -3,7 +3,7 @@ import Time from "@/time/Time";
 import TimeComponent from '@/components/Time';
 import KeyValueSection from "@/components/layout/KeyValueSection";
 
-type TimeIntervalProps = {
+type AddTimeIntervalProps = {
     startTime: Time | undefined,
     setStartTime: (value: Time | undefined) => void
     endTime: Time | undefined,
@@ -11,7 +11,7 @@ type TimeIntervalProps = {
     className?: string
 }
 
-export default function TimeInterval(props: TimeIntervalProps) {
+export default function AddTimeInterval(props: AddTimeIntervalProps) {
     const timeDifference = (
         !props.startTime || !props.endTime || props.startTime.compareTo(props.endTime) > 0
             ? undefined

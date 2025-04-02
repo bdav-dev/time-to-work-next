@@ -1,5 +1,5 @@
 import { ButtonHTMLAttributes } from "react";
-import flattenNeumorphicBlueprint, { NeumorphicBlueprint } from "@/neumorphic/neumorphic";
+import flattenNeumorphicBlueprint, { NeumorphicBlueprint } from "@/neumorphic/NeumorphicStyle";
 
 type NeumorphicButtonProps = { blueprint: NeumorphicBlueprint, overrideBackground?: boolean } & ButtonHTMLAttributes<HTMLButtonElement>;
 

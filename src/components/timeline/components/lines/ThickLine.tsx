@@ -1,6 +1,5 @@
 type ThickLineProps = {
-    position: number,
-    color: string
+    position: number
 }
 
 export default function ThickLine(props: ThickLineProps) {
@@ -8,12 +7,12 @@ export default function ThickLine(props: ThickLineProps) {
         <div
             className={`
                 absolute w-[2px] h-full -translate-x-1/2
+                bg-[#b3b6b8] dark:bg-[#494b51]
                 rounded-full
                 select-none
             `}
             style={{
-                left: `${props.position}%`,
-                backgroundColor: props.color,
+                left: `${props.position}%`
             }}
         />
     );
