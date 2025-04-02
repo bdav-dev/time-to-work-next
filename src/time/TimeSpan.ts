@@ -1,8 +1,8 @@
 import Time from "@/time/Time";
 
 export default class TimeSpan {
-    readonly hours: number;
-    readonly minutes: number;
+    public readonly hours: number;
+    public readonly minutes: number;
 
     private constructor(hours: number, minutes: number) {
         const { hours: normalizedHours, minutes: normalizedMinutes } = this.normalize(hours, minutes);
@@ -63,8 +63,8 @@ export default class TimeSpan {
         );
     }
 
-    compareTo(other: TimeSpan) {
-        return this.reduceToMinutes() - other.reduceToMinutes();
+    hasNoLength() {
+        return this.reduceToMinutes() == 0;
     }
 
     asTime() {
@@ -89,6 +89,14 @@ export default class TimeSpan {
         const minutes = this.minutes.toString().padStart(2, '0');
 
         return `${sign}${hours}:${minutes}`;
+    }
+
+    compareTo(other: TimeSpan) {
+        return this.reduceToMinutes() - other.reduceToMinutes();
+    }
+
+    equals(other: TimeSpan) {
+        return this.compareTo(other) == 0;
     }
 
 }

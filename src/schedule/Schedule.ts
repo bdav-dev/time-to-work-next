@@ -5,7 +5,7 @@ import { ScheduleBlockTime, ScheduleBlockTimeIdentifier, ScheduleBlockTimes } fr
 type ScheduleBlock = {
     startTime: Time,
     endTime?: Time,
-    type: ScheduleBlockTime,
+    time: ScheduleBlockTime,
 }
 
 export type Schedule = ScheduleBlock[];
@@ -22,7 +22,7 @@ export const ScheduleSerialization: Serialization<Schedule> = {
             source.map(block => ({
                 startTime: block.startTime.toString(),
                 endTime: block.endTime?.toString() ?? undefined,
-                typeIdentifier: block.type.identifier
+                typeIdentifier: block.time.identifier
             }))
         );
     },
@@ -30,7 +30,7 @@ export const ScheduleSerialization: Serialization<Schedule> = {
         return (JSON.parse(target) as SerializableSchedule).map(block => ({
             startTime: Time.ofString(block.startTime),
             endTime: block.endTime ? Time.ofString(block.endTime) : undefined,
-            type: ScheduleBlockTimes.ofIdentifier(block.typeIdentifier as ScheduleBlockTimeIdentifier)
+            time: ScheduleBlockTimes.ofIdentifier(block.typeIdentifier as ScheduleBlockTimeIdentifier)
         }));
     }
 }

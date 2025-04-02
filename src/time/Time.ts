@@ -23,17 +23,17 @@ export default class Time {
     }
 
     private validateTime() {
-        if (this.timeSpan.hours < 0 || this.timeSpan.hours > 23) { //TODO 24:12 ist erlaubt???? FIXED... sort of -> was bei 24 uhr? maybe bei construktor modulo stunden 24...
-            throw new RangeError("Invalid hour range (must be between 0 and 24).");
+        if (this.timeSpan.hours < 0 || this.timeSpan.hours > 23) {
+            throw new RangeError("Invalid hour range (must be between 0 and 23).");
         }
     }
 
-    subtract(time: Time) {
-        return this.timeSpan.subtract(time.asTimeSpan()).asTime();
+    subtract(timeSpan: TimeSpan) {
+        return this.timeSpan.subtract(timeSpan).asTime();
     }
 
-    add(time: Time) {
-        return this.timeSpan.add(time.asTimeSpan()).asTime();
+    add(timeSpan: TimeSpan) {
+        return this.timeSpan.add(timeSpan).asTime();
     }
 
     divide(divisor: number) {
@@ -70,6 +70,10 @@ export default class Time {
         const minutes = this.timeSpan.minutes.toString().padStart(2, '0');
 
         return `${hours}:${minutes} ${meridiem}`;
+    }
+
+    equals(other: Time) {
+        return this.timeSpan.equals(other.asTimeSpan());
     }
 
 }

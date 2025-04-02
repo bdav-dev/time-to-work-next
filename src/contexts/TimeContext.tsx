@@ -18,7 +18,6 @@ export function TimeProvider({ children }: { children?: React.ReactNode }) {
             {children}
         </TimeContext.Provider>
     );
-
 }
 
 const ONE_MINUTE_IN_MS = 60 * 1000;
@@ -35,4 +34,3 @@ function runEveryTimeWhenMinuteChanges(callback: () => void) {
         delayInMs
     );
 }
-

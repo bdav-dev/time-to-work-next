@@ -13,7 +13,10 @@ import ScheduleOperations from "@/schedule/ScheduleOperations";
 
 
 type ScheduleControlPanelProps = {
-    schedule: Schedule;
+    schedule: Schedule,
+    onAddTimeIntervalRequest?: (startTime: Time | undefined, endTime: Time | undefined, time: ScheduleBlockTime) => boolean,
+    onOpenTimeStampRequest?: (time: ScheduleBlockTime, openTimeStampAt?: Time) => void,
+    onCloseTimeStampRequest?: (closeTimeStampAt?: Time) => void
 }
 
 export default function ScheduleControlPanel(props: ScheduleControlPanelProps) {
@@ -29,7 +32,7 @@ export default function ScheduleControlPanel(props: ScheduleControlPanelProps) {
     const isScheduleBlockTypeSegmentedControlDisabled = !!openTimeStamp && isScheduleBlockTypeSegmentSelected(ScheduleBlockTypes.TIME_STAMP);
     const maskingScheduleBlockTimeSegment = (
         (!!openTimeStamp && isScheduleBlockTypeSegmentSelected(ScheduleBlockTypes.TIME_STAMP))
-            ? ScheduleBlockTimeSegments[openTimeStamp.type.identifier]
+            ? ScheduleBlockTimeSegments[openTimeStamp.time.identifier]
             : undefined
     );
 
@@ -38,6 +41,39 @@ export default function ScheduleControlPanel(props: ScheduleControlPanelProps) {
             ? 'Hinzufügen'
             : openTimeStamp ? 'Zeitstempel schließen' : 'Zeitstempel öffnen'
     );
+
+    function onButtonClick() {
+        const time = selectedScheduleBlockTimeSegment.value;
+
+        if (isScheduleBlockTypeSegmentSelected(ScheduleBlockTypes.TIME_INTERVAL)) {
+            if (startTime && !endTime) {
+                props.onOpenTimeStampRequest?.(time, startTime);
+                return;
+            }
+
+            if (!startTime && endTime) {
+                props.onCloseTimeStampRequest?.(endTime);
+                return;
+            }
+
+            if (!props.onAddTimeIntervalRequest) {
+                return;
+            }
+
+            const success = props.onAddTimeIntervalRequest?.(startTime, endTime, time);
+            if (success) {
+                setStartTime(undefined);
+                setEndTime(undefined);
+            }
+
+        } else if (isScheduleBlockTypeSegmentSelected(ScheduleBlockTypes.TIME_STAMP)) {
+            if (openTimeStamp) {
+                props.onCloseTimeStampRequest?.();
+            } else {
+                props.onOpenTimeStampRequest?.(time);
+            }
+        }
+    }
 
     return (
         <Elevation overridePadding className={'w-fit'}>
@@ -84,7 +120,7 @@ export default function ScheduleControlPanel(props: ScheduleControlPanelProps) {
                     disabled={isScheduleBlockTypeSegmentedControlDisabled}
                 />
 
-                <Button className={'min-w-56'}>
+                <Button className={'min-w-56'} onClick={onButtonClick}>
                     {buttonText}
                 </Button>
             </div>
