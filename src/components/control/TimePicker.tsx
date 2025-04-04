@@ -2,13 +2,17 @@ import NeumorphicInput from "@/components/neumorphicPrimitives/NeumorphicInput";
 import { NeumorphicBlueprintFactory } from "@/neumorphic/NeumorphicStyle";
 import Time from "@/time/Time";
 import { useEffect, useRef } from "react";
+import useTime from "@/hooks/UseTime";
 
 type TimePickerProps = {
     value: Time | undefined,
-    onValueChange: (value: Time | undefined) => void
+    onValueChange: (value: Time | undefined) => void,
+    onEnterKeyUp?: () => void,
 }
 
 export default function TimePicker(props: TimePickerProps) {
+    const now = useTime();
+
     const blueprint = NeumorphicBlueprintFactory.createMedium();
     blueprint.inverted = true;
 
@@ -32,8 +36,11 @@ export default function TimePicker(props: TimePickerProps) {
             }}
             className={'px-2 py-1.5 rounded-full outline-none'}
             onKeyUp={(e) => {
-                if (e.key === 'Enter') {
-                    props.onValueChange(Time.now());
+                if (e.key === ' ') {
+                    props.onValueChange(now);
+                } else if (e.key === 'Enter') {
+                    input.current?.blur();
+                    props.onEnterKeyUp?.();
                 }
             }}
         />

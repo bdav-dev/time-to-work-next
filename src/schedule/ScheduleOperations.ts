@@ -3,11 +3,11 @@ import Time from "@/time/Time";
 import { ScheduleBlockTime } from "@/schedule/ScheduleBlockTime";
 import TimeInterval from "@/time/TimeInterval";
 import { compare } from "@/util/CompareUtils";
+import { DisplayableError } from "@/error/DisplayableError";
 
 
 export default class ScheduleOperations {
     private constructor() {}
-
 
     static getOpenTimestamp(schedule: Schedule) {
         for (const block of schedule) {
@@ -23,11 +23,11 @@ export default class ScheduleOperations {
         const newSchedule = [...schedule];
 
         if (intervalToAdd.hasNoLength()) {
-            throw new Error("has no length");
+            throw new DisplayableError("Das Zeitintervall hat keine Länge.");
         }
 
         if (compare(intervalToAdd.endTime, 'greaterThan', now)) {
-            throw new Error("in future");
+            throw new DisplayableError("Das Zeitintervall liegt in der Zukunft.");
         }
 
         for (const block of schedule) {
@@ -37,17 +37,14 @@ export default class ScheduleOperations {
 
             const existingInterval = TimeInterval.of(block.startTime, block.endTime);
 
-            if (intervalToAdd.intersectsWith(existingInterval)) {
-                throw new Error('intersects with!');
-            }
-            if (intervalToAdd.equals(existingInterval)) {
-                throw new Error("interval already exists!");
+            if (intervalToAdd.intersectsWith(existingInterval) || intervalToAdd.equals(existingInterval)) {
+                throw new DisplayableError('Das Zeitintervall überschneidet sich mit einem bereits bestehenden Intervall.');
             }
         }
 
         const openTimeStamp = this.getOpenTimestamp(schedule);
         if (openTimeStamp && compare(intervalToAdd.endTime, 'greaterThan', openTimeStamp.startTime)) {
-            throw new Error('intersects with open timestamp!');
+            throw new DisplayableError('Das Zeitintervall überschneidet sich mit einem geöffnetem Zeitstempel.');
         }
 
         newSchedule.push({
@@ -63,11 +60,11 @@ export default class ScheduleOperations {
         const newSchedule = [...schedule];
 
         if (this.doesOpenTimeStampExist(newSchedule)) {
-            throw new Error('openTimeStamp already exists!');
+            throw new DisplayableError('Es existiert bereits ein offener Zeitstempel.');
         }
 
         if (compare(startTime, 'greaterThan', now)) {
-            throw new Error('cannot open time stamp in future');
+            throw new DisplayableError('Die Startzeit des Stempels liegt in der Zukunft.');
         }
 
         const intervalRepresentation = TimeInterval.of(startTime, now);
@@ -80,11 +77,11 @@ export default class ScheduleOperations {
             const existingInterval = TimeInterval.of(block.startTime, block.endTime);
 
             if (existingInterval.intersectsWith(intervalRepresentation)) {
-                throw new Error('intersects with!');
+                throw new DisplayableError('Der Zeitstempel überschneidet sich mit einem bereits bestehenden Intervall.');
             }
 
             if (compare(existingInterval.endTime, 'greaterThan', startTime)) {
-                throw new Error('interval in future ahead');
+                throw new DisplayableError('Ein Zeitintervall liegt in der Zukunft voraus.');
             }
         }
 
@@ -101,15 +98,15 @@ export default class ScheduleOperations {
 
         const openTimeStamp = this.getOpenTimestamp(newSchedule);
         if (!openTimeStamp) {
-            throw new Error("no open time stamp exists to be closed");
+            throw new DisplayableError("Es existiert kein offener Zeitstempel zum Schließen.");
         }
 
         if (compare(endTime, 'greaterThan', now)) {
-            throw new Error('cannot be closed in future');
+            throw new DisplayableError('Der Zeitstempel kann nicht in der Zukunft geschlossen werden.');
         }
 
         if (compare(endTime, 'lessThan', openTimeStamp.startTime)) {
-            throw new Error('cannot close timestamp which endtime is less than starttime');
+            throw new DisplayableError('Die Schließungszeit des Zeitstempels darf nicht vor der Startzeit liegen.');
         }
 
         newSchedule = newSchedule.filter(block => block !== openTimeStamp);

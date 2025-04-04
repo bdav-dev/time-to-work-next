@@ -43,3 +43,7 @@ body {
         translate: 0 -125%;
     }
 }
+
+input[type="time"]::-webkit-calendar-picker-indicator {
+    display: none;
+}

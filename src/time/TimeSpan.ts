@@ -5,7 +5,7 @@ export default class TimeSpan {
     public readonly minutes: number;
 
     private constructor(hours: number, minutes: number) {
-        const { hours: normalizedHours, minutes: normalizedMinutes } = this.normalize(hours, minutes);
+        const { normalizedHours, normalizedMinutes } = this.normalize(hours, minutes);
         this.hours = normalizedHours;
         this.minutes = normalizedMinutes;
     }
@@ -25,10 +25,19 @@ export default class TimeSpan {
 
     private normalize(hours: number, minutes: number) {
         const asMinutes = hours * 60 + minutes;
-        return {
-            hours: Math.trunc(asMinutes / 60),
-            minutes: Math.trunc(Math.abs(asMinutes % 60)),
+
+        let normalizedHours = Math.trunc(Math.abs(asMinutes) / 60);
+        let normalizedMinutes = Math.trunc(Math.abs(asMinutes) % 60);
+
+        if (asMinutes < 0) {
+            if (normalizedHours != 0) {
+                normalizedHours *= -1;
+            } else if (normalizedMinutes != 0) {
+                normalizedMinutes *= -1;
+            }
         }
+
+        return { normalizedMinutes, normalizedHours };
     }
 
     static ratio(numerator: TimeSpan, denominator: TimeSpan) {
@@ -80,13 +89,13 @@ export default class TimeSpan {
     }
 
     isNegative() {
-        return this.hours < 0;
+        return this.hours < 0 || this.minutes < 0;
     }
 
     toString() {
         const sign = this.isNegative() ? '-' : '';
         const hours = Math.abs(this.hours).toString().padStart(2, '0');
-        const minutes = this.minutes.toString().padStart(2, '0');
+        const minutes = Math.abs(this.minutes).toString().padStart(2, '0');
 
         return `${sign}${hours}:${minutes}`;
     }

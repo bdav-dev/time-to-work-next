@@ -27,12 +27,12 @@ export default function RootLayout(
                         <StyledJsxRegistry>
                             <div
                                 className={`
-                                flex flex-col min-h-screen
-                                antialiased
-                                bg-neumorphic-100 dark:bg-neumorphic-750 
-                                text-neumorphic-700 dark:text-neumorphic-150 
-                                stroke-neumorphic-700 dark:stroke-neumorphic-150
-                            `}
+                                    flex flex-col min-h-screen
+                                    antialiased
+                                    bg-neumorphic-100 dark:bg-neumorphic-750 
+                                    text-neumorphic-700 dark:text-neumorphic-150 
+                                    stroke-neumorphic-700 dark:stroke-neumorphic-150
+                                `}
                             >
                                 <div className={'flex-1 flex flex-col'}>
                                     {children}

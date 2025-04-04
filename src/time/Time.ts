@@ -24,7 +24,7 @@ export default class Time {
 
     private validateTime() {
         if (this.timeSpan.hours < 0 || this.timeSpan.hours > 23) {
-            throw new RangeError("Invalid hour range (must be between 0 and 23).");
+            throw new RangeError(`Invalid hour range (must be between 0 and 23). was ${this.timeSpan.hours}`);
         }
     }
 

@@ -2,6 +2,7 @@ import TimeSpan from "@/time/TimeSpan";
 import Time from "@/time/Time";
 import { BookingBlockProps } from "@/components/timeline/components/TimelineBlock";
 import { TimelineData } from "@/components/timeline/Timeline";
+import { compare } from "@/util/CompareUtils";
 
 export class TimelineCalculator {
     readonly startTime: Time;
@@ -78,34 +79,46 @@ export class TimelineCalculator {
 
 
     createTimelineBlockBlueprints(data: TimelineData[], currentTime: Time, isDarkTheme: boolean): BookingBlockProps[] {
-        return data.map(
-            block => {
-                const endTime = block.endTime ?? currentTime;
+        return data
+            .map(
+                block => {
+                    const endTime = block.endTime ?? currentTime;
 
-                const rightOverflow = endTime.compareTo(this.endTime) > 0;
-                const leftOverflow = block.startTime.compareTo(this.startTime) < 0;
+                    const rightOverflow = compare(endTime, 'greaterThan', this.endTime);
+                    const leftOverflow = compare(block.startTime, 'lessThan', this.startTime);
 
-                const clampedBlockStartTime = leftOverflow ? this.startTime : block.startTime;
-                const clampedBlockEndTime = rightOverflow ? this.endTime : endTime;
+                    const clampedBlockStartTime = leftOverflow ? this.startTime : block.startTime;
+                    const clampedBlockEndTime = rightOverflow ? this.endTime : endTime;
 
-                return {
-                    title: block.title,
-                    startTime: block.startTime,
-                    endTime,
-                    leftOverflow: leftOverflow,
-                    rightOverflow: rightOverflow,
-                    color: block.color,
-                    isOpen: block.endTime == undefined,
-                    size: this.mapTimeSpanToSize(TimeSpan.ofTimeDifference(clampedBlockStartTime, clampedBlockEndTime)),
-                    position: this.mapTimeToPosition(clampedBlockStartTime),
-                    isDarkTheme
+                    const isBlockOutOfBounds = (
+                        compare(endTime, 'lessOrEqualThan', this.startTime) ||
+                        compare(block.startTime, 'greaterOrEqualThan', this.endTime)
+                    );
+
+                    return isBlockOutOfBounds
+                        ? null
+                        : {
+                            title: block.title,
+                            startTime: block.startTime,
+                            endTime,
+                            leftOverflow: leftOverflow,
+                            rightOverflow: rightOverflow,
+                            color: block.color,
+                            isOpen: block.endTime == undefined,
+                            size: this.mapTimeSpanToSize(TimeSpan.ofTimeDifference(clampedBlockStartTime, clampedBlockEndTime)),
+                            position: this.mapTimeToPosition(clampedBlockStartTime),
+                            isDarkTheme
+                        }
                 }
-            }
-        );
+            )
+            .filter(block => block != null);
     }
 
     isCurrentTimeInsideActiveArea(currentTime: Time) {
-        return currentTime.compareTo(this.startTime) >= 0 && currentTime.compareTo(this.endTime) <= 0;
+        return (
+            compare(currentTime, 'greaterOrEqualThan', this.startTime) &&
+            compare(currentTime, 'lessOrEqualThan', this.endTime)
+        );
     }
 
     createTimelineBackgroundImageGradient(offTimeColor: string) {

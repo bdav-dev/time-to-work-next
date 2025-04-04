@@ -15,7 +15,8 @@ export type BookingBlockProps = {
     position: number,
     size: number,
     color?: TimelineBlockColor,
-    isDarkTheme: boolean
+    isDarkTheme: boolean,
+    onClick?: () => void,
 }
 
 const HEIGHT = 94;
@@ -26,14 +27,17 @@ export default function TimelineBlock(props: BookingBlockProps) {
     const timeLabelColor = applyThemeToThemedColorPair(color.timeLabel, props.isDarkTheme);
 
     return (
-        <div
+        <button
             className={`
                 absolute
                 flex flex-col justify-between
                 rounded-xl
+                text-left
+                ${props.onClick && 'cursor-default'}
                 ${props.leftOverflow ? 'rounded-l-none' : ''}
                 ${props.rightOverflow || props.isOpen ? 'rounded-r-none' : ''}
             `}
+            onClick={() => alert('hey')}
             style={{
                 left: props.position + '%',
                 width: props.size + '%',
@@ -61,7 +65,7 @@ export default function TimelineBlock(props: BookingBlockProps) {
                 isOpen={props.isOpen ?? false}
                 color={timeLabelColor}
             />
-        </div>
+        </button>
     );
 
 }

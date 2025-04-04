@@ -2,10 +2,12 @@
 
 import React, { CSSProperties, useEffect, useState } from "react";
 
+export type MessageType = 'warning' | 'error' | 'success';
 
 export type Message = {
     title: string | React.ReactNode,
     body: string | React.ReactNode,
+    type?: MessageType,
     retentionInSeconds?: number
 }
 
@@ -20,7 +22,7 @@ type MessageContextType = {
 
 export const MessageContext = React.createContext<MessageContextType>({ message: undefined, animationStyles: {}, set: () => {}, clear: () => {}, setDoAutoClear: () => {}, doAutoClear: false });
 
-const DEFAULT_RETENTION_IN_SECONDS = 7;
+export const DEFAULT_RETENTION_IN_SECONDS = 7;
 const APPEAR_DISAPPEAR_ANIMATION_DURATION_IN_SECONDS = 0.25;
 
 const APPEAR_STYLES: CSSProperties = { animation: `message-appear ${APPEAR_DISAPPEAR_ANIMATION_DURATION_IN_SECONDS}s ease-out forwards` };

@@ -29,7 +29,12 @@ export default function ScheduleControlPanel(props: ScheduleControlPanelProps) {
     const isScheduleBlockTypeSegmentSelected = (type: ScheduleBlockType) => selectedScheduleBlockTypeSegment.value.identifier == type.identifier;
 
     const openTimeStamp = ScheduleOperations.getOpenTimestamp(props.schedule);
-    const isScheduleBlockTypeSegmentedControlDisabled = !!openTimeStamp && isScheduleBlockTypeSegmentSelected(ScheduleBlockTypes.TIME_STAMP);
+
+    const isScheduleBlockTypeSegmentedControlDisabled = (
+        !!openTimeStamp && isScheduleBlockTypeSegmentSelected(ScheduleBlockTypes.TIME_STAMP)
+    );
+    const isButtonDisabled = isScheduleBlockTypeSegmentSelected(ScheduleBlockTypes.TIME_INTERVAL) && !startTime && !endTime;
+
     const maskingScheduleBlockTimeSegment = (
         (!!openTimeStamp && isScheduleBlockTypeSegmentSelected(ScheduleBlockTypes.TIME_STAMP))
             ? ScheduleBlockTimeSegments[openTimeStamp.time.identifier]
@@ -103,6 +108,7 @@ export default function ScheduleControlPanel(props: ScheduleControlPanelProps) {
                             setStartTime={setStartTime}
                             endTime={endTime}
                             setEndTime={setEndTime}
+                            onRequestAdd={() => !isButtonDisabled && onButtonClick()}
                         />
                 }
             </div>
@@ -120,7 +126,11 @@ export default function ScheduleControlPanel(props: ScheduleControlPanelProps) {
                     disabled={isScheduleBlockTypeSegmentedControlDisabled}
                 />
 
-                <Button className={'min-w-56'} onClick={onButtonClick}>
+                <Button
+                    className={'min-w-56'}
+                    onClick={onButtonClick}
+                    disabled={isButtonDisabled}
+                >
                     {buttonText}
                 </Button>
             </div>
