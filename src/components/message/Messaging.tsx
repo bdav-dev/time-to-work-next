@@ -7,7 +7,7 @@ export default function Messaging() {
 
     return (
         message &&
-        <div className={'absolute top-0 left-1/2 -translate-x-1/2 mt-3'}>
+        <div className={'absolute top-0 left-1/2 -translate-x-1/2 mt-3 z-50'}>
             {
                 <Message
                     message={message}

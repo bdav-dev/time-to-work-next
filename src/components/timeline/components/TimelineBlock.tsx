@@ -17,6 +17,7 @@ export type BookingBlockProps = {
     color?: TimelineBlockColor,
     isDarkTheme: boolean,
     onClick?: () => void,
+    className?: string
 }
 
 const HEIGHT = 94;
@@ -33,11 +34,12 @@ export default function TimelineBlock(props: BookingBlockProps) {
                 flex flex-col justify-between
                 rounded-xl
                 text-left
-                ${props.onClick && 'cursor-default'}
+                ${!props.onClick && 'cursor-default'}
                 ${props.leftOverflow ? 'rounded-l-none' : ''}
                 ${props.rightOverflow || props.isOpen ? 'rounded-r-none' : ''}
+                ${props.className}
             `}
-            onClick={() => alert('hey')}
+            onClick={props.onClick}
             style={{
                 left: props.position + '%',
                 width: props.size + '%',

@@ -107,6 +107,8 @@ export class TimelineCalculator {
                             isOpen: block.endTime == undefined,
                             size: this.mapTimeSpanToSize(TimeSpan.ofTimeDifference(clampedBlockStartTime, clampedBlockEndTime)),
                             position: this.mapTimeToPosition(clampedBlockStartTime),
+                            className: block.className,
+                            onClick: block.onClick,
                             isDarkTheme
                         }
                 }

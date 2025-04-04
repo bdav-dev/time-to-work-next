@@ -47,3 +47,20 @@ body {
 input[type="time"]::-webkit-calendar-picker-indicator {
     display: none;
 }
+
+dialog[open]::backdrop {
+    animation: dialog-backdrop-fade-in 0.1s ease-out forwards;
+}
+
+dialog::backdrop {
+    background-color: rgb(0 0 0 / 60%);
+}
+
+@keyframes dialog-backdrop-fade-in {
+    from {
+        background-color: rgb(0 0 0 / 0%);
+    }
+    to {
+        background-color: rgb(0 0 0 / 60%);
+    }
+}

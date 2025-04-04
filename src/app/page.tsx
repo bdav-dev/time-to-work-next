@@ -2,18 +2,18 @@
 
 import ThemeToggle from "@/components/theme/ThemeToggle";
 import Elevation from "@/components/layout/Elevation";
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Section from "@/components/layout/Section";
 import ScheduleControlPanel from "@/components/ScheduleControlPanel";
 import useTime from "@/hooks/UseTime";
 import TimeComponent from "@/components/Time";
 import VerticalRuler from "@/components/layout/VerticalRuler";
-import Timeline, { TimelineData } from "@/components/timeline/Timeline";
+import Timeline from "@/components/timeline/Timeline";
 import Time from '@/time/Time';
 import Table from "@/components/layout/Table";
 import useStateWithLocalStorage from "@/hooks/UseStateWithLocalStorage";
-import { Schedule, ScheduleSerialization } from "@/schedule/Schedule";
-import { ScheduleBlockTime } from "@/schedule/ScheduleBlockTime";
+import { mapScheduleToTimelineData, Schedule, ScheduleBlock, ScheduleSerialization } from "@/schedule/Schedule";
+import { ScheduleBlockTime, ScheduleBlockTimes } from "@/schedule/ScheduleBlockTime";
 import ScheduleOperations from "@/schedule/ScheduleOperations";
 import TimeInterval from "@/time/TimeInterval";
 import Messaging from "@/components/message/Messaging";
@@ -22,24 +22,15 @@ import TimeSpan from "@/time/TimeSpan";
 import Button from "@/components/control/Button";
 import { Message, MessageContext } from "@/contexts/MessageContext";
 import { DisplayableError } from "@/error/DisplayableError";
+import ScheduleBlockDialog from "@/components/ScheduleBlockDialog";
 
-
-function mapScheduleToTimelineData(schedule: Schedule): TimelineData[] {
-    return schedule.map(
-        scheduleBlock => ({
-            startTime: scheduleBlock.startTime,
-            endTime: scheduleBlock.endTime,
-            color: scheduleBlock.time.timelineBlock.color,
-            title: scheduleBlock.time.timelineBlock.title
-        })
-    );
-}
 
 // concepts:
 // .ttwc time to work config file
 // stempel hook => falls gestempelt wird
 // maybe make Schedule (immutable) class, any changes to schedule results in new object
 // ersetze 'Offener Zeitstempel 12:00 - ...' text mit ui, wo man steuern kann, wann geöffnet werden kann / geschlossen
+// scheudle state in context auslagern -> func wie addTimeInterval mitnehmen
 
 const createTimeIntervalErrorMessage: (body: string, retentionInSeconds?: number) => Message = (body, retentionInSeconds) => ({
     body,
@@ -59,6 +50,23 @@ export default function TimeToWork() {
     const now = useTime();
     const [schedule, setSchedule] = useStateWithLocalStorage<Schedule>('schedule', [], ScheduleSerialization);
     const messaging = useContext(MessageContext);
+
+    const [selectedScheduleBlock, setSelectedScheduleBlock] = useState<ScheduleBlock>();
+
+    // useEffect(() => {
+    //     setSchedule([
+    //         {
+    //             startTime: Time.of(8, 0),
+    //             endTime: Time.of(9, 0),
+    //             time: ScheduleBlockTimes.WORK
+    //         },
+    //         {
+    //             startTime: Time.of(10, 0),
+    //             endTime: Time.of(11, 0),
+    //             time: ScheduleBlockTimes.BREAK
+    //         }
+    //     ])
+    // }, []);
 
     function addTimeInterval(startTime: Time | undefined, endTime: Time | undefined, time: ScheduleBlockTime): boolean {
         if (!startTime || !endTime) {
@@ -118,10 +126,30 @@ export default function TimeToWork() {
         setSchedule(newSchedule);
     }
 
+    function remove(block: ScheduleBlock): boolean {
+        setSchedule(
+            schedule => ScheduleOperations.removeScheduleBlock(schedule, block)
+        );
+
+        return true;
+    }
+
     return (
         <div className={'relative flex-1 flex flex-col'}>
 
             <Messaging/>
+
+            {
+                selectedScheduleBlock &&
+                <ScheduleBlockDialog
+                    isOpen={!!selectedScheduleBlock}
+                    onRequestClose={() => setSelectedScheduleBlock(undefined)}
+                    currentTime={now}
+                    schedule={schedule}
+                    block={selectedScheduleBlock}
+                    onRequestRemoveScheduleBlock={remove}
+                />
+            }
 
             <Elevation
                 overridePadding overrideMargin overrideRounded
@@ -159,7 +187,7 @@ export default function TimeToWork() {
                 <Timeline
                     currentTime={now}
                     height={12}
-                    data={mapScheduleToTimelineData(schedule)}
+                    data={mapScheduleToTimelineData(schedule, { onClick: setSelectedScheduleBlock })}
                 />
 
                 <Table

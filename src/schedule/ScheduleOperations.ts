@@ -1,4 +1,4 @@
-import { Schedule } from "@/schedule/Schedule";
+import { Schedule, ScheduleBlock, scheduleBlockEquals } from "@/schedule/Schedule";
 import Time from "@/time/Time";
 import { ScheduleBlockTime } from "@/schedule/ScheduleBlockTime";
 import TimeInterval from "@/time/TimeInterval";
@@ -119,6 +119,10 @@ export default class ScheduleOperations {
         newSchedule = newSchedule.filter(block => !TimeInterval.of(block.startTime, block.endTime!).hasNoLength());
 
         return newSchedule;
+    }
+
+    static removeScheduleBlock(schedule: Schedule, blockToRemove: ScheduleBlock) {
+        return [...schedule].filter(block => !scheduleBlockEquals(block, blockToRemove));
     }
 
     private static doesOpenTimeStampExist(schedule: Schedule) {

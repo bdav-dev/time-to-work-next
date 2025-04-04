@@ -14,7 +14,9 @@ export type TimelineData = {
     startTime: Time,
     endTime?: Time,
     title?: string,
-    color?: TimelineBlockColor
+    color?: TimelineBlockColor,
+    className?: string,
+    onClick?: () => void
 };
 
 type TimelineProps = {

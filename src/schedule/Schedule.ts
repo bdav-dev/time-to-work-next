@@ -1,14 +1,43 @@
 import Time from "@/time/Time";
 import { Serialization } from "@/hooks/UseStateWithLocalStorage";
 import { ScheduleBlockTime, ScheduleBlockTimeIdentifier, ScheduleBlockTimes } from "@/schedule/ScheduleBlockTime";
+import { TimelineData } from "@/components/timeline/Timeline";
 
-type ScheduleBlock = {
+export type ScheduleBlock = {
     startTime: Time,
     endTime?: Time,
-    time: ScheduleBlockTime,
+    time: ScheduleBlockTime
 }
 
 export type Schedule = ScheduleBlock[];
+
+export function scheduleBlockEquals(a: ScheduleBlock, b: ScheduleBlock) {
+    const endTimeEquals = (
+        a.endTime && b.endTime
+            ? a.endTime.equals(b.endTime)
+            : !a.startTime && !b.startTime
+    );
+
+    return (
+        endTimeEquals &&
+        a.startTime.equals(b.startTime) &&
+        a.time.identifier === b.time.identifier
+    );
+}
+
+export function mapScheduleToTimelineData(schedule: Schedule, options?: { onClick?: (block: ScheduleBlock) => void, className?: (block: ScheduleBlock) => string }): TimelineData[] {
+    return schedule.map(
+        scheduleBlock => ({
+            startTime: scheduleBlock.startTime,
+            endTime: scheduleBlock.endTime,
+            color: scheduleBlock.time.timelineBlock.color,
+            title: scheduleBlock.time.timelineBlock.title,
+            onClick: options?.onClick ? () => options?.onClick?.(scheduleBlock) : undefined,
+            className: options?.className?.(scheduleBlock)
+        })
+    );
+}
+
 
 type SerializableSchedule = {
     startTime: string,
