@@ -2,7 +2,7 @@
 
 import ThemeToggle from "@/components/theme/ThemeToggle";
 import Elevation from "@/components/layout/Elevation";
-import React from "react";
+import React, { useContext } from "react";
 import Section from "@/components/layout/Section";
 import ScheduleControlPanel from "@/components/ScheduleControlPanel";
 import useTime from "@/hooks/UseTime";
@@ -18,6 +18,8 @@ import { ScheduleBlockTime } from "@/schedule/ScheduleBlockTime";
 import ScheduleOperations from "@/schedule/ScheduleOperations";
 import Button from "@/components/control/Button";
 import TimeInterval from "@/time/TimeInterval";
+import Message from "@/components/message/Message";
+import { MessageContext } from "@/contexts/MessageContext";
 
 
 function mapScheduleToTimelineData(schedule: Schedule): TimelineData[] {
@@ -43,6 +45,7 @@ export default function TimeToWork() {
 
     function addTimeInterval(startTime: Time | undefined, endTime: Time | undefined, time: ScheduleBlockTime): boolean {
         if (!startTime || !endTime) {
+            alert('nothing entered');
             return false;
         }
 
@@ -94,6 +97,9 @@ export default function TimeToWork() {
 
     return (
         <div className={'relative flex-1 flex flex-col'}>
+
+            <Message/>
+
             <Elevation
                 overridePadding overrideMargin overrideRounded
                 className={'w-fit p-5 rounded-br-2xl flex items-center gap-5 mb-4'}
@@ -115,7 +121,7 @@ export default function TimeToWork() {
 
             </Elevation>
 
-            <Button className={'w-fit'} onClick={() => setSchedule([])}>Clear Schedule</Button>
+            {/*<Button className={'w-fit'} onClick={() => setSchedule([])}>Clear Schedule</Button>*/}
 
             <div className={'flex-1 flex flex-col justify-between'}>
                 <div className={'flex justify-center'}>

@@ -6,6 +6,7 @@ import ThemeProvider from "@/contexts/ThemeContext";
 import ThemeApplier from "@/components/theme/ThemeApplier";
 import StyledJsxRegistry from "@/app/registry";
 import { TimeProvider } from "@/contexts/TimeContext";
+import MessageProvider from "@/contexts/MessageContext";
 
 
 export const metadata: Metadata = {
@@ -20,27 +21,29 @@ export default function RootLayout(
         <html lang="en">
         <ThemeProvider>
             <TimeProvider>
-                <body>
-                <ThemeApplier>
-                    <StyledJsxRegistry>
-                        <div
-                            className={`
+                <MessageProvider>
+                    <body>
+                    <ThemeApplier>
+                        <StyledJsxRegistry>
+                            <div
+                                className={`
                                 flex flex-col min-h-screen
                                 antialiased
                                 bg-neumorphic-100 dark:bg-neumorphic-750 
                                 text-neumorphic-700 dark:text-neumorphic-150 
                                 stroke-neumorphic-700 dark:stroke-neumorphic-150
                             `}
-                        >
-                            <div className={'flex-1 flex flex-col'}>
-                                {children}
-                            </div>
-                            <div>footer</div>
+                            >
+                                <div className={'flex-1 flex flex-col'}>
+                                    {children}
+                                </div>
+                                <div>footer</div>
 
-                        </div>
-                    </StyledJsxRegistry>
-                </ThemeApplier>
-                </body>
+                            </div>
+                        </StyledJsxRegistry>
+                    </ThemeApplier>
+                    </body>
+                </MessageProvider>
             </TimeProvider>
         </ThemeProvider>
         </html>

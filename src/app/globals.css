@@ -4,15 +4,42 @@
 
 
 @font-face {
-  font-family: 'Cascadia Code';
-  src: url('/fonts/CascadiaCode.woff2') format('woff2');
+    font-family: 'Cascadia Code';
+    src: url('/fonts/CascadiaCode.woff2') format('woff2');
 }
 
 @font-face {
-  font-family: 'Material Symbols Rounded Regular';
-  src: url('/fonts/MaterialSymbolsRounded_28pt-Regular.ttf') format('truetype');
+    font-family: 'Material Symbols Rounded Regular';
+    src: url('/fonts/MaterialSymbolsRounded_28pt-Regular.ttf') format('truetype');
 }
 
 body {
-  font-family: 'Cascadia Code', sans-serif;
+    font-family: 'Cascadia Code', sans-serif;
+}
+
+@keyframes grow-relative-width {
+    0% {
+        width: 0;
+    }
+    100% {
+        width: 100%;
+    }
+}
+
+@keyframes message-appear {
+    0% {
+        translate: 0 -125%;
+    }
+    100% {
+        translate: 0 0;
+    }
+}
+
+@keyframes message-disappear {
+    0% {
+        translate: 0 0;
+    }
+    100% {
+        translate: 0 -125%;
+    }
 }
