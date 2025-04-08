@@ -1,5 +1,5 @@
 import { ReactNode, useEffect, useRef } from "react";
-import Button from "@/components/control/Button";
+import Button from "@/components/primitives/control/Button";
 
 
 type DialogProps = {
@@ -22,6 +22,7 @@ export default function Dialog(props: DialogProps) {
 
     return (
         <dialog
+            onClose={props.onRequestClose}
             className={'w-full h-screen p-9 bg-transparent content-center z-40'}
             ref={dialog}
         >

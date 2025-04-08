@@ -1,5 +1,5 @@
 import React from "react";
-import NeumorphicDiv from "@/components/neumorphicPrimitives/NeumorphicDiv";
+import NeumorphicDiv from "@/components/primitives/neumorphic/NeumorphicDiv";
 import { NeumorphicBlueprintFactory } from "@/neumorphic/NeumorphicStyle";
 import { createIsLast, isFirst } from "@/util/ArrayUtils";
 

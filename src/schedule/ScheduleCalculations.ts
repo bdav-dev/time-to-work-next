@@ -8,7 +8,7 @@ export default class ScheduleCalculations {
 
     static getSumOfWorkTime(schedule: Schedule, now: Time) {
         return schedule
-            .filter(block => block.time.identifier === 'workTime')
+            .filter(block => block.timeType.identifier === 'workTime')
             .reduce(
                 (sumOfWorkTime, block) => sumOfWorkTime.add(TimeSpan.ofTimeDifference(block.startTime, block.endTime ?? now)),
                 TimeSpan.of(0, 0)

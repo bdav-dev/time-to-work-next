@@ -1,4 +1,4 @@
-import NeumorphicInput from "@/components/neumorphicPrimitives/NeumorphicInput";
+import NeumorphicInput from "@/components/primitives/neumorphic/NeumorphicInput";
 import { NeumorphicBlueprintFactory } from "@/neumorphic/NeumorphicStyle";
 import Time from "@/time/Time";
 import { useEffect, useRef } from "react";

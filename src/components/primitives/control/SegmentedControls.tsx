@@ -1,6 +1,6 @@
 import React, { CSSProperties } from "react";
 import { NeumorphicBlueprint } from "@/neumorphic/NeumorphicStyle";
-import NeumorphicButton from "@/components/neumorphicPrimitives/NeumorphicButton";
+import NeumorphicButton from "@/components/primitives/neumorphic/NeumorphicButton";
 
 export type Segment<T> = {
     id: number,

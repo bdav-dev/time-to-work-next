@@ -2,14 +2,15 @@
 
 import { ButtonHTMLAttributes } from "react";
 import { NeumorphicBlueprintFactory } from "@/neumorphic/NeumorphicStyle";
-import NeumorphicButton from "@/components/neumorphicPrimitives/NeumorphicButton";
+import NeumorphicButton from "@/components/primitives/neumorphic/NeumorphicButton";
 
 export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
-    circular?: boolean;
-    overrideMargin?: boolean;
+    circular?: boolean,
+    overrideMargin?: boolean,
+    overridePadding?: boolean
 };
 
-export default function Button({ className, children, overrideMargin, circular, ...rest }: ButtonProps) {
+export default function Button({ className, children, overrideMargin, circular, overridePadding, ...rest }: ButtonProps) {
     const blueprint = NeumorphicBlueprintFactory.createMedium();
     blueprint.active = true;
     if (overrideMargin) {
@@ -20,7 +21,7 @@ export default function Button({ className, children, overrideMargin, circular, 
         <NeumorphicButton
             blueprint={blueprint}
             className={`
-                p-2.5
+                ${!overridePadding && 'p-2.5'}
                 ${circular ? 'rounded-full' : 'rounded-xl'}
                 border-none
                 ${className}

@@ -2,55 +2,40 @@
 
 import ThemeToggle from "@/components/theme/ThemeToggle";
 import Elevation from "@/components/layout/Elevation";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import Section from "@/components/layout/Section";
-import ScheduleControlPanel from "@/components/ScheduleControlPanel";
+import ScheduleControlPanel from "@/components/control/schedule/ScheduleControlPanel";
 import useTime from "@/hooks/UseTime";
-import TimeComponent from "@/components/Time";
+import TimeComponent from "@/components/time/Time";
 import VerticalRuler from "@/components/layout/VerticalRuler";
 import Timeline from "@/components/timeline/Timeline";
 import Time from '@/time/Time';
 import Table from "@/components/layout/Table";
 import useStateWithLocalStorage from "@/hooks/UseStateWithLocalStorage";
 import { mapScheduleToTimelineData, Schedule, ScheduleBlock, ScheduleSerialization } from "@/schedule/Schedule";
-import { ScheduleBlockTime, ScheduleBlockTimes } from "@/schedule/ScheduleBlockTime";
+import { ScheduleBlockTimeType } from "@/schedule/ScheduleBlockTimeType";
 import ScheduleOperations from "@/schedule/ScheduleOperations";
 import TimeInterval from "@/time/TimeInterval";
 import Messaging from "@/components/message/Messaging";
 import ScheduleCalculations from "@/schedule/ScheduleCalculations";
 import TimeSpan from "@/time/TimeSpan";
-import Button from "@/components/control/Button";
 import { Message, MessageContext } from "@/contexts/MessageContext";
 import { DisplayableError } from "@/error/DisplayableError";
-import ScheduleBlockDialog from "@/components/ScheduleBlockDialog";
+import ScheduleBlockDialog from "@/components/dialog/ScheduleBlockDialog";
 
 
 // concepts:
 // .ttwc time to work config file
 // stempel hook => falls gestempelt wird
-// maybe make Schedule (immutable) class, any changes to schedule results in new object
 // ersetze 'Offener Zeitstempel 12:00 - ...' text mit ui, wo man steuern kann, wann geöffnet werden kann / geschlossen
-// scheudle state in context auslagern -> func wie addTimeInterval mitnehmen
-
-const createTimeIntervalErrorMessage: (body: string, retentionInSeconds?: number) => Message = (body, retentionInSeconds) => ({
-    body,
-    retentionInSeconds: retentionInSeconds ?? 2,
-    title: 'Fehler beim Hinzufügen',
-    type: 'error'
-});
-
-const createTimeStampErrorMessage: (body: string, retentionInSeconds?: number) => Message = (body, retentionInSeconds) => ({
-    body,
-    retentionInSeconds: retentionInSeconds ?? 2,
-    title: 'Fehler beim Stempeln',
-    type: 'error'
-});
+// für schedule.equals => evtl to set umwandeln, dann normale scheduleblock equals anwenden
+// dialog customizable bar => title, mehr buttons, X-Button
 
 export default function TimeToWork() {
-    const now = useTime();
-    const [schedule, setSchedule] = useStateWithLocalStorage<Schedule>('schedule', [], ScheduleSerialization);
     const messaging = useContext(MessageContext);
 
+    const now = useTime();
+    const [schedule, setSchedule] = useStateWithLocalStorage<Schedule>('schedule', [], ScheduleSerialization);
     const [selectedScheduleBlock, setSelectedScheduleBlock] = useState<ScheduleBlock>();
 
     // useEffect(() => {
@@ -58,17 +43,17 @@ export default function TimeToWork() {
     //         {
     //             startTime: Time.of(8, 0),
     //             endTime: Time.of(9, 0),
-    //             time: ScheduleBlockTimes.WORK
+    //             timeType: ScheduleBlockTimeTypes.WORK
     //         },
     //         {
     //             startTime: Time.of(10, 0),
     //             endTime: Time.of(11, 0),
-    //             time: ScheduleBlockTimes.BREAK
+    //             timeType: ScheduleBlockTimeTypes.BREAK
     //         }
     //     ])
     // }, []);
 
-    function addTimeInterval(startTime: Time | undefined, endTime: Time | undefined, time: ScheduleBlockTime): boolean {
+    function addTimeInterval(startTime: Time | undefined, endTime: Time | undefined, time: ScheduleBlockTimeType): boolean {
         if (!startTime || !endTime) {
             messaging.set(createTimeIntervalErrorMessage('Das Start- und Endfeld ist leer.'));
             return false;
@@ -97,7 +82,7 @@ export default function TimeToWork() {
         return true;
     }
 
-    function openTimeStamp(time: ScheduleBlockTime, openTimeStampAt?: Time) {
+    function openTimeStamp(time: ScheduleBlockTimeType, openTimeStampAt?: Time) {
         let newSchedule: Schedule;
         try {
             newSchedule = ScheduleOperations.openTimeStamp(schedule, openTimeStampAt ?? now, now, time);
@@ -148,6 +133,10 @@ export default function TimeToWork() {
                     schedule={schedule}
                     block={selectedScheduleBlock}
                     onRequestRemoveScheduleBlock={remove}
+                    onRequestSubmitSchedule={(schedule) => {
+                        setSelectedScheduleBlock(undefined);
+                        setSchedule(schedule);
+                    }}
                 />
             }
 
@@ -172,7 +161,7 @@ export default function TimeToWork() {
 
             </Elevation>
 
-            <Button className={'w-fit'} onClick={() => setSchedule([])}>Clear Schedule</Button>
+            {/*<Button className={'w-fit'} onClick={() => setSchedule([])}>Clear Schedule</Button>*/}
 
             <div className={'flex-1 flex flex-col justify-between'}>
                 <div className={'flex justify-center'}>
@@ -212,3 +201,17 @@ export default function TimeToWork() {
         </div>
     );
 }
+
+const createTimeIntervalErrorMessage: (body: string, retentionInSeconds?: number) => Message = (body, retentionInSeconds) => ({
+    body,
+    retentionInSeconds: retentionInSeconds ?? 2,
+    title: 'Fehler beim Hinzufügen',
+    type: 'error'
+});
+
+const createTimeStampErrorMessage: (body: string, retentionInSeconds?: number) => Message = (body, retentionInSeconds) => ({
+    body,
+    retentionInSeconds: retentionInSeconds ?? 2,
+    title: 'Fehler beim Stempeln',
+    type: 'error'
+});

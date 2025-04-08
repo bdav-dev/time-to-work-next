@@ -7,7 +7,7 @@ import Time from "@/time/Time";
 import TimelineBlock from "@/components/timeline/components/TimelineBlock";
 import { TimelineCalculator } from "@/components/timeline/TimelineCalculator";
 import { TimelineBlockColor } from "@/components/timeline/TimelineBlockColor";
-import NeumorphicDiv from "@/components/neumorphicPrimitives/NeumorphicDiv";
+import NeumorphicDiv from "@/components/primitives/neumorphic/NeumorphicDiv";
 import { NeumorphicBlueprintFactory } from "@/neumorphic/NeumorphicStyle";
 
 export type TimelineData = {

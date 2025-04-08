@@ -1,5 +1,6 @@
 import { Message as Msg, MessageType } from "@/contexts/MessageContext";
 import { CSSProperties } from "react";
+import StatusIndicator, { Status } from "@/components/StatusIndicator";
 
 type MessageProps = {
     message: Msg,
@@ -9,11 +10,11 @@ type MessageProps = {
     style?: CSSProperties
 }
 
-const MessageTypeClassNames: { [key in MessageType]: string } = {
-    error: 'bg-red-500',
-    success: 'bg-green-500 dark:bg-green-400',
-    warning: 'bg-yellow-500 dark:bg-yellow-400'
-};
+const MessageTypeToStatusIndicatorMap: { [key in MessageType]: Status } = {
+    error: 'red',
+    success: 'green',
+    warning: 'yellow',
+}
 
 export default function Message(props: MessageProps) {
     return (
@@ -30,7 +31,7 @@ export default function Message(props: MessageProps) {
             <div className={'flex flex-row items-center gap-2'}>
                 {
                     props.message.type &&
-                    <div className={`min-w-5 min-h-5 size-5 rounded-full ${MessageTypeClassNames[props.message.type]}`}/>
+                    <StatusIndicator status={MessageTypeToStatusIndicatorMap[props.message.type]}/>
                 }
 
                 <div className={'font-bold overflow-ellipsis whitespace-nowrap overflow-hidden'}>

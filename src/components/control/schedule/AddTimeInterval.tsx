@@ -1,6 +1,6 @@
-import TimePicker from "@/components/control/TimePicker";
+import TimePicker from "@/components/primitives/control/TimePicker";
 import Time from "@/time/Time";
-import TimeComponent from '@/components/Time';
+import TimeComponent from '@/components/time/Time';
 import KeyValueSection from "@/components/layout/KeyValueSection";
 import { compare } from "@/util/CompareUtils";
 

@@ -7,4 +7,8 @@ export class DisplayableError extends Error {
         Object.setPrototypeOf(this, new.target.prototype);
     }
 
+    static unknown(): DisplayableError {
+        return new DisplayableError('An unknown error occurred.');
+    }
+
 }

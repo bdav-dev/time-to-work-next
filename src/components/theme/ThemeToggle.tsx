@@ -3,7 +3,7 @@
 import LightModeIcon from "@/icons/LightModeIcon";
 import DarkModeIcon from "@/icons/DarkModeIcon";
 import { useTheme } from "@/hooks/UseTheme";
-import Button from "@/components/control/Button";
+import Button from "@/components/primitives/control/Button";
 import { IconProps } from "@/icons/IconProps";
 import React from "react";
 

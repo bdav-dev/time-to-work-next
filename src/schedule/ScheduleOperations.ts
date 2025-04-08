@@ -1,6 +1,6 @@
 import { Schedule, ScheduleBlock, scheduleBlockEquals } from "@/schedule/Schedule";
 import Time from "@/time/Time";
-import { ScheduleBlockTime } from "@/schedule/ScheduleBlockTime";
+import { ScheduleBlockTimeType } from "@/schedule/ScheduleBlockTimeType";
 import TimeInterval from "@/time/TimeInterval";
 import { compare } from "@/util/CompareUtils";
 import { DisplayableError } from "@/error/DisplayableError";
@@ -19,7 +19,7 @@ export default class ScheduleOperations {
         return null;
     }
 
-    static addTimeInterval(schedule: Schedule, now: Time, intervalToAdd: TimeInterval, time: ScheduleBlockTime): Schedule {
+    static addTimeInterval(schedule: Schedule, now: Time, intervalToAdd: TimeInterval, timeType: ScheduleBlockTimeType): Schedule {
         const newSchedule = [...schedule];
 
         if (intervalToAdd.hasNoLength()) {
@@ -37,7 +37,7 @@ export default class ScheduleOperations {
 
             const existingInterval = TimeInterval.of(block.startTime, block.endTime);
 
-            if (intervalToAdd.intersectsWith(existingInterval) || intervalToAdd.equals(existingInterval)) {
+            if (intervalToAdd.intersectsWith(existingInterval)) {
                 throw new DisplayableError('Das Zeitintervall überschneidet sich mit einem bereits bestehenden Intervall.');
             }
         }
@@ -50,13 +50,13 @@ export default class ScheduleOperations {
         newSchedule.push({
             startTime: intervalToAdd.startTime,
             endTime: intervalToAdd.endTime,
-            time
+            timeType
         });
 
         return newSchedule;
     }
 
-    static openTimeStamp(schedule: Schedule, startTime: Time, now: Time, time: ScheduleBlockTime): Schedule {
+    static openTimeStamp(schedule: Schedule, startTime: Time, now: Time, timeType: ScheduleBlockTimeType): Schedule {
         const newSchedule = [...schedule];
 
         if (this.doesOpenTimeStampExist(newSchedule)) {
@@ -87,7 +87,7 @@ export default class ScheduleOperations {
 
         newSchedule.push({
             startTime: startTime,
-            time
+            timeType
         });
 
         return newSchedule;
@@ -113,7 +113,7 @@ export default class ScheduleOperations {
         newSchedule.push({
             startTime: openTimeStamp.startTime,
             endTime,
-            time: openTimeStamp.time
+            timeType: openTimeStamp.timeType
         });
 
         newSchedule = newSchedule.filter(block => !TimeInterval.of(block.startTime, block.endTime!).hasNoLength());
@@ -122,7 +122,7 @@ export default class ScheduleOperations {
     }
 
     static removeScheduleBlock(schedule: Schedule, blockToRemove: ScheduleBlock) {
-        return [...schedule].filter(block => !scheduleBlockEquals(block, blockToRemove));
+        return schedule.filter(block => !scheduleBlockEquals(block, blockToRemove));
     }
 
     private static doesOpenTimeStampExist(schedule: Schedule) {
