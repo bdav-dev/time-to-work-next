@@ -2,7 +2,7 @@
 
 import ThemeToggle from "@/components/theme/ThemeToggle";
 import Elevation from "@/components/layout/Elevation";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Section from "@/components/layout/Section";
 import ScheduleControlPanel from "@/components/control/schedule/ScheduleControlPanel";
 import useTime from "@/hooks/UseTime";
@@ -22,6 +22,8 @@ import TimeSpan from "@/time/TimeSpan";
 import { Message, MessageContext } from "@/contexts/MessageContext";
 import { DisplayableError } from "@/error/DisplayableError";
 import ScheduleBlockDialog from "@/components/dialog/ScheduleBlockDialog";
+import FlatButton from "@/components/primitives/control/FlatButton";
+import SettingsDialog from "@/components/dialog/SettingsDialog";
 
 
 // concepts:
@@ -30,6 +32,8 @@ import ScheduleBlockDialog from "@/components/dialog/ScheduleBlockDialog";
 // ersetze 'Offener Zeitstempel 12:00 - ...' text mit ui, wo man steuern kann, wann geöffnet werden kann / geschlossen
 // für schedule.equals => evtl to set umwandeln, dann normale scheduleblock equals anwenden
 // dialog customizable bar => title, mehr buttons, X-Button
+// make neu hier dialog only show when user enters first time
+// change message retention times by add timeinterval error
 
 export default function TimeToWork() {
     const messaging = useContext(MessageContext);
@@ -37,6 +41,33 @@ export default function TimeToWork() {
     const now = useTime();
     const [schedule, setSchedule] = useStateWithLocalStorage<Schedule>('schedule', [], ScheduleSerialization);
     const [selectedScheduleBlock, setSelectedScheduleBlock] = useState<ScheduleBlock>();
+
+    const [isSettingsDialogOpen, setIsSettingsDialogOpen] = useState(false);
+
+    useEffect(() => {
+
+        messaging.set(
+            {
+                title: "Neu hier?",
+                body: <div className={'flex flex-col'}>
+                    Gib' einige Informationen zu deiner Arbeitszeit an,
+                    damit time-to-work für dich Daten, wie zum Beispiel die restliche Arbeitszeit, berechnen kann.
+
+                    <FlatButton
+                        className={'mt-2'}
+                        onClick={() => {
+                            messaging.clear();
+                            setIsSettingsDialogOpen(true);
+                        }}
+                    >
+                        Zu den Einstellungen
+                    </FlatButton>
+                </div>,
+                retentionInSeconds: 45
+            }
+        );
+
+    }, []);
 
     // useEffect(() => {
     //     setSchedule([
@@ -140,6 +171,8 @@ export default function TimeToWork() {
                 />
             }
 
+            <SettingsDialog isOpen={isSettingsDialogOpen} onRequestClose={() => setIsSettingsDialogOpen(false)}/>
+
             <Elevation
                 overridePadding overrideMargin overrideRounded
                 className={'w-fit p-5 rounded-br-2xl flex items-center gap-5 mb-4'}
@@ -191,7 +224,9 @@ export default function TimeToWork() {
                             </Section>,
                             '--:--',
                             '--:--',
-                            '--:--',
+                            <Section>
+                                <TimeComponent time={ScheduleCalculations.getSumOfBreakTime(schedule, now)}/>
+                            </Section>,
                             '--:--'
                         ]
                     ]}

@@ -15,6 +15,15 @@ export default class ScheduleCalculations {
             );
     }
 
+    static getSumOfBreakTime(schedule: Schedule, now: Time) {
+        return schedule
+            .filter(block => block.timeType.identifier === 'breakTime')
+            .reduce(
+                (sumOfBreakTime, block) => sumOfBreakTime.add(TimeSpan.ofTimeDifference(block.startTime, block.endTime ?? now)),
+                TimeSpan.of(0, 0)
+            );
+    }
+
     static getRemainingTimeToWork(schedule: Schedule, now: Time, timeToWork: TimeSpan) {
         return timeToWork.subtract(this.getSumOfWorkTime(schedule, now));
     }

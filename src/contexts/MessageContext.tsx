@@ -1,12 +1,12 @@
 'use client';
 
-import React, { CSSProperties, useEffect, useState } from "react";
+import { createContext, CSSProperties, ReactNode, useEffect, useState } from "react";
 
 export type MessageType = 'warning' | 'error' | 'success';
 
 export type Message = {
-    title: string | React.ReactNode,
-    body: string | React.ReactNode,
+    title: string | ReactNode,
+    body: string | ReactNode,
     type?: MessageType,
     retentionInSeconds?: number
 }
@@ -20,7 +20,7 @@ type MessageContextType = {
     animationStyles: CSSProperties,
 }
 
-export const MessageContext = React.createContext<MessageContextType>({ message: undefined, animationStyles: {}, set: () => {}, clear: () => {}, setDoAutoClear: () => {}, doAutoClear: false });
+export const MessageContext = createContext<MessageContextType>({ message: undefined, animationStyles: {}, set: () => {}, clear: () => {}, setDoAutoClear: () => {}, doAutoClear: false });
 
 export const DEFAULT_RETENTION_IN_SECONDS = 7;
 const APPEAR_DISAPPEAR_ANIMATION_DURATION_IN_SECONDS = 0.25;

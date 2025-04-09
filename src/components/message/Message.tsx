@@ -20,7 +20,7 @@ export default function Message(props: MessageProps) {
     return (
         <div
             className={`
-                relative min-w-60 max-w-96
+                relative min-w-60 max-w-[30rem]
                 p-3.5
                 bg-neumorphic-50 dark:bg-neumorphic-850
                 drop-shadow-xl rounded-2xl overflow-hidden

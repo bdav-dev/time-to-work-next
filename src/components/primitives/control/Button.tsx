@@ -31,5 +31,4 @@ export default function Button({ className, children, overrideMargin, circular, 
             {children}
         </NeumorphicButton>
     );
-
 }
