@@ -1,7 +1,14 @@
 import Dialog from "@/components/primitives/Dialog";
 import SegmentedControls, { Segment } from "@/components/primitives/control/SegmentedControls";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Frame from "@/components/layout/Frame";
+import Timeline from "@/components/timeline/Timeline";
+import useTime from "@/hooks/UseTime";
+import HorizontalRuler from "@/components/layout/HorizontalRuler";
+import Time from "@/time/Time";
+import { TimelineBlockColors } from "@/components/timeline/TimelineBlockColor";
+import NumberPicker from "@/components/primitives/control/NumberPicker";
+import TimePicker from "@/components/primitives/control/TimePicker";
 
 
 type SettingsDialogProps = {
@@ -12,6 +19,16 @@ type SettingsDialogProps = {
 
 export default function SettingsDialog(props: SettingsDialogProps) {
     const [selectedSettings, setSelectedSettings] = useState<Segment<null>>(SettingsSegments.general);
+    const now = useTime();
+
+    const [num, setNum] = useState(0);
+
+    const [startTime, setStartTime] = useState(Time.ofString('07:00'));
+    const [endTime, setEndTime] = useState<Time | undefined>(Time.ofString('18:00'));
+
+    useEffect(() => {
+        console.log(num);
+    }, [num]);
 
     return (
         <Dialog
@@ -30,6 +47,60 @@ export default function SettingsDialog(props: SettingsDialogProps) {
                 />
 
                 <Frame className={'flex-1'}>
+                    <div className={'text-xl'}>
+                        Timeline
+                    </div>
+
+                    <Timeline
+                        data={[
+                            {
+                                startTime: Time.ofString('10:00'),
+                                endTime: Time.ofString('12:00'),
+                                title: "test",
+                                color: TimelineBlockColors.BLUE
+                            }
+                        ]}
+                        endTime={endTime}
+                        currentTime={now}
+                    />
+
+                    <div className={'h-3'}/>
+
+                    <HorizontalRuler/>
+
+                    <div className={'flex flex-row justify-between p-4'}>
+                        <div>
+                            Startzeit
+                        </div>
+
+                        <div>
+                            test
+                        </div>
+                    </div>
+
+                    <HorizontalRuler/>
+
+                    <div className={'flex flex-row justify-between items-center p-4'}>
+                        <div>
+                            Endzeit
+                        </div>
+
+                        <div>
+                            <TimePicker value={endTime} onValueChange={setEndTime}/>
+                        </div>
+                    </div>
+
+                    <HorizontalRuler/>
+
+                    <div className={'flex flex-row justify-between p-4'}>
+                        <div>
+                            Anzahl großer Zeitabschnitte
+                        </div>
+
+                        <div>
+                            <NumberPicker value={num} onValueChange={setNum}/>
+                        </div>
+                    </div>
 
                 </Frame>
 

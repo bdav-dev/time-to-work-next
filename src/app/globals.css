@@ -48,6 +48,16 @@ input[type="time"]::-webkit-calendar-picker-indicator {
     display: none;
 }
 
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+
 dialog[open]::backdrop {
     animation: dialog-backdrop-fade-in 0.1s ease-out forwards;
 }
