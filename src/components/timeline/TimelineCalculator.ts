@@ -18,25 +18,119 @@ export class TimelineCalculator {
 
     readonly timeStepSize: number;
 
-    constructor(configuration: {
+
+    constructor(config: {
         startTime: Time,
         endTime: Time,
         offTimeSize: number,
         amountOfTimeSteps: number,
         amountOfSubTimeSteps: number,
+        data: TimelineData[],
+        currentTime: Time,
+        automaticTimeBoundsAndTimeStepsIfOverflow: boolean,
+        automaticTimeSteps: boolean
     }) {
-        this.startTime = configuration.startTime;
-        this.endTime = configuration.endTime;
-        this.offTimeSize = configuration.offTimeSize;
-        this.amountOfTimeSteps = configuration.amountOfTimeSteps;
+        this.startTime = (
+            config.automaticTimeBoundsAndTimeStepsIfOverflow
+                ? this.calculateStartTimeIfOverflowing(config.data, config.startTime)
+                : config.startTime
+        )
+        this.endTime = (
+            config.automaticTimeBoundsAndTimeStepsIfOverflow
+                ? this.calculateEndTimeIfOverflowing(config.data, config.endTime, config.currentTime)
+                : config.endTime
+        )
+        const wasStartOrEndTimeAdjusted = !this.startTime.equals(config.startTime) || !this.endTime.equals(config.endTime);
+        this.amountOfTimeSteps = (
+            wasStartOrEndTimeAdjusted || config.automaticTimeSteps
+                ? this.calculateAutomaticTimeSteps()
+                : config.amountOfTimeSteps
+        );
 
-        this.amountOfTimeBlocks = configuration.amountOfTimeSteps - 1;
-        this.amountOfSubTimeBlocks = configuration.amountOfSubTimeSteps + 1;
+        this.offTimeSize = config.offTimeSize;
+
+        this.amountOfTimeBlocks = this.amountOfTimeSteps - 1;
+        this.amountOfSubTimeBlocks = config.amountOfSubTimeSteps + 1;
 
         this.activeAreaSize = 100 - 2 * this.offTimeSize;
         this.activeAreaTimeSpan = TimeSpan.ofTimeDifference(this.startTime, this.endTime);
 
         this.timeStepSize = this.activeAreaSize / this.amountOfTimeBlocks;
+    }
+
+    private calculateStartTimeIfOverflowing(data: TimelineData[], startTime: Time) {
+        const startTimeOfEarliestBlock = this.getEarliestBlock(data)?.startTime;
+
+        if (startTimeOfEarliestBlock && compare(startTimeOfEarliestBlock, 'lessThan', startTime)) {
+            const minutes = startTimeOfEarliestBlock.asTimeSpan().minutes;
+            return Time.of(
+                startTimeOfEarliestBlock.asTimeSpan().hours,
+                minutes >= 30 ? 30 : 0
+            );
+        }
+
+        return startTime;
+    }
+
+    private calculateEndTimeIfOverflowing(data: TimelineData[], endTime: Time, currentTime: Time) {
+        const latestBlock = this.getLatestBlock(data, currentTime);
+        const endTimeOfLatestBlock = latestBlock ? latestBlock.endTime ?? currentTime : undefined;
+
+        if (endTimeOfLatestBlock && compare(endTimeOfLatestBlock, 'greaterThan', endTime)) {
+            const minutes = endTimeOfLatestBlock.asTimeSpan().minutes;
+            const hours = endTimeOfLatestBlock.asTimeSpan().hours;
+            if (minutes == 0) {
+                return Time.of(hours, 0);
+            } else if (minutes > 30) {
+                return Time.of(hours + 1, 0);
+            } else {
+                return Time.of(hours, 30);
+            }
+        }
+
+        return endTime;
+    }
+
+    private getEarliestBlock(data: TimelineData[]) {
+        return data.sort((a, b) => a.startTime.compareTo(b.startTime)).at(0);
+    }
+
+    private getLatestBlock(data: TimelineData[], currentTime: Time) {
+        return data.sort((a, b) => (b.endTime ?? currentTime).compareTo(a.endTime ?? currentTime)).at(0);
+    }
+
+    private calculateAutomaticTimeSteps() {
+        const timelineLength = TimeSpan.ofTimeDifference(this.startTime, this.endTime);
+
+        const calculateMajorSteps = (stepSize: TimeSpan) => {
+            const majorSteps = TimeSpan.ratio(TimeSpan.ofTimeDifference(this.startTime, this.endTime), stepSize) + 1;
+            return Number.isInteger(majorSteps) ? majorSteps : undefined;
+        }
+
+        let majorSteps: number | undefined;
+
+        if (compare(timelineLength, 'greaterOrEqualThan', TimeSpan.ofString('14:00'))) {
+            majorSteps = (
+                calculateMajorSteps(TimeSpan.ofHours(2)) ??
+                calculateMajorSteps(TimeSpan.ofHours(1))
+            );
+        } else if (compare(timelineLength, 'greaterOrEqualThan', TimeSpan.ofString('8:00'))) {
+            majorSteps = calculateMajorSteps(TimeSpan.ofHours(1));
+
+        } else if (compare(timelineLength, 'greaterOrEqualThan', TimeSpan.ofString('4:00'))) {
+            majorSteps = (
+                calculateMajorSteps(TimeSpan.ofMinutes(30)) ??
+                calculateMajorSteps(TimeSpan.ofHours(1))
+            );
+        } else {
+            majorSteps = (
+                calculateMajorSteps(TimeSpan.ofMinutes(15)) ??
+                calculateMajorSteps(TimeSpan.ofMinutes(30)) ??
+                calculateMajorSteps(TimeSpan.ofHours(1))
+            );
+        }
+
+        return majorSteps ?? 2;
     }
 
     private mapTimeToPosition(time: Time) {
@@ -52,13 +146,15 @@ export class TimelineCalculator {
     }
 
     createTimeSteps() {
-        const timeStep = this.activeAreaTimeSpan.divide(this.amountOfTimeBlocks);
+        const timeStepInMinutes = this.activeAreaTimeSpan.reduceToMinutes() / this.amountOfTimeBlocks;
 
         const timeSteps = [];
         for (let i = 0; i < this.amountOfTimeSteps; i++) {
             timeSteps.push({
                 position: this.offTimeSize + i * this.timeStepSize,
-                time: this.startTime.asTimeSpan().add(timeStep.multiply(i)).asTime(),
+                time: i == this.amountOfTimeSteps - 1
+                    ? this.endTime
+                    : this.startTime.asTimeSpan().add(TimeSpan.ofMinutes(timeStepInMinutes * i)).asTime(),
             });
         }
         return timeSteps;

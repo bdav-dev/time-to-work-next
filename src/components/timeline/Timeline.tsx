@@ -19,16 +19,20 @@ export type TimelineData = {
     onClick?: () => void
 };
 
-type TimelineProps = {
+export type TimelineProps = {
     height?: number,
     data: TimelineData[],
     currentTime: Time,
+    dynamicStartAndEndTimes?: boolean,
     startTime?: Time,
     endTime?: Time,
     offTimeSize?: number,
     amountOfTimeSteps?: number,
-    amountOfSubTimeSteps?: number
+    amountOfSubTimeSteps?: number,
+    automaticTimeSteps?: boolean,
+    automaticTimeBoundsAndTimeStepsIfOverflow?: boolean
 }
+// TODO: make automaticTimeSteps and automaticTimeBoundsAndTimeStepsIfOverflow NAMING consistent in whole codebase
 
 export default function Timeline(props: TimelineProps) {
     const { darkTheme } = useTheme();
@@ -41,6 +45,10 @@ export default function Timeline(props: TimelineProps) {
         offTimeSize: props.offTimeSize ?? 3.5,
         amountOfTimeSteps: props.amountOfTimeSteps ?? 12,
         amountOfSubTimeSteps: props.amountOfSubTimeSteps ?? 3,
+        data: props.data,
+        currentTime: props.currentTime,
+        automaticTimeSteps: props.automaticTimeSteps ?? false,
+        automaticTimeBoundsAndTimeStepsIfOverflow: props.automaticTimeBoundsAndTimeStepsIfOverflow ?? true
     });
 
     const subTimeSteps = calculator.createSubTimeSteps();

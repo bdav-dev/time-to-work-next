@@ -1,8 +1,10 @@
 'use client';
 
 import { createContext, CSSProperties, ReactNode, useEffect, useState } from "react";
+import { ContextProviderProps } from "@/contexts/ContextTypes";
+import { delay } from "@/util/PromiseUtils";
 
-export type MessageType = 'warning' | 'error' | 'success';
+export type MessageType = 'success' | 'warning' | 'error';
 
 export type Message = {
     title: string | ReactNode,
@@ -19,8 +21,15 @@ type MessageContextType = {
     setDoAutoClear: (doNotAutoClear: boolean) => void,
     animationStyles: CSSProperties,
 }
-
-export const MessageContext = createContext<MessageContextType>({ message: undefined, animationStyles: {}, set: () => {}, clear: () => {}, setDoAutoClear: () => {}, doAutoClear: false });
+const EmptyMessageContext: MessageContextType = {
+    message: undefined,
+    animationStyles: {},
+    set: () => {},
+    clear: () => {},
+    setDoAutoClear: () => {},
+    doAutoClear: false
+}
+export const MessageContext = createContext<MessageContextType>(EmptyMessageContext);
 
 export const DEFAULT_RETENTION_IN_SECONDS = 7;
 const APPEAR_DISAPPEAR_ANIMATION_DURATION_IN_SECONDS = 0.25;
@@ -28,13 +37,7 @@ const APPEAR_DISAPPEAR_ANIMATION_DURATION_IN_SECONDS = 0.25;
 const APPEAR_STYLES: CSSProperties = { animation: `message-appear ${APPEAR_DISAPPEAR_ANIMATION_DURATION_IN_SECONDS}s ease-out forwards` };
 const DISAPPEAR_STYLES: CSSProperties = { animation: `message-disappear ${APPEAR_DISAPPEAR_ANIMATION_DURATION_IN_SECONDS}s ease-in forwards` };
 
-const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
-
-type MessageProviderProps = {
-    children?: React.ReactNode
-}
-
-export default function MessageProvider(props: MessageProviderProps) {
+export default function MessageProvider(props: ContextProviderProps) {
     const [message, setMessage] = useState<Message>();
     const [toAutoClear, setToAutoClear] = useState<Message>();
     const [toMount, setToMount] = useState<Message>();

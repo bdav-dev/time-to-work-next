@@ -7,6 +7,7 @@ import ThemeApplier from "@/components/theme/ThemeApplier";
 import StyledJsxRegistry from "@/app/registry";
 import { TimeProvider } from "@/contexts/TimeContext";
 import MessageProvider from "@/contexts/MessageContext";
+import ConfigurationProvider from "@/contexts/ConfigurationContext";
 
 
 export const metadata: Metadata = {
@@ -22,27 +23,28 @@ export default function RootLayout(
         <ThemeProvider>
             <TimeProvider>
                 <MessageProvider>
-                    <body>
-                    <ThemeApplier>
-                        <StyledJsxRegistry>
-                            <div
-                                className={`
-                                    flex flex-col min-h-screen
-                                    antialiased
-                                    bg-neumorphic-100 dark:bg-neumorphic-750 
-                                    text-neumorphic-700 dark:text-neumorphic-150 
-                                    stroke-neumorphic-700 dark:stroke-neumorphic-150
-                                `}
-                            >
-                                <div className={'flex-1 flex flex-col'}>
-                                    {children}
+                    <ConfigurationProvider>
+                        <body>
+                        <ThemeApplier>
+                            <StyledJsxRegistry>
+                                <div
+                                    className={`
+                                        flex flex-col min-h-screen
+                                        antialiased
+                                        bg-neumorphic-100 dark:bg-neumorphic-750 
+                                        text-neumorphic-700 dark:text-neumorphic-150 
+                                        stroke-neumorphic-700 dark:stroke-neumorphic-150
+                                    `}
+                                >
+                                    <div className={'flex-1 flex flex-col'}>
+                                        {children}
+                                    </div>
+                                    <div>footer</div> {/* TODO: create footer */}
                                 </div>
-                                <div>footer</div>
-
-                            </div>
-                        </StyledJsxRegistry>
-                    </ThemeApplier>
-                    </body>
+                            </StyledJsxRegistry>
+                        </ThemeApplier>
+                        </body>
+                    </ConfigurationProvider>
                 </MessageProvider>
             </TimeProvider>
         </ThemeProvider>

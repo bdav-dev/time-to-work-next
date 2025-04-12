@@ -14,6 +14,14 @@ export default class TimeSpan {
         return new TimeSpan(hours, minutes);
     }
 
+    static ofMinutes(minutes: number) {
+        return new TimeSpan(0, minutes);
+    }
+
+    static ofHours(hours: number) {
+        return new TimeSpan(hours, 0);
+    }
+
     static ofString(timeSpan: string) {
         const [hours, minutes] = timeSpan.split(":");
         return new TimeSpan(parseInt(hours), parseInt(minutes));

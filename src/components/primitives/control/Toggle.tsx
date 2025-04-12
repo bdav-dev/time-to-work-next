@@ -10,13 +10,13 @@ type ToggleProps = {
 export default function Toggle(props: ToggleProps) {
     const onSegment: Segment<boolean> = {
         id: 0,
-        displayAs: 'ON',
+        displayAs: 'AN',
         value: true,
         className: (isSelection) => `${isSelection && 'text-green-500 dark:text-green-400'}`,
     };
     const offSegment: Segment<boolean> = {
         id: 1,
-        displayAs: 'OFF',
+        displayAs: 'AUS',
         value: false,
         className: (isSelection) => `${isSelection && 'text-red-500 dark:text-red-400'}`
     };

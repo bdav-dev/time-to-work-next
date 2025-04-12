@@ -24,8 +24,7 @@ export default function ScheduleBlockTypeSelect(props: ScheduleBlockTypeSelectPr
     );
 }
 
-// @ts-ignore
-const ScheduleBlockTypeSegments: { [key in ScheduleBlockTypeIdentifier]: Segment<ScheduleBlockType> } = (
+const ScheduleBlockTypeSegments = (
     ScheduleBlockTypes.values().reduce(
         (segments, type, index) => ({
             ...segments,
@@ -36,5 +35,5 @@ const ScheduleBlockTypeSegments: { [key in ScheduleBlockTypeIdentifier]: Segment
             }
         }),
         {}
-    )
+    ) as { [key in ScheduleBlockTypeIdentifier]: Segment<ScheduleBlockType> }
 );

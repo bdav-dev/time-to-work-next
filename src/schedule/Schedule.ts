@@ -48,7 +48,6 @@ export function mapScheduleToTimelineData(
     );
 }
 
-
 type SerializableSchedule = {
     startTime: string,
     endTime?: string,

@@ -9,7 +9,7 @@ type NeumorphicInputProps = {
 } & InputHTMLAttributes<HTMLInputElement>;
 
 export default function NeumorphicInput(
-    { blueprint, overrideBackground, className, children, type, ref, ...rest }: NeumorphicInputProps
+    { blueprint, overrideBackground, className, children, type, ref, disabled, ...rest }: NeumorphicInputProps
 ) {
     const bp = flattenNeumorphicBlueprint(blueprint);
 
@@ -17,8 +17,12 @@ export default function NeumorphicInput(
         <input
             ref={ref}
             type={type}
-            className={`${!overrideBackground && 'bg-neumorphic-100 dark:bg-neumorphic-750'} ${className}`}
-            {...rest}
+            className={`
+                ${!overrideBackground && 'bg-neumorphic-100 dark:bg-neumorphic-750'}
+                ${disabled && 'opacity-60'}
+                ${className}
+            `}
+            disabled={disabled}
             style={{
                 margin: bp.margin ? `margin: ${bp.margin}px` : undefined,
                 boxShadow: `
@@ -26,6 +30,7 @@ export default function NeumorphicInput(
                     ${bp.inverted ? 'inset' : ''} ${-bp.left}px ${-bp.top}px ${bp.blur}px var(--neumorphic-light-shadow-color)
                 `,
             }}
+            {...rest}
         />
     );
 }

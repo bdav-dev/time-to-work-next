@@ -3,11 +3,12 @@ import Button from "@/components/primitives/control/Button";
 
 
 type DialogProps = {
-    children?: ReactNode,
+    title?: string | ReactNode,
     isOpen: boolean,
     onRequestClose: () => void,
     overrideSize?: boolean,
-    title?: string | ReactNode
+    children?: ReactNode,
+    className?: string
 }
 
 export default function Dialog(props: DialogProps) {
@@ -36,6 +37,7 @@ export default function Dialog(props: DialogProps) {
                     text-neumorphic-700 dark:text-neumorphic-150 
                     stroke-neumorphic-700 dark:stroke-neumorphic-150
                     relative
+                    ${props.className}
                 `}
             >
                 <div className={'flex justify-start'}>
@@ -56,12 +58,10 @@ export default function Dialog(props: DialogProps) {
                     </div>
                 </div>
 
-                <div className={'flex flex-col px-7 pb-7'}>
+                <div className={'flex flex-col px-7 pb-7 flex-1'}>
                     {props.children}
                 </div>
             </div>
         </dialog>
     );
-
-
 }

@@ -1,5 +1,4 @@
 import Dialog from "@/components/primitives/Dialog";
-import Timeline from "@/components/timeline/Timeline";
 import Time from "@/time/Time";
 import { mapScheduleToTimelineData, Schedule, ScheduleBlock, scheduleBlockEquals } from "@/schedule/Schedule";
 import Button from "@/components/primitives/control/Button";
@@ -13,6 +12,7 @@ import ScheduleBlockTimeTypeSelect from "@/components/control/select/ScheduleBlo
 import Section from "@/components/layout/Section";
 import StatusIndicator from "@/components/StatusIndicator";
 import Frame from "@/components/layout/Frame";
+import ConfiguredTimeline from "@/components/control/ConfiguredTimeline";
 
 
 type SchedulePreview = {
@@ -104,8 +104,7 @@ export default function ScheduleBlockDialog(props: ScheduleBlockDialogProps) {
             onRequestClose={props.onRequestClose}
             title={(props.block.endTime ? 'Zeitintervall' : 'Zeitstempel') + ' bearbeiten'}
         >
-            <Timeline
-                currentTime={props.currentTime}
+            <ConfiguredTimeline
                 data={
                     mapScheduleToTimelineData(
                         schedulePreview.schedule,

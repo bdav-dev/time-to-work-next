@@ -11,3 +11,6 @@ export function extractValue(any: any, ...keys: string[]) {
     return undefined;
 }
 
+export function replaceValue<T extends object, K extends keyof T>(object: T, key: K, newValue: T[K]) {
+    return { ...object, [key]: newValue };
+}

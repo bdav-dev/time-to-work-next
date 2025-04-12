@@ -8,7 +8,6 @@ import ScheduleControlPanel from "@/components/control/schedule/ScheduleControlP
 import useTime from "@/hooks/UseTime";
 import TimeComponent from "@/components/time/Time";
 import VerticalRuler from "@/components/layout/VerticalRuler";
-import Timeline from "@/components/timeline/Timeline";
 import Time from '@/time/Time';
 import Table from "@/components/layout/Table";
 import useStateWithLocalStorage from "@/hooks/UseStateWithLocalStorage";
@@ -24,6 +23,8 @@ import { DisplayableError } from "@/error/DisplayableError";
 import ScheduleBlockDialog from "@/components/dialog/ScheduleBlockDialog";
 import FlatButton from "@/components/primitives/control/FlatButton";
 import SettingsDialog from "@/components/dialog/SettingsDialog";
+import ConfiguredTimeline from "@/components/control/ConfiguredTimeline";
+import Button from "@/components/primitives/control/Button";
 
 
 // concepts:
@@ -31,9 +32,9 @@ import SettingsDialog from "@/components/dialog/SettingsDialog";
 // stempel hook => falls gestempelt wird
 // ersetze 'Offener Zeitstempel 12:00 - ...' text mit ui, wo man steuern kann, wann geöffnet werden kann / geschlossen
 // für schedule.equals => evtl to set umwandeln, dann normale scheduleblock equals anwenden
-// dialog customizable bar => title, mehr buttons, X-Button
 // make neu hier dialog only show when user enters first time
 // change message retention times by add timeinterval error
+// test automatic expansion to 24:00 -> error???
 
 export default function TimeToWork() {
     const messaging = useContext(MessageContext);
@@ -45,7 +46,6 @@ export default function TimeToWork() {
     const [isSettingsDialogOpen, setIsSettingsDialogOpen] = useState(false);
 
     useEffect(() => {
-
         messaging.set(
             {
                 title: "Neu hier?",
@@ -66,23 +66,7 @@ export default function TimeToWork() {
                 retentionInSeconds: 45
             }
         );
-
     }, []);
-
-    // useEffect(() => {
-    //     setSchedule([
-    //         {
-    //             startTime: Time.of(8, 0),
-    //             endTime: Time.of(9, 0),
-    //             timeType: ScheduleBlockTimeTypes.WORK
-    //         },
-    //         {
-    //             startTime: Time.of(10, 0),
-    //             endTime: Time.of(11, 0),
-    //             timeType: ScheduleBlockTimeTypes.BREAK
-    //         }
-    //     ])
-    // }, []);
 
     function addTimeInterval(startTime: Time | undefined, endTime: Time | undefined, time: ScheduleBlockTimeType): boolean {
         if (!startTime || !endTime) {
@@ -175,9 +159,15 @@ export default function TimeToWork() {
 
             <Elevation
                 overridePadding overrideMargin overrideRounded
-                className={'w-fit p-5 rounded-br-2xl flex items-center gap-5 mb-4'}
+                className={'w-fit p-5 rounded-br-2xl flex items-center gap-6 mb-4'}
             >
-                <ThemeToggle overrideMargin/>
+                <div className={'flex flex-row items-center gap-2'}>
+                    <ThemeToggle overrideMargin/>
+
+                    <Button circular className={'size-12'} onClick={() => setIsSettingsDialogOpen(true)}>
+                        S
+                    </Button>
+                </div>
 
                 <VerticalRuler className={'h-8'}/>
 
@@ -194,8 +184,6 @@ export default function TimeToWork() {
 
             </Elevation>
 
-            {/*<Button className={'w-fit'} onClick={() => setSchedule([])}>Clear Schedule</Button>*/}
-
             <div className={'flex-1 flex flex-col justify-between'}>
                 <div className={'flex justify-center'}>
                     <ScheduleControlPanel
@@ -206,8 +194,7 @@ export default function TimeToWork() {
                     />
                 </div>
 
-                <Timeline
-                    currentTime={now}
+                <ConfiguredTimeline
                     height={12}
                     data={mapScheduleToTimelineData(schedule, { onClick: setSelectedScheduleBlock })}
                 />

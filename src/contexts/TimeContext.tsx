@@ -2,11 +2,12 @@
 
 import React, { createContext, useEffect, useState } from "react";
 import Time from "@/time/Time";
+import { ContextProviderProps } from "@/contexts/ContextTypes";
 
 
 export const TimeContext = createContext<Time>(Time.now());
 
-export function TimeProvider({ children }: { children?: React.ReactNode }) {
+export function TimeProvider(props: ContextProviderProps) {
     const [time, setTime] = useState<Time>(Time.now());
 
     useEffect(() => {
@@ -15,7 +16,7 @@ export function TimeProvider({ children }: { children?: React.ReactNode }) {
 
     return (
         <TimeContext.Provider value={time}>
-            {children}
+            {props.children}
         </TimeContext.Provider>
     );
 }

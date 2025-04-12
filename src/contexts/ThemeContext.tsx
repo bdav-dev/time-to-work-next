@@ -2,6 +2,7 @@
 
 import React, { Dispatch, SetStateAction, useEffect } from "react";
 import useStateWithLocalStorage from "@/hooks/UseStateWithLocalStorage";
+import { ContextProviderProps } from "@/contexts/ContextTypes";
 
 
 type ThemeContextType = {
@@ -14,11 +15,7 @@ export const ThemeContext = React.createContext<ThemeContextType>({
     setDarkTheme: () => { }
 });
 
-type ThemeProviderProps = {
-    children?: React.ReactNode
-}
-
-export default function ThemeProvider(props: ThemeProviderProps) {
+export default function ThemeProvider(props: ContextProviderProps) {
     const [darkTheme, setDarkTheme] = useStateWithLocalStorage("useDarkTheme", true);
 
     useEffect(() => {

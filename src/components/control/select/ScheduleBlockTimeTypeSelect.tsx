@@ -23,8 +23,7 @@ export default function ScheduleBlockTimeTypeSelect(props: ScheduleBlockTimeType
     );
 }
 
-// @ts-ignore
-export const ScheduleBlockTimeSegments: { [key in ScheduleBlockTimeTypeIdentifier]: Segment<ScheduleBlockTimeType> } = (
+export const ScheduleBlockTimeSegments = (
     ScheduleBlockTimeTypes.values().reduce(
         (segments, timeType, index) => ({
             ...segments,
@@ -36,5 +35,5 @@ export const ScheduleBlockTimeSegments: { [key in ScheduleBlockTimeTypeIdentifie
             }
         }),
         {}
-    )
+    ) as { [key in ScheduleBlockTimeTypeIdentifier]: Segment<ScheduleBlockTimeType> }
 );
