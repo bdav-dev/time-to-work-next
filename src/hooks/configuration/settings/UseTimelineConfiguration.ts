@@ -25,7 +25,7 @@ export const DefaultTimelineConfiguration: TimelineConfiguration = {
 
 export default function useTimelineConfiguration(): ReadWriteConfiguration<TimelineConfiguration> {
     const [timelineConfiguration, setTimelineConfiguration] = useStateWithLocalStorage<TimelineConfiguration>(
-        'config.timeline',
+        'ttw-n.config.timeline',
         DefaultTimelineConfiguration,
         TimelineConfigurationSerialization
     );

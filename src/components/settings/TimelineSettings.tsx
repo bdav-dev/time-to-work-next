@@ -5,32 +5,47 @@ import Checkbox from "@/components/primitives/control/Checkbox";
 import NumberPicker from "@/components/primitives/control/NumberPicker";
 import useMutatingConfigurationValue from "@/hooks/configuration/UseMutatingConfigurationValue";
 import { DefaultTimelineConfiguration } from "@/hooks/configuration/settings/UseTimelineConfiguration";
-import useMutatingConfigurationValueWithFallback from "@/hooks/configuration/UseMutatingConfigurationValueWithFallback";
 import ConfiguredTimeline from "@/components/control/ConfiguredTimeline";
+import Time from "@/time/Time";
+import { compare } from "@/util/CompareUtils";
+import TimeSpan from "@/time/TimeSpan";
 
-// TODO: handle situation where starttime > endtime
 export default function TimelineSettings() {
     const [amountOfTimesteps, setAmountOfTimesteps] = useMutatingConfigurationValue(config => config.timeline.amountOfMajorTimeSteps);
     const [amountOfSubTimesteps, setAmountOfSubTimesteps] = useMutatingConfigurationValue(config => config.timeline.amountOfMinorTimeSteps);
-    const [startTime, setStartTime] = useMutatingConfigurationValueWithFallback(
-        config => config.timeline.startTime,
-        DefaultTimelineConfiguration.startTime
-    );
-    const [endTime, setEndTime] = useMutatingConfigurationValueWithFallback(
-        config => config.timeline.endTime,
-        DefaultTimelineConfiguration.endTime
-    );
+    const [startTime, setStartTime] = useMutatingConfigurationValue(config => config.timeline.startTime);
+    const [endTime, setEndTime] = useMutatingConfigurationValue(config => config.timeline.endTime);
 
     const [dynamicScaling, setDynamicScaling] = useMutatingConfigurationValue(config => config.timeline.automaticTimeBoundsIfOverflow);
     const [auto, setAuto] = useMutatingConfigurationValue(config => config.timeline.automaticAmountOfMajorTimeSteps);
 
     const [offTimeSize, setOffTimeSize] = useMutatingConfigurationValue(config => config.timeline.offTimeSize);
 
+    function rectifyStartTimeInput(startTimeInput?: Time) {
+        const fallback = (
+            compare(DefaultTimelineConfiguration.startTime, 'greaterOrEqualThan', endTime)
+                ? endTime.subtract(TimeSpan.ofMinutes(1))
+                : DefaultTimelineConfiguration.startTime
+        );
+        return (!startTimeInput || compare(startTimeInput, 'greaterOrEqualThan', endTime))
+            ? fallback
+            : startTimeInput;
+    }
+
+    function rectifyEndTimeInput(endTimeInput?: Time) {
+        const fallback = (
+            compare(DefaultTimelineConfiguration.endTime, 'lessOrEqualThan', startTime)
+                ? startTime.add(TimeSpan.ofMinutes(1))
+                : DefaultTimelineConfiguration.endTime
+        );
+        return (!endTimeInput || compare(endTimeInput, 'lessOrEqualThan', startTime))
+            ? fallback
+            : endTimeInput;
+    }
+
     return (
         <>
-            <ConfiguredTimeline
-                data={[]}
-            />
+            <ConfiguredTimeline data={[]}/> {/* TODO: Preview real schedule here, create schedule context */}
 
             <Settings
                 className={'mt-2'}
@@ -39,11 +54,19 @@ export default function TimelineSettings() {
                         settings: [
                             {
                                 label: 'Startzeit',
-                                setting: <TimePicker value={startTime} onValueChange={setStartTime}/>
+                                setting: <TimePicker
+                                    value={startTime}
+                                    onValueChange={startTimeInput => setStartTime(rectifyStartTimeInput(startTimeInput))}
+                                    valueOnSpaceKeyPressed={DefaultTimelineConfiguration.startTime}
+                                />
                             },
                             {
                                 label: 'Endzeit',
-                                setting: <TimePicker value={endTime} onValueChange={setEndTime}/>
+                                setting: <TimePicker
+                                    value={endTime}
+                                    onValueChange={endTimeInput => setEndTime(rectifyEndTimeInput(endTimeInput))}
+                                    valueOnSpaceKeyPressed={DefaultTimelineConfiguration.endTime}
+                                />
                             },
                             {
                                 label: 'Automatische Start- & Endzeit bei Überlauf',
@@ -87,3 +110,5 @@ export default function TimelineSettings() {
         </>
     );
 }
+
+

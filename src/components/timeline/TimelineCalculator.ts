@@ -109,14 +109,22 @@ export class TimelineCalculator {
 
         let majorSteps: number | undefined;
 
-        if (compare(timelineLength, 'greaterOrEqualThan', TimeSpan.ofString('14:00'))) {
+        if (compare(timelineLength, 'greaterOrEqualThan', TimeSpan.ofString('16:00'))) {
             majorSteps = (
                 calculateMajorSteps(TimeSpan.ofHours(2)) ??
-                calculateMajorSteps(TimeSpan.ofHours(1))
+                calculateMajorSteps(TimeSpan.ofHours(3))
+            );
+        } else if (compare(timelineLength, 'greaterOrEqualThan', TimeSpan.ofString('15:00'))) {
+            majorSteps = (
+                calculateMajorSteps(TimeSpan.ofHours(2)) ??
+                calculateMajorSteps(TimeSpan.ofHours(3))
             );
         } else if (compare(timelineLength, 'greaterOrEqualThan', TimeSpan.ofString('8:00'))) {
-            majorSteps = calculateMajorSteps(TimeSpan.ofHours(1));
-
+            majorSteps = (
+                calculateMajorSteps(TimeSpan.ofHours(1)) ??
+                calculateMajorSteps(TimeSpan.ofHours(2)) ??
+                calculateMajorSteps(TimeSpan.ofHours(3))
+            );
         } else if (compare(timelineLength, 'greaterOrEqualThan', TimeSpan.ofString('4:00'))) {
             majorSteps = (
                 calculateMajorSteps(TimeSpan.ofMinutes(30)) ??

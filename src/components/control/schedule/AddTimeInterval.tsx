@@ -3,6 +3,7 @@ import Time from "@/time/Time";
 import TimeComponent from '@/components/time/Time';
 import KeyValueSection from "@/components/layout/KeyValueSection";
 import { compare } from "@/util/CompareUtils";
+import useTime from "@/hooks/UseTime";
 
 type AddTimeIntervalProps = {
     startTime: Time | undefined,
@@ -14,6 +15,8 @@ type AddTimeIntervalProps = {
 }
 
 export default function AddTimeInterval(props: AddTimeIntervalProps) {
+    const now = useTime();
+
     const timeDifference = (
         !props.startTime || !props.endTime || compare(props.startTime, 'greaterThan', props.endTime)
             ? undefined
@@ -26,13 +29,15 @@ export default function AddTimeInterval(props: AddTimeIntervalProps) {
                 <TimePicker
                     value={props.startTime}
                     onValueChange={props.setStartTime}
-                    onEnterKeyUp={props.onRequestAdd}
+                    onEnterKeyPressed={props.onRequestAdd}
+                    valueOnSpaceKeyPressed={now}
                 />
                 bis
                 <TimePicker
                     value={props.endTime}
                     onValueChange={props.setEndTime}
-                    onEnterKeyUp={props.onRequestAdd}
+                    onEnterKeyPressed={props.onRequestAdd}
+                    valueOnSpaceKeyPressed={now}
                 />
             </div>
 

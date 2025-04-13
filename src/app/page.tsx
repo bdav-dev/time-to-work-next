@@ -35,12 +35,13 @@ import Button from "@/components/primitives/control/Button";
 // make neu hier dialog only show when user enters first time
 // change message retention times by add timeinterval error
 // test automatic expansion to 24:00 -> error???
+// unique keys (e.g. ttw-n.timeline) because localhost shares ALL localstorage data
 
 export default function TimeToWork() {
     const messaging = useContext(MessageContext);
 
     const now = useTime();
-    const [schedule, setSchedule] = useStateWithLocalStorage<Schedule>('schedule', [], ScheduleSerialization);
+    const [schedule, setSchedule] = useStateWithLocalStorage<Schedule>('ttw-n.schedule', [], ScheduleSerialization);
     const [selectedScheduleBlock, setSelectedScheduleBlock] = useState<ScheduleBlock>();
 
     const [isSettingsDialogOpen, setIsSettingsDialogOpen] = useState(false);

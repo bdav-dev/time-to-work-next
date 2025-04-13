@@ -16,7 +16,7 @@ export const ThemeContext = React.createContext<ThemeContextType>({
 });
 
 export default function ThemeProvider(props: ContextProviderProps) {
-    const [darkTheme, setDarkTheme] = useStateWithLocalStorage("useDarkTheme", true);
+    const [darkTheme, setDarkTheme] = useStateWithLocalStorage("ttw-n.useDarkTheme", true);
 
     useEffect(() => {
         document.documentElement.style.setProperty(
