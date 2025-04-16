@@ -7,8 +7,8 @@ import { delay } from "@/util/PromiseUtils";
 export type MessageType = 'success' | 'warning' | 'error';
 
 export type Message = {
-    title: string | ReactNode,
-    body: string | ReactNode,
+    title: ReactNode,
+    body: ReactNode,
     type?: MessageType,
     retentionInSeconds?: number
 }

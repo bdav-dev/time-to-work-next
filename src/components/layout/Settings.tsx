@@ -4,13 +4,14 @@ import { ReactNode } from "react";
 
 
 type SettingSection = {
-    title?: string | ReactNode,
+    title?: ReactNode,
     settings: SettingProps[]
 }
 
 type SettingsProps = {
     settingSections: SettingSection[],
-    className?: string
+    className?: string,
+    trailingHorizontalRuler?: boolean
 }
 
 export default function Settings(props: SettingsProps) {
@@ -24,7 +25,9 @@ export default function Settings(props: SettingsProps) {
                                 <div className={'flex flex-row items-center gap-2.5 px-1 min-h-8'}>
                                     {
                                         section.title &&
-                                        <div className={'text-xl font-bold'}>{section.title}</div>
+                                        <div className={'text-xl font-bold'}>
+                                            {section.title}
+                                        </div>
                                     }
                                     <HorizontalRuler className={'flex-1'}/>
                                 </div>
@@ -39,6 +42,12 @@ export default function Settings(props: SettingsProps) {
                         </div>
                     )
                 )
+            }
+            {
+                props.trailingHorizontalRuler &&
+                <div className={'flex items-center px-1 h-8'}>
+                    <HorizontalRuler className={'flex-1'}/>
+                </div>
             }
         </div>
     );

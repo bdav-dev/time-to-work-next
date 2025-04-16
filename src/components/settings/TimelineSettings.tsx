@@ -9,8 +9,11 @@ import ConfiguredTimeline from "@/components/control/ConfiguredTimeline";
 import Time from "@/time/Time";
 import { compare } from "@/util/CompareUtils";
 import TimeSpan from "@/time/TimeSpan";
+import useSchedule from "@/hooks/UseSchedule";
 
 export default function TimelineSettings() {
+    const [schedule] = useSchedule();
+
     const [amountOfTimesteps, setAmountOfTimesteps] = useMutatingConfigurationValue(config => config.timeline.amountOfMajorTimeSteps);
     const [amountOfSubTimesteps, setAmountOfSubTimesteps] = useMutatingConfigurationValue(config => config.timeline.amountOfMinorTimeSteps);
     const [startTime, setStartTime] = useMutatingConfigurationValue(config => config.timeline.startTime);
@@ -45,7 +48,7 @@ export default function TimelineSettings() {
 
     return (
         <>
-            <ConfiguredTimeline data={[]}/> {/* TODO: Preview real schedule here, create schedule context */}
+            <ConfiguredTimeline schedule={schedule}/>
 
             <Settings
                 className={'mt-2'}
@@ -70,7 +73,7 @@ export default function TimelineSettings() {
                             },
                             {
                                 label: 'Automatische Start- & Endzeit bei Überlauf',
-                                setting: <Toggle isOn={dynamicScaling} onChange={setDynamicScaling}/>
+                                setting: <Toggle value={dynamicScaling} onValueChange={setDynamicScaling}/>
                             },
                             {
                                 label: 'Anzahl Hauptzeitschritte',

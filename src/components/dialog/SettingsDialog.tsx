@@ -4,6 +4,7 @@ import { ReactNode, useState } from "react";
 import Frame from "@/components/layout/Frame";
 import TimelineSettings from "@/components/settings/TimelineSettings";
 import About from "@/components/settings/About";
+import TrainSettings from "@/components/settings/TrainSettings";
 
 type SettingsDialogProps = {
     isOpen: boolean,
@@ -25,28 +26,24 @@ export default function SettingsDialog(props: SettingsDialogProps) {
                 <SegmentedControls
                     segments={Object.values(SettingsSegments)}
                     selection={selectedSettings}
-                    onSelectionChange={s => setSelectedSettings(s!)}
+                    onSelectionChange={segment => setSelectedSettings(segment!)}
                     deselectable={false}
                     orientation={'vertical'}
                     segmentClassName={isSelection => `${isSelection && 'font-bold'}`}
                 />
 
                 <Frame className={'flex flex-col flex-1'}>
-                    <div className={'text-xl'}>
-                        {
-                            selectedSettings.displayAs
-                        }
+                    <div className={'text-2xl font-bold'}>
+                        {selectedSettings.displayAs}
                     </div>
-                    {
-                        SettingsToComponentMap[selectedSettings.value]
-                    }
+                    {SettingsToComponentMap[selectedSettings.value]}
                 </Frame>
             </div>
         </Dialog>
     );
 }
 
-type Settings = 'general' | 'myInfo' | 'regulatory' | 'about' | 'timeline';
+type Settings = 'general' | 'myInfo' | 'regulatory' | 'about' | 'timeline' | 'train';
 
 const SettingsSegments: { [key in Settings]: Segment<Settings> } = {
     general: {
@@ -69,6 +66,11 @@ const SettingsSegments: { [key in Settings]: Segment<Settings> } = {
         value: "timeline",
         displayAs: "Timeline"
     },
+    train: {
+        id: 5,
+        value: "train",
+        displayAs: "Zug"
+    },
     about: {
         id: 4,
         value: "about",
@@ -79,6 +81,7 @@ const SettingsSegments: { [key in Settings]: Segment<Settings> } = {
 const SettingsToComponentMap: { [key in Settings]: ReactNode } = {
     timeline: <TimelineSettings/>,
     about: <About/>,
+    train: <TrainSettings/>,
     general: <></>,
     myInfo: <></>,
     regulatory: <></>

@@ -3,7 +3,7 @@ import Button from "@/components/primitives/control/Button";
 
 
 type DialogProps = {
-    title?: string | ReactNode,
+    title?: ReactNode,
     isOpen: boolean,
     onRequestClose: () => void,
     overrideSize?: boolean,

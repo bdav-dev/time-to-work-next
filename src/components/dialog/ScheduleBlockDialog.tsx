@@ -1,6 +1,6 @@
 import Dialog from "@/components/primitives/Dialog";
 import Time from "@/time/Time";
-import { mapScheduleToTimelineData, Schedule, ScheduleBlock, scheduleBlockEquals } from "@/schedule/Schedule";
+import { Schedule, ScheduleBlock, scheduleBlockEquals } from "@/schedule/Schedule";
 import Button from "@/components/primitives/control/Button";
 import React, { useEffect, useMemo, useState } from "react";
 import TimePicker from "@/components/primitives/control/TimePicker";
@@ -95,12 +95,10 @@ export default function ScheduleBlockDialog(props: ScheduleBlockDialogProps) {
             title={(props.block.endTime ? 'Zeitintervall' : 'Zeitstempel') + ' bearbeiten'}
         >
             <ConfiguredTimeline
-                data={
-                    mapScheduleToTimelineData(
-                        preview.schedule,
-                        { className: block => scheduleBlockEquals(block, preview.block) ? `${preview.error && 'border-2 border-red-500'}` : 'opacity-40' }
-                    )
-                }
+                schedule={preview.schedule}
+                scheduleMapOptions={{
+                    className: block => scheduleBlockEquals(block, preview.block) ? `${preview.error && 'border-2 border-red-500'}` : 'opacity-40'
+                }}
                 height={7}
             />
 

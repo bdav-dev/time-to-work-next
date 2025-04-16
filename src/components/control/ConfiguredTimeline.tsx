@@ -1,18 +1,15 @@
-import Timeline, { TimelineProps } from "@/components/timeline/Timeline";
+import Timeline from "@/components/timeline/Timeline";
 import useTime from "@/hooks/UseTime";
 import useConfiguration from "@/hooks/configuration/UseConfiguration";
 import { TimelineConfiguration } from "@/hooks/configuration/settings/UseTimelineConfiguration";
+import { mapScheduleToTimelineData, Schedule, ScheduleToTimelineDataMapOptions } from "@/schedule/Schedule";
 
 
-type ConfiguredTimelineProps = Omit<TimelineProps,
-    'currentTime' |
-    'startTime' |
-    'endTime' |
-    'dynamicStartAndEndTimes' |
-    'amountOfSubTimeSteps' |
-    'amountOfTimeSteps' |
-    'offTimeSize'
->
+type ConfiguredTimelineProps = {
+    schedule: Schedule,
+    scheduleMapOptions?: ScheduleToTimelineDataMapOptions,
+    height?: number
+}
 
 export default function ConfiguredTimeline(props: ConfiguredTimelineProps) {
     const now = useTime();
@@ -20,6 +17,8 @@ export default function ConfiguredTimeline(props: ConfiguredTimelineProps) {
 
     return (
         <Timeline
+            data={mapScheduleToTimelineData(props.schedule, props.scheduleMapOptions)}
+            height={props.height}
             currentTime={now}
             startTime={timelineConfig.startTime}
             endTime={timelineConfig.endTime}
@@ -29,7 +28,6 @@ export default function ConfiguredTimeline(props: ConfiguredTimelineProps) {
             offTimeSize={timelineConfig.offTimeSize / 2}
             automaticTimeBoundsAndTimeStepsIfOverflow={timelineConfig.automaticTimeBoundsIfOverflow}
             automaticTimeSteps={timelineConfig.automaticAmountOfMajorTimeSteps}
-            {...props}
         />
     );
 }

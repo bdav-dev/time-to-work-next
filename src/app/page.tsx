@@ -10,7 +10,7 @@ import TimeComponent from "@/components/time/Time";
 import VerticalRuler from "@/components/layout/VerticalRuler";
 import Time from '@/time/Time';
 import Table from "@/components/layout/Table";
-import { mapScheduleToTimelineData, Schedule, ScheduleBlock } from "@/schedule/Schedule";
+import { Schedule, ScheduleBlock } from "@/schedule/Schedule";
 import { ScheduleBlockTimeType } from "@/schedule/ScheduleBlockTimeType";
 import ScheduleOperations from "@/schedule/ScheduleOperations";
 import TimeInterval from "@/time/TimeInterval";
@@ -37,6 +37,7 @@ import useSchedule from "@/hooks/UseSchedule";
 // test automatic expansion to 24:00 -> error???
 // unique keys (e.g. ttw-n.timeline) because localhost shares ALL localstorage data
 
+
 export default function TimeToWork() {
     const messaging = useContext(MessageContext);
 
@@ -45,6 +46,7 @@ export default function TimeToWork() {
     const [isSettingsDialogOpen, setIsSettingsDialogOpen] = useState(false);
     const [schedule, setSchedule] = useSchedule();
 
+    // TODO: Implement a way to show this message only when the user enters the page for the first time, maybe create custom hook for this?
     useEffect(() => {
         messaging.set(
             {
@@ -195,7 +197,8 @@ export default function TimeToWork() {
 
                 <ConfiguredTimeline
                     height={12}
-                    data={mapScheduleToTimelineData(schedule, { onClick: setSelectedScheduleBlock })}
+                    schedule={schedule}
+                    scheduleMapOptions={{ onClick: setSelectedScheduleBlock }}
                 />
 
                 <Table

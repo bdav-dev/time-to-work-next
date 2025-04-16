@@ -3,20 +3,24 @@ import React from "react";
 
 
 type ToggleProps = {
-    isOn: boolean,
-    onChange: (isOn: boolean) => void,
+    value: boolean,
+    onValueChange: (isOn: boolean) => void,
+    customLabels?: {
+        true: string,
+        false: string
+    }
 }
 
 export default function Toggle(props: ToggleProps) {
     const onSegment: Segment<boolean> = {
         id: 0,
-        displayAs: 'AN',
+        displayAs: props.customLabels?.true ?? 'AN',
         value: true,
         className: (isSelection) => `${isSelection && 'text-green-500 dark:text-green-400'}`,
     };
     const offSegment: Segment<boolean> = {
         id: 1,
-        displayAs: 'AUS',
+        displayAs: props.customLabels?.false ?? 'AUS',
         value: false,
         className: (isSelection) => `${isSelection && 'text-red-500 dark:text-red-400'}`
     };
@@ -25,9 +29,9 @@ export default function Toggle(props: ToggleProps) {
         <SegmentedControls
             orientation={"horizontal"}
             segments={[onSegment, offSegment]}
-            selection={props.isOn ? onSegment : offSegment}
+            selection={props.value ? onSegment : offSegment}
             segmentClassName={(isSelection) => `min-w-14 ${isSelection && 'font-bold'}`}
-            onSelectionChange={(selection) => props.onChange(selection!.value)}
+            onSelectionChange={(selection) => props.onValueChange(selection!.value)}
             deselectable={false}
         />
     );

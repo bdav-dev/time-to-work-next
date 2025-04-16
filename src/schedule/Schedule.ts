@@ -29,13 +29,12 @@ export function scheduleBlockEquals(a: ScheduleBlock | undefined, b: ScheduleBlo
     );
 }
 
-export function mapScheduleToTimelineData(
-    schedule: Schedule,
-    options?: {
-        onClick?: (block: ScheduleBlock) => void,
-        className?: (block: ScheduleBlock) => string
-    }
-): TimelineData[] {
+export type ScheduleToTimelineDataMapOptions = {
+    onClick?: (block: ScheduleBlock) => void,
+    className?: (block: ScheduleBlock) => string
+}
+
+export function mapScheduleToTimelineData(schedule: Schedule, options?: ScheduleToTimelineDataMapOptions): TimelineData[] {
     return schedule.map(
         scheduleBlock => ({
             startTime: scheduleBlock.startTime,

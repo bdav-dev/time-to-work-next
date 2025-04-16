@@ -4,7 +4,7 @@ import { ReactNode } from "react";
 
 
 type CheckboxProps = {
-    label?: string | ReactNode,
+    label?: ReactNode,
     value: boolean,
     setValue: (value: boolean) => void
 };

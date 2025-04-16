@@ -7,7 +7,8 @@ type TimePickerProps = {
     value: Time | undefined,
     onValueChange: (value: Time | undefined) => void,
     onEnterKeyPressed?: () => void,
-    valueOnSpaceKeyPressed?: Time
+    valueOnSpaceKeyPressed?: Time,
+    disabled?: boolean
 }
 
 export default function TimePicker(props: TimePickerProps) {
@@ -27,6 +28,7 @@ export default function TimePicker(props: TimePickerProps) {
             ref={input}
             blueprint={blueprint}
             type={'time'}
+            disabled={props.disabled}
             value={props.value?.toString() ?? ''}
             onChange={event => {
                 const value = event.currentTarget.value;

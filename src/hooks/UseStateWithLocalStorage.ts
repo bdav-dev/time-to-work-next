@@ -19,7 +19,7 @@ export default function useStateWithLocalStorage<T>(key: string, fallback: T, se
     const [value, setValue] = useState<T>(fallback);
 
     useEffect(() => {
-        let raw = getFromLocalStorage(key);
+        const raw = getFromLocalStorage(key);
         setValue(raw == null ? fallback : serialization.deserialize(raw));
     }, []);
 
