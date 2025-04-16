@@ -13,6 +13,7 @@ import Section from "@/components/layout/Section";
 import StatusIndicator from "@/components/StatusIndicator";
 import Frame from "@/components/layout/Frame";
 import ConfiguredTimeline from "@/components/control/ConfiguredTimeline";
+import { compare } from "@/util/CompareUtils";
 
 
 type SchedulePreview = {
@@ -46,34 +47,25 @@ export default function ScheduleBlockDialog(props: ScheduleBlockDialogProps) {
         setSelectedTimeType(props.block.timeType);
     }
 
-    function addTimeInterval(schedule: Schedule, startTime: Time, endTime: Time) {
-        let timeInterval: TimeInterval;
-        try {
-            timeInterval = TimeInterval.of(startTime, endTime);
-        } catch (e) {
-            throw new DisplayableError('error creating time interval');
-        }
-
-        return ScheduleOperations.addTimeInterval(
-            schedule,
-            props.currentTime,
-            timeInterval,
-            selectedTimeType
-        );
-    }
-
-    const schedulePreview = useMemo<SchedulePreview>(() => {
+    const preview = useMemo<SchedulePreview>(() => {
         let schedule = ScheduleOperations.removeScheduleBlock(props.schedule, props.block);
 
         if (!startTime) {
-            return { schedule, error: new DisplayableError('Es ist keine Startzeit definiert.') };
+            return { schedule, error: DisplayableError.of('Es ist keine Startzeit definiert.') };
+        }
+        if (endTime && compare(endTime, 'lessThan', startTime)) {
+            return { schedule, error: DisplayableError.of('Die Endzeit liegt vor der Startzeit.') };
         }
 
         const block: ScheduleBlock = { startTime, endTime, timeType: selectedTimeType };
-
         try {
             schedule = endTime
-                ? addTimeInterval(schedule, startTime, endTime)
+                ? ScheduleOperations.addTimeInterval(
+                    schedule,
+                    props.currentTime,
+                    TimeInterval.of(startTime, endTime),
+                    selectedTimeType
+                )
                 : ScheduleOperations.openTimeStamp(
                     schedule,
                     startTime,
@@ -81,10 +73,9 @@ export default function ScheduleBlockDialog(props: ScheduleBlockDialogProps) {
                     selectedTimeType
                 );
         } catch (error) {
-            if (error instanceof DisplayableError) {
-                return { schedule: [...schedule, block], block, error };
-            }
-            return { schedule, error: DisplayableError.unknown() };
+            return error instanceof DisplayableError
+                ? { schedule: [...schedule, block], block, error }
+                : { schedule, error: DisplayableError.unknown() };
         }
 
         return { schedule, block };
@@ -92,7 +83,6 @@ export default function ScheduleBlockDialog(props: ScheduleBlockDialogProps) {
 
     function remove() {
         const success = props.onRequestRemoveScheduleBlock?.(props.block);
-
         if (success) {
             props.onRequestClose?.();
         }
@@ -107,8 +97,8 @@ export default function ScheduleBlockDialog(props: ScheduleBlockDialogProps) {
             <ConfiguredTimeline
                 data={
                     mapScheduleToTimelineData(
-                        schedulePreview.schedule,
-                        { className: block => scheduleBlockEquals(block, schedulePreview.block) ? `${schedulePreview.error && 'border-2 border-red-500'}` : 'opacity-40' }
+                        preview.schedule,
+                        { className: block => scheduleBlockEquals(block, preview.block) ? `${preview.error && 'border-2 border-red-500'}` : 'opacity-40' }
                     )
                 }
                 height={7}
@@ -130,19 +120,17 @@ export default function ScheduleBlockDialog(props: ScheduleBlockDialogProps) {
 
                 <Section className={'flex-1 flex flex-col gap-0.5'}>
                     <div className={'flex flex-row gap-2 items-center font-bold'}>
-                        <StatusIndicator status={schedulePreview.error ? 'red' : 'green'}/>
+                        <StatusIndicator status={preview.error ? 'red' : 'green'}/>
                         {
-                            schedulePreview.error
+                            preview.error
                                 ? 'Fehler'
                                 : 'Bereit'
                         }
                     </div>
                     {
-                        schedulePreview.error &&
+                        preview.error &&
                         <div>
-                            {
-                                schedulePreview.error.message
-                            }
+                            {preview.error.message}
                         </div>
                     }
                 </Section>
@@ -156,8 +144,8 @@ export default function ScheduleBlockDialog(props: ScheduleBlockDialogProps) {
 
                 <Button
                     overrideMargin
-                    disabled={!!schedulePreview.error || scheduleBlockEquals(props.block, schedulePreview.block)}
-                    onClick={() => !schedulePreview.error && props.onRequestSubmitSchedule?.(schedulePreview.schedule)}
+                    disabled={!!preview.error || scheduleBlockEquals(props.block, preview.block)}
+                    onClick={() => !preview.error && props.onRequestSubmitSchedule?.(preview.schedule)}
                 >
                     Speichern
                 </Button>

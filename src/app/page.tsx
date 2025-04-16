@@ -10,8 +10,7 @@ import TimeComponent from "@/components/time/Time";
 import VerticalRuler from "@/components/layout/VerticalRuler";
 import Time from '@/time/Time';
 import Table from "@/components/layout/Table";
-import useStateWithLocalStorage from "@/hooks/UseStateWithLocalStorage";
-import { mapScheduleToTimelineData, Schedule, ScheduleBlock, ScheduleSerialization } from "@/schedule/Schedule";
+import { mapScheduleToTimelineData, Schedule, ScheduleBlock } from "@/schedule/Schedule";
 import { ScheduleBlockTimeType } from "@/schedule/ScheduleBlockTimeType";
 import ScheduleOperations from "@/schedule/ScheduleOperations";
 import TimeInterval from "@/time/TimeInterval";
@@ -25,6 +24,7 @@ import FlatButton from "@/components/primitives/control/FlatButton";
 import SettingsDialog from "@/components/dialog/SettingsDialog";
 import ConfiguredTimeline from "@/components/control/ConfiguredTimeline";
 import Button from "@/components/primitives/control/Button";
+import useSchedule from "@/hooks/UseSchedule";
 
 
 // concepts:
@@ -41,10 +41,9 @@ export default function TimeToWork() {
     const messaging = useContext(MessageContext);
 
     const now = useTime();
-    const [schedule, setSchedule] = useStateWithLocalStorage<Schedule>('ttw-n.schedule', [], ScheduleSerialization);
     const [selectedScheduleBlock, setSelectedScheduleBlock] = useState<ScheduleBlock>();
-
     const [isSettingsDialogOpen, setIsSettingsDialogOpen] = useState(false);
+    const [schedule, setSchedule] = useSchedule();
 
     useEffect(() => {
         messaging.set(
@@ -188,7 +187,6 @@ export default function TimeToWork() {
             <div className={'flex-1 flex flex-col justify-between'}>
                 <div className={'flex justify-center'}>
                     <ScheduleControlPanel
-                        schedule={schedule}
                         onAddTimeIntervalRequest={addTimeInterval}
                         onOpenTimeStampRequest={openTimeStamp}
                         onCloseTimeStampRequest={closeTimeStamp}

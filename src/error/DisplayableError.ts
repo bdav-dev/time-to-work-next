@@ -7,8 +7,12 @@ export class DisplayableError extends Error {
         Object.setPrototypeOf(this, new.target.prototype);
     }
 
+    static of(message: string, messageRetentionInSeconds?: number): DisplayableError {
+        return new DisplayableError(message, messageRetentionInSeconds);
+    }
+
     static unknown(): DisplayableError {
-        return new DisplayableError('An unknown error occurred.');
+        return new DisplayableError('Ein unbekannter Fehler ist aufgetreten.');
     }
 
 }

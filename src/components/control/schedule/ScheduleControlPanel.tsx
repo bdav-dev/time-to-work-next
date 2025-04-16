@@ -5,29 +5,30 @@ import React, { useState } from "react";
 import Time from "@/time/Time";
 import AddTimeInterval from "@/components/control/schedule/AddTimeInterval";
 import TimeStampInfo from "@/components/control/schedule/TimeStampInfo";
-import { Schedule } from "@/schedule/Schedule";
 import { ScheduleBlockTimeType, ScheduleBlockTimeTypes } from "@/schedule/ScheduleBlockTimeType";
 import { ScheduleBlockType, ScheduleBlockTypes } from "@/schedule/ScheduleBlockType";
 import ScheduleOperations from "@/schedule/ScheduleOperations";
 import ScheduleBlockTimeTypeSelect from "@/components/control/select/ScheduleBlockTimeTypeSelect";
 import ScheduleBlockTypeSelect from "@/components/control/select/ScheduleBlockTypeSelect";
+import useSchedule from "@/hooks/UseSchedule";
 
 
 type ScheduleControlPanelProps = {
-    schedule: Schedule,
     onAddTimeIntervalRequest?: (startTime: Time | undefined, endTime: Time | undefined, timeType: ScheduleBlockTimeType) => boolean,
     onOpenTimeStampRequest?: (timeType: ScheduleBlockTimeType, openTimeStampAt?: Time) => void,
     onCloseTimeStampRequest?: (closeTimeStampAt?: Time) => void
 }
 
 export default function ScheduleControlPanel(props: ScheduleControlPanelProps) {
+    const [schedule] = useSchedule();
+
     const [selectedScheduleBlockType, setSelectedScheduleBlockType] = useState<ScheduleBlockType>(ScheduleBlockTypes.TIME_STAMP);
     const [selectedScheduleBlockTimeType, setSelectedScheduleBlockTimeType] = useState<ScheduleBlockTimeType>(ScheduleBlockTimeTypes.WORK);
 
     const [startTime, setStartTime] = useState<Time>();
     const [endTime, setEndTime] = useState<Time>();
 
-    const openTimeStamp = ScheduleOperations.getOpenTimestamp(props.schedule);
+    const openTimeStamp = ScheduleOperations.getOpenTimestamp(schedule);
 
     const isScheduleBlockTypeSegmentedControlDisabled = (
         !!openTimeStamp && selectedScheduleBlockType.identifier == 'timeStamp'
