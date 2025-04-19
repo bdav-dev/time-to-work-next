@@ -2,13 +2,18 @@ import TimeClass from "@/time/Time";
 import TimeSpan from "@/time/TimeSpan";
 
 type TimeProps = {
-    time: TimeClass | TimeSpan | undefined;
+    time: TimeClass | TimeSpan | undefined,
+    className?: string
 }
 
-export default function Time({ time }: TimeProps) {
+export default function Time({ time, className }: TimeProps) {
     return (
-        time
-            ? <>{time.toString()}</>
-            : <>--:--</>
+        <span className={className}>
+            {
+                time
+                    ? <>{time.toString()}</>
+                    : <>--:--</>
+            }
+        </span>
     );
 }

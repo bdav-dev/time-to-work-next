@@ -8,7 +8,9 @@ type TimePickerProps = {
     onValueChange: (value: Time | undefined) => void,
     onEnterKeyPressed?: () => void,
     valueOnSpaceKeyPressed?: Time,
-    disabled?: boolean
+    disabled?: boolean,
+    className?: string,
+    invalid?: boolean
 }
 
 export default function TimePicker(props: TimePickerProps) {
@@ -34,7 +36,10 @@ export default function TimePicker(props: TimePickerProps) {
                 const value = event.currentTarget.value;
                 props.onValueChange(value != '' ? Time.ofString(value) : undefined);
             }}
-            className={'px-2 py-1.5 rounded-full outline-none'}
+            className={`
+                px-2 py-1.5 rounded-full focus:outline-none ${props.className}
+                ${props.invalid && 'outline-red-400 outline outline-1'}
+            `}
             onKeyUp={(e) => {
                 if (e.key === ' ') {
                     props.valueOnSpaceKeyPressed && props.onValueChange(props.valueOnSpaceKeyPressed);

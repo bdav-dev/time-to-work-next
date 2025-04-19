@@ -1,11 +1,11 @@
-import React, { CSSProperties } from "react";
+import { CSSProperties, ReactNode } from "react";
 import { NeumorphicBlueprint } from "@/neumorphic/NeumorphicStyle";
 import NeumorphicButton from "@/components/primitives/neumorphic/NeumorphicButton";
 
 export type Segment<T> = {
     id: number,
     value: T,
-    displayAs: string | React.ReactNode,
+    displayAs: ReactNode,
     className?: string | ((isSelection: boolean) => string),
 };
 
@@ -78,6 +78,7 @@ export default function SegmentedControls<T>(props: SegmentedControlsProps<T>) {
                                     ${realizeSegmentClassName(props.segmentClassName, isSelection)}
                                     ${realizeSpecificSegmentClassName(segment, isSelection)}
                                     ${props.widthFull && 'w-full'}
+                                    select-none
                                 `}
                             >
                                 {realizeSegment(segment)}

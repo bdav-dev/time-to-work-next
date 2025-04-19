@@ -1,15 +1,8 @@
 import SegmentedControls, { Segment } from "@/components/primitives/control/SegmentedControls";
-import React from "react";
 import { ScheduleBlockType, ScheduleBlockTypeIdentifier, ScheduleBlockTypes } from "@/schedule/ScheduleBlockType";
 
 
-type ScheduleBlockTypeSelectProps = {
-    value: ScheduleBlockType,
-    onValueChange: (value: ScheduleBlockType) => void,
-    disabled?: boolean
-}
-
-export default function ScheduleBlockTypeSelect(props: ScheduleBlockTypeSelectProps) {
+export default function ScheduleBlockTypeSelect(props: SelectProps<ScheduleBlockType>) {
     return (
         <SegmentedControls
             segments={Object.values(ScheduleBlockTypeSegments)}

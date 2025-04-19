@@ -1,6 +1,6 @@
 import { Message as Msg, MessageType } from "@/contexts/MessageContext";
 import { CSSProperties } from "react";
-import StatusIndicator, { Status } from "@/components/StatusIndicator";
+import StatusIndicator, { Status } from "@/components/misc/StatusIndicator";
 
 type MessageProps = {
     message: Msg,

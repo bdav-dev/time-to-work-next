@@ -1,11 +1,11 @@
-import Settings from "@/components/layout/Settings";
+import Settings from "@/components/settings/Settings";
 import TimePicker from "@/components/primitives/control/TimePicker";
 import Toggle from "@/components/primitives/control/Toggle";
 import Checkbox from "@/components/primitives/control/Checkbox";
 import NumberPicker from "@/components/primitives/control/NumberPicker";
 import useMutatingConfigurationValue from "@/hooks/configuration/UseMutatingConfigurationValue";
-import { DefaultTimelineConfiguration } from "@/hooks/configuration/settings/UseTimelineConfiguration";
-import ConfiguredTimeline from "@/components/control/ConfiguredTimeline";
+import { DefaultTimelineConfiguration } from "@/hooks/configuration/instances/UseTimelineConfiguration";
+import ConfiguredTimeline from "@/components/timeline/ConfiguredTimeline";
 import Time from "@/time/Time";
 import { compare } from "@/util/CompareUtils";
 import TimeSpan from "@/time/TimeSpan";

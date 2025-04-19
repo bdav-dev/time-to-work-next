@@ -1,9 +1,9 @@
 import Section from "@/components/layout/Section";
-import React from "react";
+import { ReactNode } from "react";
 
 type KeyValueSectionProps = {
-    first: string | React.ReactNode,
-    second: string | React.ReactNode
+    first: string | ReactNode,
+    second: string | ReactNode
 }
 
 export default function KeyValueSection(props: KeyValueSectionProps) {

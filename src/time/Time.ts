@@ -26,6 +26,9 @@ export default class Time {
         if (this.timeSpan.hours == 24 && this.timeSpan.minutes == 0) {
             return;
         }
+        if (this.timeSpan.isNegative()) {
+            throw new Error("Cannot be negative.");
+        }
         if (this.timeSpan.hours < 0 || this.timeSpan.hours > 23) {
             throw new RangeError(`Invalid hour range (must be between 0 and 23). Hour value was ${this.timeSpan.hours}`);
         }
@@ -75,8 +78,8 @@ export default class Time {
         return `${hours}:${minutes} ${meridiem}`;
     }
 
-    equals(other: Time) {
-        return this.timeSpan.equals(other.asTimeSpan());
+    equals(other: Time | undefined | null) {
+        return this.timeSpan.equals(other?.asTimeSpan());
     }
 
 }

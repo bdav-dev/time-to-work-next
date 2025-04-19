@@ -1,7 +1,7 @@
 import Time from "@/time/Time";
-import { Serialization } from "@/hooks/UseStateWithLocalStorage";
 import { ScheduleBlockTimeType, ScheduleBlockTimeTypeIdentifier, ScheduleBlockTimeTypes } from "@/schedule/ScheduleBlockTimeType";
 import { TimelineData } from "@/components/timeline/Timeline";
+import { createJsonSerialization, Serialization } from "@/serialization/Serialization";
 
 export type ScheduleBlock = {
     startTime: Time,
@@ -47,27 +47,19 @@ export function mapScheduleToTimelineData(schedule: Schedule, options?: Schedule
     );
 }
 
-type SerializableSchedule = {
-    startTime: string,
-    endTime?: string,
-    timeTypeIdentifier: string
-}[];
-
-export const ScheduleSerialization: Serialization<Schedule> = {
-    serialize: source => {
-        return JSON.stringify(
-            source.map(block => ({
-                startTime: block.startTime.toString(),
-                endTime: block.endTime?.toString() ?? undefined,
-                timeTypeIdentifier: block.timeType.identifier
-            }))
-        );
-    },
-    deserialize: target => {
-        return (JSON.parse(target) as SerializableSchedule).map(block => ({
+export const ScheduleSerialization: Serialization<Schedule> = createJsonSerialization({
+    serialize: source => (
+        source.map(block => ({
+            startTime: block.startTime.toString(),
+            endTime: block.endTime?.toString() ?? undefined,
+            timeTypeIdentifier: block.timeType.identifier
+        }))
+    ),
+    deserialize: target => (
+        target.map(block => ({
             startTime: Time.ofString(block.startTime),
             endTime: block.endTime ? Time.ofString(block.endTime) : undefined,
             timeType: ScheduleBlockTimeTypes.ofIdentifier(block.timeTypeIdentifier as ScheduleBlockTimeTypeIdentifier)
-        }));
-    }
-}
+        }))
+    )
+});

@@ -1,4 +1,4 @@
-import { ThemedColorPair } from "@/color/color";
+import { ThemedColorPair } from "@/color/Color";
 
 export type TimelineBlockColor = {
     block: ThemedColorPair,

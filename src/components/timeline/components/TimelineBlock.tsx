@@ -1,12 +1,12 @@
-import React from "react";
+import { ReactNode } from "react";
 import Time from "@/time/Time";
-import { applyThemeToThemedColorPair } from "@/color/color";
+import { applyThemeToThemedColorPair } from "@/color/Color";
 import TimelineBlockTimeLabel from "@/components/timeline/components/TimelineBlockTimeLabel";
 import { TimelineBlockColor, TimelineBlockColors } from "@/components/timeline/TimelineBlockColor";
 
 
 export type BookingBlockProps = {
-    title?: string | React.ReactNode,
+    title?: ReactNode,
     startTime: Time,
     endTime: Time,
     isOpen?: boolean,

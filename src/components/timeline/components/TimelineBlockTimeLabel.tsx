@@ -1,8 +1,7 @@
 import MaterialSymbol, { MaterialSymbols } from "@/icons/MaterialSymbol";
 import TimeSpan from "@/time/TimeSpan";
-import React from "react";
 import Time from "@/time/Time";
-import { ColorPair } from "@/color/color";
+import { ColorPair } from "@/color/Color";
 
 
 type TimelineBlockTimeLabelProps = {

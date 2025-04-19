@@ -48,8 +48,12 @@ export default class TimeSpan {
         return { normalizedMinutes, normalizedHours };
     }
 
-    static ratio(numerator: TimeSpan, denominator: TimeSpan) {
+    static divide(numerator: TimeSpan, denominator: TimeSpan) {
         return numerator.reduceToMinutes() / denominator.reduceToMinutes();
+    }
+
+    static ratio(numerator: TimeSpan, denominator: TimeSpan) {
+        return this.divide(numerator, denominator);
     }
 
     subtract(timeSpan: TimeSpan) {
@@ -85,7 +89,17 @@ export default class TimeSpan {
     }
 
     asTime() {
-        return Time.of(this.hours, this.minutes);
+        return Time.of(
+            this.hours,
+            this.minutes
+        );
+    }
+
+    absolute() {
+        return new TimeSpan(
+            Math.abs(this.hours),
+            Math.abs(this.minutes)
+        );
     }
 
     reduceToMinutes() {
@@ -112,8 +126,10 @@ export default class TimeSpan {
         return this.reduceToMinutes() - other.reduceToMinutes();
     }
 
-    equals(other: TimeSpan) {
-        return this.compareTo(other) == 0;
+    equals(other: TimeSpan | undefined | null) {
+        return other == undefined
+            ? false
+            : this.compareTo(other) == 0;
     }
 
 }

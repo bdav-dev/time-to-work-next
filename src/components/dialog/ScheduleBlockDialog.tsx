@@ -2,17 +2,17 @@ import Dialog from "@/components/primitives/Dialog";
 import Time from "@/time/Time";
 import { Schedule, ScheduleBlock, scheduleBlockEquals } from "@/schedule/Schedule";
 import Button from "@/components/primitives/control/Button";
-import React, { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import TimePicker from "@/components/primitives/control/TimePicker";
 import ScheduleOperations from "@/schedule/ScheduleOperations";
 import { ScheduleBlockTimeType } from "@/schedule/ScheduleBlockTimeType";
 import TimeInterval from "@/time/TimeInterval";
 import { DisplayableError } from "@/error/DisplayableError";
-import ScheduleBlockTimeTypeSelect from "@/components/control/select/ScheduleBlockTimeTypeSelect";
+import ScheduleBlockTimeTypeSelect from "@/components/select/ScheduleBlockTimeTypeSelect";
 import Section from "@/components/layout/Section";
-import StatusIndicator from "@/components/StatusIndicator";
+import StatusIndicator from "@/components/misc/StatusIndicator";
 import Frame from "@/components/layout/Frame";
-import ConfiguredTimeline from "@/components/control/ConfiguredTimeline";
+import ConfiguredTimeline from "@/components/timeline/ConfiguredTimeline";
 import { compare } from "@/util/CompareUtils";
 
 

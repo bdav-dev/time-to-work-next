@@ -1,7 +1,6 @@
 import Section from "@/components/layout/Section";
 import TimeComponent from "@/components/time/Time";
 import Time from "@/time/Time";
-import React from "react";
 import KeyValueSection from "@/components/layout/KeyValueSection";
 
 type TimeStampInfoProps = {

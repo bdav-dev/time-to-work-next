@@ -10,7 +10,7 @@ export default {
                 neumorphic: {
                     50: '#f5f8fa',
                     100: '#ecf0f3',
-                    150: '#e8e8e8',
+                    150: '#e0e4e8',
                     200: '#dbdfe3',
                     300: '#c9ced4',
                     400: '#9a9ca1',

@@ -1,11 +1,11 @@
-import React from "react";
+import { ReactNode } from "react";
 import NeumorphicDiv from "@/components/primitives/neumorphic/NeumorphicDiv";
 import { NeumorphicBlueprintFactory } from "@/neumorphic/NeumorphicStyle";
 import { createIsLast, isFirst } from "@/util/ArrayUtils";
 
 type TableProps = {
-    header?: (string | React.ReactNode)[] | (string | React.ReactNode),
-    data: (string | React.ReactNode)[][],
+    header?: (ReactNode | undefined)[] | ReactNode,
+    data: (ReactNode | undefined)[][],
     className?: string
 }
 
@@ -17,34 +17,37 @@ const headerClassName = (isFirst: boolean = true, isLast: boolean = true, column
 `;
 
 export default function Table(props: TableProps) {
-    const isLastInHeader = createIsLast(Array.isArray(props.header) ? props.header : []);
-    const amountOfColumns = Math.max(...props.data.map(row => row.length));
+    const header = Array.isArray(props.header) ? props.header.filter(column => column != undefined) : props.header;
+    const data = props.data.map(row => row.filter(column => column != undefined));
+
+    const isLastInHeader = createIsLast(Array.isArray(header) ? header : []);
+    const amountOfColumns = Math.max(...data.map(row => row.length));
 
     return (
         <NeumorphicDiv blueprint={NeumorphicBlueprintFactory.createLarge()} className={'rounded-3xl'}>
 
             <table className={`w-full ${props.className} `}>
                 {
-                    props.header &&
+                    header &&
                     <thead>
                     <tr>
                         {
-                            Array.isArray(props.header)
-                                ? props.header.map(
+                            Array.isArray(header)
+                                ? header.map(
                                     (columnHeader, i) => (
                                         <th key={i} className={headerClassName(isFirst(i), isLastInHeader(i), i)}>
                                             {columnHeader}
                                         </th>
                                     )
                                 )
-                                : <th colSpan={amountOfColumns} className={headerClassName()}>{props.header}</th>
+                                : <th colSpan={amountOfColumns} className={headerClassName()}>{header}</th>
                         }
                     </tr>
                     </thead>
                 }
                 <tbody>
                 {
-                    props.data
+                    data
                         .filter(row => row.length != 0)
                         .map(
                             (row, rowIndex) => (

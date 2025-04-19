@@ -1,6 +1,6 @@
 'use client';
 
-import React, { Dispatch, SetStateAction, useEffect } from "react";
+import { createContext, Dispatch, SetStateAction, useEffect } from "react";
 import useStateWithLocalStorage from "@/hooks/UseStateWithLocalStorage";
 import { ContextProviderProps } from "@/contexts/ContextTypes";
 
@@ -10,7 +10,7 @@ type ThemeContextType = {
     setDarkTheme: Dispatch<SetStateAction<boolean>>
 }
 
-export const ThemeContext = React.createContext<ThemeContextType>({
+export const ThemeContext = createContext<ThemeContextType>({
     darkTheme: true,
     setDarkTheme: () => { }
 });

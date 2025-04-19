@@ -1,5 +1,4 @@
 import SegmentedControls, { Segment } from "@/components/primitives/control/SegmentedControls";
-import React from "react";
 
 
 type ToggleProps = {

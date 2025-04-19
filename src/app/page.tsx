@@ -1,13 +1,10 @@
 'use client';
 
-import ThemeToggle from "@/components/theme/ThemeToggle";
-import Elevation from "@/components/layout/Elevation";
-import React, { useContext, useEffect, useState } from "react";
+import { useState } from "react";
 import Section from "@/components/layout/Section";
-import ScheduleControlPanel from "@/components/control/schedule/ScheduleControlPanel";
+import ScheduleControlPanel from "@/components/schedule/ScheduleControlPanel";
 import useTime from "@/hooks/UseTime";
 import TimeComponent from "@/components/time/Time";
-import VerticalRuler from "@/components/layout/VerticalRuler";
 import Time from '@/time/Time';
 import Table from "@/components/layout/Table";
 import { Schedule, ScheduleBlock } from "@/schedule/Schedule";
@@ -17,14 +14,18 @@ import TimeInterval from "@/time/TimeInterval";
 import Messaging from "@/components/message/Messaging";
 import ScheduleCalculations from "@/schedule/ScheduleCalculations";
 import TimeSpan from "@/time/TimeSpan";
-import { Message, MessageContext } from "@/contexts/MessageContext";
+import { Message } from "@/contexts/MessageContext";
 import { DisplayableError } from "@/error/DisplayableError";
 import ScheduleBlockDialog from "@/components/dialog/ScheduleBlockDialog";
 import FlatButton from "@/components/primitives/control/FlatButton";
 import SettingsDialog from "@/components/dialog/SettingsDialog";
-import ConfiguredTimeline from "@/components/control/ConfiguredTimeline";
-import Button from "@/components/primitives/control/Button";
+import ConfiguredTimeline from "@/components/timeline/ConfiguredTimeline";
 import useSchedule from "@/hooks/UseSchedule";
+import { useVerifiedPublicTransitConfiguration } from "@/hooks/configuration/instances/UsePublicTransitConfiguration";
+import useEffectOnFirstTimeVisit from "@/hooks/UseEffectOnFirstTimeVisit";
+import PublicTransitInformationBoard from "@/components/publicTransit/PublicTransitInformationBoard";
+import useMessaging from "@/hooks/UseMessaging";
+import Header from "@/components/misc/Header";
 
 
 // concepts:
@@ -32,22 +33,25 @@ import useSchedule from "@/hooks/UseSchedule";
 // stempel hook => falls gestempelt wird
 // ersetze 'Offener Zeitstempel 12:00 - ...' text mit ui, wo man steuern kann, wann geöffnet werden kann / geschlossen
 // für schedule.equals => evtl to set umwandeln, dann normale scheduleblock equals anwenden
-// make neu hier dialog only show when user enters first time
 // change message retention times by add timeinterval error
-// test automatic expansion to 24:00 -> error???
-// unique keys (e.g. ttw-n.timeline) because localhost shares ALL localstorage data
-
+// make timeline name of big and small lines in code consistent
+// maybe limit grace period
 
 export default function TimeToWork() {
-    const messaging = useContext(MessageContext);
-
     const now = useTime();
+    const messaging = useMessaging();
+
     const [selectedScheduleBlock, setSelectedScheduleBlock] = useState<ScheduleBlock>();
     const [isSettingsDialogOpen, setIsSettingsDialogOpen] = useState(false);
     const [schedule, setSchedule] = useSchedule();
 
-    // TODO: Implement a way to show this message only when the user enters the page for the first time, maybe create custom hook for this?
-    useEffect(() => {
+    const publicTransitConfig = useVerifiedPublicTransitConfiguration();
+
+    useEffectOnFirstTimeVisit(() => {
+        showFirstTimeVisitMessage();
+    });
+
+    function showFirstTimeVisitMessage() {
         messaging.set(
             {
                 title: "Neu hier?",
@@ -68,7 +72,7 @@ export default function TimeToWork() {
                 retentionInSeconds: 45
             }
         );
-    }, []);
+    }
 
     function addTimeInterval(startTime: Time | undefined, endTime: Time | undefined, time: ScheduleBlockTimeType): boolean {
         if (!startTime || !endTime) {
@@ -157,34 +161,15 @@ export default function TimeToWork() {
                 />
             }
 
-            <SettingsDialog isOpen={isSettingsDialogOpen} onRequestClose={() => setIsSettingsDialogOpen(false)}/>
+            <SettingsDialog
+                isOpen={isSettingsDialogOpen}
+                onRequestClose={() => setIsSettingsDialogOpen(false)}
+            />
 
-            <Elevation
-                overridePadding overrideMargin overrideRounded
-                className={'w-fit p-5 rounded-br-2xl flex items-center gap-6 mb-4'}
-            >
-                <div className={'flex flex-row items-center gap-2'}>
-                    <ThemeToggle overrideMargin/>
-
-                    <Button circular className={'size-12'} onClick={() => setIsSettingsDialogOpen(true)}>
-                        S
-                    </Button>
-                </div>
-
-                <VerticalRuler className={'h-8'}/>
-
-                <div>
-                    <div className={'text-2xl font-bold'}>time-to-work</div>
-                    Arbeitszeitdashboard
-                </div>
-
-                <VerticalRuler className={'h-8'}/>
-
-                <Section className={'text-xl font-bold flex items-center px-5'}>
-                    <TimeComponent time={now}/>
-                </Section>
-
-            </Elevation>
+            <Header
+                time={now}
+                onSettingsButtonClick={() => setIsSettingsDialogOpen(true)}
+            />
 
             <div className={'flex-1 flex flex-col justify-between'}>
                 <div className={'flex justify-center'}>
@@ -202,7 +187,14 @@ export default function TimeToWork() {
                 />
 
                 <Table
-                    header={['Summe der Arbeitszeit', 'restliche Arbeitszeit', 'Arbeitsende', 'neuer Zeitsaldo', 'Pause', 'nächster Zug']}
+                    header={[
+                        'Summe der Arbeitszeit',
+                        'restliche Arbeitszeit',
+                        'Arbeitsende',
+                        'neuer Zeitsaldo',
+                        'Pause',
+                        publicTransitConfig?.type.nextDepartureText
+                    ]}
                     data={[
                         [
                             <Section>
@@ -216,26 +208,32 @@ export default function TimeToWork() {
                             <Section>
                                 <TimeComponent time={ScheduleCalculations.getSumOfBreakTime(schedule, now)}/>
                             </Section>,
-                            '--:--'
+                            publicTransitConfig &&
+                            <Section className={'flex justify-center'}>
+                                <PublicTransitInformationBoard config={publicTransitConfig} now={now}/>
+                            </Section>
                         ]
                     ]}
                 />
             </div>
-
         </div>
     );
 }
 
-const createTimeIntervalErrorMessage: (body: string, retentionInSeconds?: number) => Message = (body, retentionInSeconds) => ({
-    body,
-    retentionInSeconds: retentionInSeconds ?? 2,
-    title: 'Fehler beim Hinzufügen',
-    type: 'error'
-});
+const createTimeIntervalErrorMessage: (body: string, retentionInSeconds?: number) => Message = (
+    (body, retentionInSeconds) => ({
+        body,
+        retentionInSeconds: retentionInSeconds ?? 2,
+        title: 'Fehler beim Hinzufügen',
+        type: 'error'
+    })
+);
 
-const createTimeStampErrorMessage: (body: string, retentionInSeconds?: number) => Message = (body, retentionInSeconds) => ({
-    body,
-    retentionInSeconds: retentionInSeconds ?? 2,
-    title: 'Fehler beim Stempeln',
-    type: 'error'
-});
+const createTimeStampErrorMessage: (body: string, retentionInSeconds?: number) => Message = (
+    (body, retentionInSeconds) => ({
+        body,
+        retentionInSeconds: retentionInSeconds ?? 2,
+        title: 'Fehler beim Stempeln',
+        type: 'error'
+    })
+);

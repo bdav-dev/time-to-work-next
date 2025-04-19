@@ -1,11 +1,16 @@
 import Time from "@/time/Time";
-import { ReadWriteConfigurationValue } from "@/contexts/ConfigurationContext";
+import TimeSpan from "@/time/TimeSpan";
+import { ReadWriteConfigurationValue } from "@/configuration/Configuration";
 
 
 export default class EmptyConfigurationReadWriteValue {
     static readonly TIME: ReadWriteConfigurationValue<Time> = {
         set: () => {},
         value: Time.of(0, 0)
+    };
+    static readonly TIME_SPAN: ReadWriteConfigurationValue<TimeSpan> = {
+        set: () => {},
+        value: TimeSpan.of(0, 0)
     };
     static readonly NUMBER: ReadWriteConfigurationValue<number> = {
         set: () => {},
@@ -14,5 +19,9 @@ export default class EmptyConfigurationReadWriteValue {
     static readonly BOOLEAN: ReadWriteConfigurationValue<boolean> = {
         set: () => {},
         value: false
+    };
+    static readonly UNDEFINED: ReadWriteConfigurationValue<undefined> = {
+        set: () => {},
+        value: undefined
     };
 }

@@ -1,7 +1,6 @@
 import Timeline from "@/components/timeline/Timeline";
 import useTime from "@/hooks/UseTime";
 import useConfiguration from "@/hooks/configuration/UseConfiguration";
-import { TimelineConfiguration } from "@/hooks/configuration/settings/UseTimelineConfiguration";
 import { mapScheduleToTimelineData, Schedule, ScheduleToTimelineDataMapOptions } from "@/schedule/Schedule";
 
 
@@ -13,7 +12,7 @@ type ConfiguredTimelineProps = {
 
 export default function ConfiguredTimeline(props: ConfiguredTimelineProps) {
     const now = useTime();
-    const timelineConfig = useConfiguration<TimelineConfiguration>(config => config.timeline);
+    const timelineConfig = useConfiguration(config => config.timeline);
 
     return (
         <Timeline

@@ -1,5 +1,6 @@
-import { ConfigurationContext, ConfigurationContextType, FlatReadWriteConfigurationValueWithFallback, ReadWriteConfigurationValue } from "@/contexts/ConfigurationContext";
 import { useContext } from "react";
+import { ConfigurationContextType, FlatReadWriteConfigurationValueWithFallback, ReadWriteConfigurationValue } from "@/configuration/Configuration";
+import { ConfigurationContext } from "@/contexts/ConfigurationContext";
 
 
 export default function useMutatingConfigurationValueWithFallback<V>(
@@ -9,7 +10,7 @@ export default function useMutatingConfigurationValueWithFallback<V>(
     const config = useContext(ConfigurationContext)
     const readWriteConfigValue = configValueExtractor(config);
 
-    const set = (value?: V)=> readWriteConfigValue.set(value ?? fallback);
+    const set = (value?: V) => readWriteConfigValue.set(value ?? fallback);
 
     return [readWriteConfigValue.value, set];
 }

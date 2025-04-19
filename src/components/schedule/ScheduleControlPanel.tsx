@@ -1,15 +1,15 @@
 import HorizontalRuler from "@/components/layout/HorizontalRuler";
 import Button from "@/components/primitives/control/Button";
 import Elevation from "@/components/layout/Elevation";
-import React, { useState } from "react";
+import { useState } from "react";
 import Time from "@/time/Time";
-import AddTimeInterval from "@/components/control/schedule/AddTimeInterval";
-import TimeStampInfo from "@/components/control/schedule/TimeStampInfo";
+import AddTimeInterval from "@/components/schedule/AddTimeInterval";
+import TimeStampInfo from "@/components/schedule/TimeStampInfo";
 import { ScheduleBlockTimeType, ScheduleBlockTimeTypes } from "@/schedule/ScheduleBlockTimeType";
 import { ScheduleBlockType, ScheduleBlockTypes } from "@/schedule/ScheduleBlockType";
 import ScheduleOperations from "@/schedule/ScheduleOperations";
-import ScheduleBlockTimeTypeSelect from "@/components/control/select/ScheduleBlockTimeTypeSelect";
-import ScheduleBlockTypeSelect from "@/components/control/select/ScheduleBlockTypeSelect";
+import ScheduleBlockTimeTypeSelect from "@/components/select/ScheduleBlockTimeTypeSelect";
+import ScheduleBlockTypeSelect from "@/components/select/ScheduleBlockTypeSelect";
 import useSchedule from "@/hooks/UseSchedule";
 
 

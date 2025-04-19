@@ -1,11 +1,11 @@
 'use client';
 
-import React from "react";
+import { ReactNode } from "react";
 import { useTheme } from "@/hooks/UseTheme";
 
 type ThemeApplierProps = {
     className?: string,
-    children?: React.ReactNode
+    children?: ReactNode
 }
 
 export default function ThemeApplier(props: ThemeApplierProps) {
