@@ -9,6 +9,7 @@ import { TimeProvider } from "@/contexts/TimeContext";
 import ScheduleProvider from "@/contexts/ScheduleContext";
 import MessageProvider from "@/contexts/MessageContext";
 import ConfigurationProvider from "@/contexts/ConfigurationContext";
+import Footer from "@/components/layout/page/Footer";
 
 
 export const metadata: Metadata = {
@@ -35,8 +36,7 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
                         <div className={'flex-1 flex flex-col'}>
                             {children}
                         </div>
-                        <div>footer</div>
-                        {/* TODO: create footer */}
+                        <Footer/>
                     </div>
                 </StyledJsxRegistry>
             </ThemeApplier>

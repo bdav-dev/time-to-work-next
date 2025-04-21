@@ -1,4 +1,4 @@
-import SegmentedControls, { Segment } from "@/components/primitives/control/SegmentedControls";
+import SegmentedControls, { Segment } from "@/components/control/SegmentedControls";
 import { ScheduleBlockTimeType, ScheduleBlockTimeTypeIdentifier, ScheduleBlockTimeTypes } from "@/schedule/ScheduleBlockTimeType";
 
 

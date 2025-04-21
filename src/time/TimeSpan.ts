@@ -23,12 +23,24 @@ export default class TimeSpan {
     }
 
     static ofString(timeSpan: string) {
-        const [hours, minutes] = timeSpan.split(":");
-        return new TimeSpan(parseInt(hours), parseInt(minutes));
+        const [hoursAsString, minutesAsString] = timeSpan.split(":");
+
+        const hours = parseInt(hoursAsString);
+        let minutes = parseInt(minutesAsString);
+
+        if (hoursAsString.startsWith('-') && hours == 0) {
+            minutes *= -1;
+        }
+
+        return new TimeSpan(hours, minutes);
     }
 
     static ofTimeDifference(startTime: Time, endTime: Time) {
         return endTime.asTimeSpan().subtract(startTime.asTimeSpan());
+    }
+
+    static empty() {
+        return new TimeSpan(0, 0);
     }
 
     private normalize(hours: number, minutes: number) {

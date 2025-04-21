@@ -63,14 +63,14 @@ function TimeRemaining({ timeRemaining }: { timeRemaining: TimeSpan | undefined 
         return <TimeComponent time={undefined}/>;
     }
 
-    if (compare(timeRemaining, 'lessThan', TimeSpan.ofMinutes(0))) {
+    if (compare(timeRemaining, 'lessThan', TimeSpan.empty())) {
         return (
             <span className={'text-red-700 dark:text-red-300'}>
                 seit <TimeComponent time={timeRemaining.absolute()}/>
             </span>
         );
     }
-    if (compare(timeRemaining, 'equal', TimeSpan.ofMinutes(0))) {
+    if (compare(timeRemaining, 'equal', TimeSpan.empty())) {
         return (
             <span className={'text-red-700 dark:text-red-300'}>
                 Jetzt

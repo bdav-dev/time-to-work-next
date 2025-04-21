@@ -34,7 +34,7 @@ export default function PublicTransitSettings() {
     );
     const [type, setType] = useMutatingConfigurationValue(config => config.publicTransit.type);
 
-    const isPeriodInvalid = period.equals(TimeSpan.of(0, 0));
+    const isPeriodInvalid = period.equals(TimeSpan.empty());
 
     return (
         <div>
@@ -48,7 +48,7 @@ export default function PublicTransitSettings() {
             </div>
 
             <Settings
-                settingSections={[
+                sections={[
                     {
                         title: 'Allgemein',
                         settings: [
@@ -67,12 +67,16 @@ export default function PublicTransitSettings() {
                         title: 'Zeitplan',
                         settings: [
                             {
-                                label: "Startzeitpunkt",
+                                label: 'Startzeitpunkt',
                                 setting: disabled => <TimePicker
                                     value={startTime}
                                     onValueChange={val => setStartTime(val!)}
                                     disabled={disabled}
                                 />,
+                                tooltip: <>
+                                    Beispiel: Beginnt der Fahrplan um 06:04,
+                                    trage <span className={'underline'}>06:04</span> ein.
+                                </>,
                                 disabled: !isPublicTransitFeatureEnabled
                             },
                             {
@@ -83,6 +87,11 @@ export default function PublicTransitSettings() {
                                     disabled={disabled}
                                     invalid={isPublicTransitFeatureEnabled && isPeriodInvalid}
                                 />,
+                                tooltip: <>
+                                    Hier gibst du an, in welchem Intervall dein Zug regelmäßig kommt.
+                                    Beispiel: Wenn der Zug z.B. jeden Tag um 14:04, 14:34, 15:04, ... abfährt,
+                                    trägst du hier 00:30 ein.
+                                </>,
                                 disabled: !isPublicTransitFeatureEnabled
                             }
                         ]
@@ -97,6 +106,9 @@ export default function PublicTransitSettings() {
                                     onValueChange={travelTime => setTravelTime(travelTime?.asTimeSpan())}
                                     disabled={disabled}
                                 />,
+                                tooltip: <>
+                                    Trage hier ein, wie lange du benötigst, um von deinem Arbeitsplatz zum Bahnhof zu gelangen
+                                </>,
                                 disabled: !isPublicTransitFeatureEnabled
                             },
                             {

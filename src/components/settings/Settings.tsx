@@ -5,11 +5,12 @@ import { ReactNode } from "react";
 
 type SettingSection = {
     title?: ReactNode,
+    hideHorizontalRuler?: boolean,
     settings: SettingProps[]
 }
 
 type SettingsProps = {
-    settingSections: (SettingSection | undefined)[],
+    sections: (SettingSection | undefined)[],
     className?: string,
     trailingHorizontalRuler?: boolean
 }
@@ -18,7 +19,7 @@ export default function Settings(props: SettingsProps) {
     return (
         <div className={props.className}>
             {
-                props.settingSections
+                props.sections
                     .filter(section => section != undefined)
                     .map(
                         (section, sectionIndex) => (
@@ -31,7 +32,10 @@ export default function Settings(props: SettingsProps) {
                                                 {section.title}
                                             </div>
                                         }
-                                        <HorizontalRuler className={'flex-1'}/>
+                                        {
+                                            !section?.hideHorizontalRuler &&
+                                            <HorizontalRuler className={'flex-1'}/>
+                                        }
                                     </div>
                                 }
                                 {

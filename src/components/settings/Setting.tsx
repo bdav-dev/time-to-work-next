@@ -24,7 +24,7 @@ export default function Setting(props: SettingProps) {
 
             <hr className={`flex-1 mx-3.5 border-neumorphic-200 dark:border-neumorphic-700 ${props.disabled && 'opacity-60'}`}/>
 
-            <div className={'flex flex-row items-center gap-5'}>
+            <div className={'flex flex-row items-center gap-1'}>
                 {
                     typeof props.setting === 'function'
                         ? props.setting(props.disabled ?? false)
@@ -55,15 +55,17 @@ function Tooltip({ className, children }: { className?: string, children?: React
                 absolute
                 group-hover:visible invisible
                 group-hover:opacity-100 opacity-0
-                group-hover:right-0 right-2
+                group-hover:pl-2.5 pl-0
+                group-hover:pr-0 pr-2.5
+                right-0
                 transition-all
                 top-1/2
                 translate-x-full -translate-y-1/2
-                w-max max-w-96
-                p-2.5
+                w-max max-w-[30rem]
             `}>
                 <div className={`
-                        text-left p-3
+                        transition-all
+                        text-left text-sm p-2.5
                         border rounded-lg
                         drop-shadow-lg
                         select-text

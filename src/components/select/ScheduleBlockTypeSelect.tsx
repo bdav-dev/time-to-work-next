@@ -1,4 +1,4 @@
-import SegmentedControls, { Segment } from "@/components/primitives/control/SegmentedControls";
+import SegmentedControls, { Segment } from "@/components/control/SegmentedControls";
 import { ScheduleBlockType, ScheduleBlockTypeIdentifier, ScheduleBlockTypes } from "@/schedule/ScheduleBlockType";
 
 
@@ -11,6 +11,7 @@ export default function ScheduleBlockTypeSelect(props: SelectProps<ScheduleBlock
             segmentClassName={(isSelection) => `${isSelection && 'font-bold'}`}
             onSelectionChange={selected => props.onValueChange(selected!.value)}
             deselectable={false}
+            disabled={props.disabled}
             widthFull
             roundedFull
         />

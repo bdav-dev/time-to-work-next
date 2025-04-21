@@ -7,7 +7,7 @@ import { compare } from "@/util/CompareUtils";
 export class TimelineCalculator {
     readonly startTime: Time;
     readonly endTime: Time;
-    readonly offTimeSize: number;
+    readonly marginSize: number;
     readonly amountOfTimeSteps: number;
 
     readonly amountOfTimeBlocks: number;
@@ -20,39 +20,38 @@ export class TimelineCalculator {
 
 
     constructor(config: {
-        startTime: Time,
-        endTime: Time,
-        offTimeSize: number,
-        amountOfTimeSteps: number,
-        amountOfSubTimeSteps: number,
         data: TimelineData[],
         currentTime: Time,
-        automaticTimeBoundsAndTimeStepsIfOverflow: boolean,
-        automaticTimeSteps: boolean
+        startTime: Time,
+        endTime: Time,
+        automaticTimeBoundsOnOverflow: boolean,
+        automaticAmountOfTimeSteps: boolean,
+        amountOfTimeSteps: number,
+        amountOfSubTimeSteps: number,
+        marginSize: number
     }) {
         this.startTime = (
-            config.automaticTimeBoundsAndTimeStepsIfOverflow
-                ? this.calculateStartTimeIfOverflowing(config.data, config.startTime)
-                : config.startTime
-        )
+            config.automaticTimeBoundsOnOverflow && this.calculateStartTimeIfOverflowing(config.data, config.startTime) ||
+            config.startTime
+        );
         this.endTime = (
-            config.automaticTimeBoundsAndTimeStepsIfOverflow
-                ? this.calculateEndTimeIfOverflowing(config.data, config.endTime, config.currentTime)
-                : config.endTime
-        )
+            config.automaticTimeBoundsOnOverflow && this.calculateEndTimeIfOverflowing(config.data, config.endTime, config.currentTime) ||
+            config.endTime
+        );
+
         const wasStartOrEndTimeAdjusted = !this.startTime.equals(config.startTime) || !this.endTime.equals(config.endTime);
         this.amountOfTimeSteps = (
-            wasStartOrEndTimeAdjusted || config.automaticTimeSteps
+            wasStartOrEndTimeAdjusted || config.automaticAmountOfTimeSteps
                 ? this.calculateAutomaticTimeSteps()
                 : config.amountOfTimeSteps
         );
 
-        this.offTimeSize = config.offTimeSize;
+        this.marginSize = config.marginSize;
 
         this.amountOfTimeBlocks = this.amountOfTimeSteps - 1;
         this.amountOfSubTimeBlocks = config.amountOfSubTimeSteps + 1;
 
-        this.activeAreaSize = 100 - 2 * this.offTimeSize;
+        this.activeAreaSize = 100 - 2 * this.marginSize;
         this.activeAreaTimeSpan = TimeSpan.ofTimeDifference(this.startTime, this.endTime);
 
         this.timeStepSize = this.activeAreaSize / this.amountOfTimeBlocks;
@@ -68,8 +67,6 @@ export class TimelineCalculator {
                 minutes >= 30 ? 30 : 0
             );
         }
-
-        return startTime;
     }
 
     private calculateEndTimeIfOverflowing(data: TimelineData[], endTime: Time, currentTime: Time) {
@@ -87,8 +84,6 @@ export class TimelineCalculator {
                 return Time.of(hours, 30);
             }
         }
-
-        return endTime;
     }
 
     private getEarliestBlock(data: TimelineData[]) {
@@ -146,7 +141,7 @@ export class TimelineCalculator {
             TimeSpan.ofTimeDifference(this.startTime, time),
             this.activeAreaTimeSpan
         );
-        return percentageOfActiveArea * this.activeAreaSize + this.offTimeSize;
+        return percentageOfActiveArea * this.activeAreaSize + this.marginSize;
     }
 
     private mapTimeSpanToSize(timeSpan: TimeSpan) {
@@ -159,7 +154,7 @@ export class TimelineCalculator {
         const timeSteps = [];
         for (let i = 0; i < this.amountOfTimeSteps; i++) {
             timeSteps.push({
-                position: this.offTimeSize + i * this.timeStepSize,
+                position: this.marginSize + i * this.timeStepSize,
                 time: i == this.amountOfTimeSteps - 1
                     ? this.endTime
                     : this.startTime.asTimeSpan().add(TimeSpan.ofMinutes(timeStepInMinutes * i)).asTime(),
@@ -176,7 +171,7 @@ export class TimelineCalculator {
             if (i % this.amountOfSubTimeBlocks === 0) {
                 continue;
             }
-            subTimeSteps.push({ position: this.offTimeSize + i * subTimeStepSize });
+            subTimeSteps.push({ position: this.marginSize + i * subTimeStepSize });
         }
         return subTimeSteps;
     }
@@ -227,15 +222,15 @@ export class TimelineCalculator {
         );
     }
 
-    createTimelineBackgroundImageGradient(offTimeColor: string) {
-        const mainSize = `${100 - this.offTimeSize}%`;
+    createTimelineBackgroundImageGradient(marginColor: string) {
+        const mainSize = `${100 - this.marginSize}%`;
 
         return `linear-gradient(
             to right,
-            ${offTimeColor} ${this.offTimeSize}%,
-            transparent ${this.offTimeSize}%,
+            ${marginColor} ${this.marginSize}%,
+            transparent ${this.marginSize}%,
             transparent ${mainSize},
-            ${offTimeColor} ${mainSize}
+            ${marginColor} ${mainSize}
         )`;
     }
 

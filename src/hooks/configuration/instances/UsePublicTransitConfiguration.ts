@@ -22,8 +22,8 @@ export type VerifiedPublicTransitConfiguration = Omit<PublicTransitConfiguration
 export const DefaultPublicTransitConfiguration: PublicTransitConfiguration = {
     isPublicTransitFeatureEnabled: false,
     type: PublicTransitTypes.TRAIN,
-    startTime: Time.of(0, 0),
-    period: TimeSpan.of(0, 0),
+    startTime: Time.midnight(),
+    period: TimeSpan.empty(),
     travelTime: undefined,
     gracePeriod: TimeSpan.ofMinutes(5)
 }
@@ -42,7 +42,7 @@ export function useVerifiedPublicTransitConfiguration(): VerifiedPublicTransitCo
     const publicTransitConfiguration = useConfiguration(config => config.publicTransit);
     return (
         !publicTransitConfiguration.isPublicTransitFeatureEnabled ||
-        publicTransitConfiguration.period.equals(TimeSpan.ofMinutes(0))
+        publicTransitConfiguration.period.equals(TimeSpan.empty())
             ? undefined
             : publicTransitConfiguration
     );

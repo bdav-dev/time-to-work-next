@@ -1,6 +1,6 @@
 import Elevation from "@/components/layout/Elevation";
-import Link from "next/link";
 import Section from "@/components/layout/Section";
+import Hyperlink from "@/components/misc/Hyperlink";
 
 
 export default function About() {
@@ -23,18 +23,12 @@ export default function About() {
                 <div>Visit this project</div>
 
                 <div className={'flex flex-row gap-6'}>
-                    <Link
-                        href={'https://www.bdav.dev/code/time-to-work-next'}
-                        className={'underline'}
-                    >
+                    <Hyperlink href={'https://www.bdav.dev/code/time-to-work-next'} openInNewTab>
                         Website
-                    </Link>
-                    <Link
-                        href={'https://github.com/bdav-dev/time-to-work-next'}
-                        className={'underline'}
-                    >
+                    </Hyperlink>
+                    <Hyperlink href={'https://github.com/bdav-dev/time-to-work-next'} openInNewTab>
                         GitHub
-                    </Link>
+                    </Hyperlink>
                 </div>
             </div>
 

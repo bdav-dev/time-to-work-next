@@ -3,6 +3,7 @@ import { PublicTransitConfiguration } from "@/hooks/configuration/instances/UseP
 import EmptyConfigurationReadWriteValue from "@/configuration/EmptyConfigurationReadWriteValue";
 import { PublicTransitTypes } from "@/publicTransit/PublicTransitType";
 import TimeSpan from "@/time/TimeSpan";
+import { WorkingTimeConfiguration } from "@/hooks/configuration/instances/UseWorkingTimeSettings";
 
 
 export type ReadWriteConfigurationValue<T> = {
@@ -18,16 +19,18 @@ export type FlatReadWriteConfigurationValueWithFallback<T> = [T, (value?: T) => 
 export type ConfigurationContextType = {
     timeline: ReadWriteConfiguration<TimelineConfiguration>,
     publicTransit: ReadWriteConfiguration<PublicTransitConfiguration>,
+    workingTime: ReadWriteConfiguration<WorkingTimeConfiguration>
 }
+
 export const EmptyConfiguration: ConfigurationContextType = {
     timeline: {
         startTime: EmptyConfigurationReadWriteValue.TIME,
         endTime: EmptyConfigurationReadWriteValue.TIME,
-        amountOfMinorTimeSteps: EmptyConfigurationReadWriteValue.NUMBER,
-        amountOfMajorTimeSteps: EmptyConfigurationReadWriteValue.NUMBER,
-        automaticTimeBoundsIfOverflow: EmptyConfigurationReadWriteValue.BOOLEAN,
-        automaticAmountOfMajorTimeSteps: EmptyConfigurationReadWriteValue.BOOLEAN,
-        offTimeSize: EmptyConfigurationReadWriteValue.NUMBER
+        amountOfSubTimeSteps: EmptyConfigurationReadWriteValue.NUMBER,
+        amountOfTimeSteps: EmptyConfigurationReadWriteValue.NUMBER,
+        automaticTimeBoundsOnOverflow: EmptyConfigurationReadWriteValue.BOOLEAN,
+        automaticAmountOfTimeSteps: EmptyConfigurationReadWriteValue.BOOLEAN,
+        marginSize: EmptyConfigurationReadWriteValue.NUMBER
     },
     publicTransit: {
         isPublicTransitFeatureEnabled: EmptyConfigurationReadWriteValue.BOOLEAN,
@@ -36,5 +39,9 @@ export const EmptyConfiguration: ConfigurationContextType = {
         period: EmptyConfigurationReadWriteValue.TIME_SPAN,
         travelTime: EmptyConfigurationReadWriteValue.UNDEFINED as ReadWriteConfigurationValue<TimeSpan | undefined>,
         gracePeriod: EmptyConfigurationReadWriteValue.TIME_SPAN
+    },
+    workingTime: {
+        dailyWorkingTime: EmptyConfigurationReadWriteValue.UNDEFINED as ReadWriteConfigurationValue<TimeSpan | undefined>,
+        timeBalance: EmptyConfigurationReadWriteValue.UNDEFINED as ReadWriteConfigurationValue<TimeSpan | undefined>
     }
 }

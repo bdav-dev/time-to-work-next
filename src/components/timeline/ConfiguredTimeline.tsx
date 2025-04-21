@@ -21,12 +21,11 @@ export default function ConfiguredTimeline(props: ConfiguredTimelineProps) {
             currentTime={now}
             startTime={timelineConfig.startTime}
             endTime={timelineConfig.endTime}
-            dynamicStartAndEndTimes={timelineConfig.automaticTimeBoundsIfOverflow}
-            amountOfSubTimeSteps={timelineConfig.amountOfMinorTimeSteps}
-            amountOfTimeSteps={timelineConfig.amountOfMajorTimeSteps}
-            offTimeSize={timelineConfig.offTimeSize / 2}
-            automaticTimeBoundsAndTimeStepsIfOverflow={timelineConfig.automaticTimeBoundsIfOverflow}
-            automaticTimeSteps={timelineConfig.automaticAmountOfMajorTimeSteps}
+            automaticTimeBoundsOnOverflow={timelineConfig.automaticTimeBoundsOnOverflow}
+            amountOfSubTimeSteps={timelineConfig.amountOfSubTimeSteps}
+            amountOfTimeSteps={timelineConfig.amountOfTimeSteps}
+            marginSize={timelineConfig.marginSize / 2}
+            automaticAmountOfTimeSteps={timelineConfig.automaticAmountOfTimeSteps}
         />
     );
 }

@@ -8,21 +8,21 @@ import { ReadWriteConfiguration } from "@/configuration/Configuration";
 export type TimelineConfiguration = {
     startTime: Time,
     endTime: Time,
-    automaticTimeBoundsIfOverflow: boolean,
-    amountOfMajorTimeSteps: number,
-    automaticAmountOfMajorTimeSteps: boolean,
-    amountOfMinorTimeSteps: number,
-    offTimeSize: number
+    automaticTimeBoundsOnOverflow: boolean,
+    automaticAmountOfTimeSteps: boolean,
+    amountOfTimeSteps: number,
+    amountOfSubTimeSteps: number,
+    marginSize: number
 }
 
 export const DefaultTimelineConfiguration: TimelineConfiguration = {
-    startTime: Time.ofString('07:00'),
+    startTime: Time.ofString('06:00'),
     endTime: Time.ofString('18:00'),
-    automaticTimeBoundsIfOverflow: true,
-    automaticAmountOfMajorTimeSteps: true,
-    amountOfMajorTimeSteps: 12,
-    amountOfMinorTimeSteps: 3,
-    offTimeSize: 9
+    automaticTimeBoundsOnOverflow: true,
+    automaticAmountOfTimeSteps: true,
+    amountOfTimeSteps: 13,
+    amountOfSubTimeSteps: 3,
+    marginSize: 9
 }
 
 export default function useTimelineConfiguration(): ReadWriteConfiguration<TimelineConfiguration> {

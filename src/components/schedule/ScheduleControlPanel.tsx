@@ -48,11 +48,11 @@ export default function ScheduleControlPanel(props: ScheduleControlPanelProps) {
     );
 
     function onButtonClick() {
-        const time = selectedScheduleBlockTimeType;
+        const timeType = selectedScheduleBlockTimeType;
 
         if (selectedScheduleBlockType.identifier == 'timeInterval') {
             if (startTime && !endTime) {
-                props.onOpenTimeStampRequest?.(time, startTime);
+                props.onOpenTimeStampRequest?.(timeType, startTime);
                 return;
             }
 
@@ -65,7 +65,7 @@ export default function ScheduleControlPanel(props: ScheduleControlPanelProps) {
                 return;
             }
 
-            const success = props.onAddTimeIntervalRequest?.(startTime, endTime, time);
+            const success = props.onAddTimeIntervalRequest?.(startTime, endTime, timeType);
             if (success) {
                 setStartTime(undefined);
                 setEndTime(undefined);
@@ -75,7 +75,7 @@ export default function ScheduleControlPanel(props: ScheduleControlPanelProps) {
             if (openTimeStamp) {
                 props.onCloseTimeStampRequest?.();
             } else {
-                props.onOpenTimeStampRequest?.(time);
+                props.onOpenTimeStampRequest?.(timeType);
             }
         }
     }

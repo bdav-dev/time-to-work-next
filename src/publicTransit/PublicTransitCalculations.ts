@@ -21,14 +21,14 @@ export default class PublicTransitCalculations {
     }
 
     static nextDeparture(config: VerifiedPublicTransitConfiguration, now: Time) {
-        let timeSpan = TimeSpan.ofTimeDifference(config.startTime, now);
+        let cycle = TimeSpan.ofTimeDifference(config.startTime, now);
         if (config.travelTime) {
-            timeSpan = timeSpan
-                .add(config.travelTime ?? TimeSpan.of(0, 0))
+            cycle = cycle
+                .add(config.travelTime)
                 .subtract(config.gracePeriod.add(TimeSpan.ofMinutes(1)));
         }
 
-        const nthDeparture = Math.floor(TimeSpan.divide(timeSpan, config.period)) + 1;
+        const nthDeparture = Math.floor(TimeSpan.divide(cycle, config.period)) + 1;
 
         if (nthDeparture < 0) {
             return config.startTime;
@@ -50,11 +50,11 @@ export default class PublicTransitCalculations {
     }
 
     static calculatePublicTransitInformation(config: VerifiedPublicTransitConfiguration, now: Time) {
-        const nextDeparture = PublicTransitCalculations.nextDeparture(config, now);
-        const timeUntilNextDeparture = nextDeparture && PublicTransitCalculations.timeUntilNextDeparture(nextDeparture, now);
+        const nextDeparture = this.nextDeparture(config, now);
+        const timeUntilNextDeparture = nextDeparture && this.timeUntilNextDeparture(nextDeparture, now);
 
-        const leaveTime = nextDeparture && config.travelTime && PublicTransitCalculations.leaveTime(config.travelTime, nextDeparture);
-        const timeUntilLeave = leaveTime && PublicTransitCalculations.timeUntilLeave(leaveTime, now);
+        const leaveTime = nextDeparture && config.travelTime && this.leaveTime(config.travelTime, nextDeparture);
+        const timeUntilLeave = leaveTime && this.timeUntilLeave(leaveTime, now);
 
         return { nextDeparture, timeUntilNextDeparture, leaveTime, timeUntilLeave };
     }

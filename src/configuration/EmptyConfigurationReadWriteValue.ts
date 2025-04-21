@@ -6,11 +6,11 @@ import { ReadWriteConfigurationValue } from "@/configuration/Configuration";
 export default class EmptyConfigurationReadWriteValue {
     static readonly TIME: ReadWriteConfigurationValue<Time> = {
         set: () => {},
-        value: Time.of(0, 0)
+        value: Time.midnight()
     };
     static readonly TIME_SPAN: ReadWriteConfigurationValue<TimeSpan> = {
         set: () => {},
-        value: TimeSpan.of(0, 0)
+        value: TimeSpan.empty()
     };
     static readonly NUMBER: ReadWriteConfigurationValue<number> = {
         set: () => {},

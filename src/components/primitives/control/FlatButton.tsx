@@ -7,8 +7,8 @@ export default function FlatButton({ className, children, overrideMargin, circul
     return (
         <button
             className={`
-                ${!overridePadding && 'p-2.5'}
-                ${circular ? 'rounded-full' : 'rounded-xl'}
+                ${!overridePadding && 'p-1.5'}
+                ${circular ? 'rounded-full' : 'rounded-lg'}
                 border border-neumorphic-700 dark:border-neumorphic-150 
                 ${className}
             `}

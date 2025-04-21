@@ -4,7 +4,7 @@ import Section from "@/components/layout/Section";
 import TimeComponent from "@/components/time/Time";
 import Elevation from "@/components/layout/Elevation";
 import Time from "@/time/Time";
-import SettingsButton from "../settings/SettingsButton";
+import SettingsButton from "../../settings/SettingsButton";
 
 
 type HeaderProps = {

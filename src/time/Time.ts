@@ -22,6 +22,10 @@ export default class Time {
         return new Time(date.getHours(), date.getMinutes());
     }
 
+    public static midnight() {
+        return new Time(0, 0);
+    }
+
     private validateTime() {
         if (this.timeSpan.hours == 24 && this.timeSpan.minutes == 0) {
             return;

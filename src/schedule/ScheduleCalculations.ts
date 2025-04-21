@@ -11,7 +11,7 @@ export default class ScheduleCalculations {
             .filter(block => block.timeType.identifier === 'workTime')
             .reduce(
                 (sumOfWorkTime, block) => sumOfWorkTime.add(TimeSpan.ofTimeDifference(block.startTime, block.endTime ?? now)),
-                TimeSpan.of(0, 0)
+                TimeSpan.empty()
             );
     }
 
@@ -20,7 +20,7 @@ export default class ScheduleCalculations {
             .filter(block => block.timeType.identifier === 'breakTime')
             .reduce(
                 (sumOfBreakTime, block) => sumOfBreakTime.add(TimeSpan.ofTimeDifference(block.startTime, block.endTime ?? now)),
-                TimeSpan.of(0, 0)
+                TimeSpan.empty()
             );
     }
 

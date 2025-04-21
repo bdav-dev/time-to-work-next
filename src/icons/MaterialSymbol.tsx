@@ -11,7 +11,9 @@ export enum MaterialSymbols {
     SETTINGS,
     DIRECTIONS_BUS,
     TRAM,
-    SUBWAY
+    SUBWAY,
+    ADD,
+    REMOVE
 }
 
 const MaterialSymbolsMap: { [key in MaterialSymbols]: ReactNode } = {
@@ -25,7 +27,9 @@ const MaterialSymbolsMap: { [key in MaterialSymbols]: ReactNode } = {
     [MaterialSymbols.SETTINGS]: <>&#xe8b8;</>,
     [MaterialSymbols.DIRECTIONS_BUS]: <>&#xe530;</>,
     [MaterialSymbols.TRAM]: <>&#xe571;</>,
-    [MaterialSymbols.SUBWAY]: <>&#xe56f;</>
+    [MaterialSymbols.SUBWAY]: <>&#xe56f;</>,
+    [MaterialSymbols.ADD]: <>&#xe145;</>,
+    [MaterialSymbols.REMOVE]: <>&#xe15b;</>
 }
 
 type MaterialSymbolProps = HTMLProps<HTMLSpanElement> & {

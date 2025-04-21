@@ -79,6 +79,7 @@ export default function SegmentedControls<T>(props: SegmentedControlsProps<T>) {
                                     ${realizeSpecificSegmentClassName(segment, isSelection)}
                                     ${props.widthFull && 'w-full'}
                                     select-none
+                                    flex items-center justify-center
                                 `}
                             >
                                 {realizeSegment(segment)}

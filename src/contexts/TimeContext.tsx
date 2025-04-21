@@ -5,12 +5,13 @@ import Time from "@/time/Time";
 import { ContextProviderProps } from "@/contexts/ContextTypes";
 
 
-export const TimeContext = createContext<Time>(Time.now());
+export const TimeContext = createContext<Time | undefined>(undefined);
 
 export function TimeProvider(props: ContextProviderProps) {
-    const [time, setTime] = useState<Time>(Time.now());
+    const [time, setTime] = useState<Time>();
 
     useEffect(() => {
+        setTime(Time.now());
         runEveryTimeWhenMinuteChanges(() => setTime(Time.now()));
     }, []);
 

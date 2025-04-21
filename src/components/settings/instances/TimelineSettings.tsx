@@ -14,15 +14,15 @@ import useSchedule from "@/hooks/UseSchedule";
 export default function TimelineSettings() {
     const [schedule] = useSchedule();
 
-    const [amountOfTimesteps, setAmountOfTimesteps] = useMutatingConfigurationValue(config => config.timeline.amountOfMajorTimeSteps);
-    const [amountOfSubTimesteps, setAmountOfSubTimesteps] = useMutatingConfigurationValue(config => config.timeline.amountOfMinorTimeSteps);
     const [startTime, setStartTime] = useMutatingConfigurationValue(config => config.timeline.startTime);
     const [endTime, setEndTime] = useMutatingConfigurationValue(config => config.timeline.endTime);
+    const [amountOfTimesteps, setAmountOfTimesteps] = useMutatingConfigurationValue(config => config.timeline.amountOfTimeSteps);
+    const [amountOfSubTimesteps, setAmountOfSubTimesteps] = useMutatingConfigurationValue(config => config.timeline.amountOfSubTimeSteps);
 
-    const [dynamicScaling, setDynamicScaling] = useMutatingConfigurationValue(config => config.timeline.automaticTimeBoundsIfOverflow);
-    const [auto, setAuto] = useMutatingConfigurationValue(config => config.timeline.automaticAmountOfMajorTimeSteps);
+    const [automaticTimeBoundsOnOverflow, setAutomaticTimeBoundsOnOverflow] = useMutatingConfigurationValue(config => config.timeline.automaticTimeBoundsOnOverflow);
+    const [automaticAmountOfTimeSteps, setAutomaticAmountOfTimeSteps] = useMutatingConfigurationValue(config => config.timeline.automaticAmountOfTimeSteps);
 
-    const [offTimeSize, setOffTimeSize] = useMutatingConfigurationValue(config => config.timeline.offTimeSize);
+    const [marginSize, setMarginSize] = useMutatingConfigurationValue(config => config.timeline.marginSize);
 
     function rectifyStartTimeInput(startTimeInput?: Time) {
         const fallback = (
@@ -52,7 +52,7 @@ export default function TimelineSettings() {
 
             <Settings
                 className={'mt-2'}
-                settingSections={[
+                sections={[
                     {
                         settings: [
                             {
@@ -73,18 +73,26 @@ export default function TimelineSettings() {
                             },
                             {
                                 label: 'Automatische Start- & Endzeit bei Überlauf',
-                                setting: <Toggle value={dynamicScaling} onValueChange={setDynamicScaling}/>
+                                setting: <Toggle value={automaticTimeBoundsOnOverflow} onValueChange={setAutomaticTimeBoundsOnOverflow}/>,
+                                tooltip: <>
+                                    TODO
+                                </>
                             },
                             {
-                                label: 'Anzahl Hauptzeitschritte',
+                                label: 'Anzahl Zeitschritte',
                                 setting: <>
-                                    <Checkbox value={auto} setValue={setAuto} label={'Automatisch'}/>
+                                    <Checkbox
+                                        value={automaticAmountOfTimeSteps}
+                                        setValue={setAutomaticAmountOfTimeSteps}
+                                        label={'Automatisch'}
+                                    />
                                     <NumberPicker
+                                        className={'ml-4'}
                                         lowerLimit={2}
                                         upperLimit={20}
                                         value={amountOfTimesteps}
                                         onValueChange={setAmountOfTimesteps}
-                                        disabled={auto}
+                                        disabled={automaticAmountOfTimeSteps}
                                     />
                                 </>
                             },
@@ -102,8 +110,8 @@ export default function TimelineSettings() {
                                 setting: <NumberPicker
                                     upperLimit={20}
                                     lowerLimit={1}
-                                    value={offTimeSize}
-                                    onValueChange={setOffTimeSize}
+                                    value={marginSize}
+                                    onValueChange={setMarginSize}
                                 />
                             }
                         ]

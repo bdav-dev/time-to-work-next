@@ -1,11 +1,12 @@
 import Dialog from "@/components/primitives/Dialog";
-import SegmentedControls, { Segment } from "@/components/primitives/control/SegmentedControls";
+import SegmentedControls, { Segment } from "@/components/control/SegmentedControls";
 import { ReactNode, useState } from "react";
 import Frame from "@/components/layout/Frame";
 import TimelineSettings from "@/components/settings/instances/TimelineSettings";
 import About from "@/components/settings/instances/About";
 import PublicTransitSettings from "@/components/settings/instances/PublicTransitSettings";
 import ThemeToggle from "@/components/theme/ThemeToggle";
+import WorkingTimeSettings from "@/components/settings/instances/WorkingTimeSettings";
 
 type SettingsDialogProps = {
     isOpen: boolean,
@@ -47,7 +48,7 @@ export default function SettingsDialog(props: SettingsDialogProps) {
     );
 }
 
-type Settings = 'general' | 'myInfo' | 'regulatory' | 'about' | 'timeline' | 'publicTransit';
+type Settings = 'general' | 'workingTime' | 'about' | 'timeline' | 'publicTransit';
 
 const SettingsSegments: { [key in Settings]: Segment<Settings> } = {
     general: {
@@ -55,15 +56,10 @@ const SettingsSegments: { [key in Settings]: Segment<Settings> } = {
         value: "general",
         displayAs: "Allgemein"
     },
-    myInfo: {
+    workingTime: {
         id: 1,
-        value: "myInfo",
-        displayAs: "Meine Angaben"
-    },
-    regulatory: {
-        id: 2,
-        value: "regulatory",
-        displayAs: "Rechtliche Vorgaben"
+        value: "workingTime",
+        displayAs: "Angaben zur Arbeitszeit"
     },
     timeline: {
         id: 3,
@@ -87,6 +83,5 @@ const SettingsToComponentMap: { [key in Settings]: ReactNode } = {
     about: <About/>,
     publicTransit: <PublicTransitSettings/>,
     general: <></>,
-    myInfo: <></>,
-    regulatory: <></>
+    workingTime: <WorkingTimeSettings/>
 }

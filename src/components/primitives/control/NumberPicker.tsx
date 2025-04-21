@@ -10,7 +10,8 @@ type NumberPickerProps = {
     onValueChange: (value: number) => void,
     upperLimit?: number,
     lowerLimit?: number,
-    disabled?: boolean
+    disabled?: boolean,
+    className?: string
 }
 
 export default function NumberPicker(props: NumberPickerProps) {
@@ -48,7 +49,7 @@ export default function NumberPicker(props: NumberPickerProps) {
     }
 
     return (
-        <div className={'flex flex-row'}>
+        <div className={`flex flex-row ${props.className}`}>
             <NeumorphicButton
                 blueprint={leftButtonBlueprint}
                 className={'p-2 rounded-l-xl text-[1.3rem] leading-none'}

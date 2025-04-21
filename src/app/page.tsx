@@ -25,7 +25,7 @@ import { useVerifiedPublicTransitConfiguration } from "@/hooks/configuration/ins
 import useEffectOnFirstTimeVisit from "@/hooks/UseEffectOnFirstTimeVisit";
 import PublicTransitInformationBoard from "@/components/publicTransit/PublicTransitInformationBoard";
 import useMessaging from "@/hooks/UseMessaging";
-import Header from "@/components/misc/Header";
+import Header from "@/components/layout/page/Header";
 
 
 // concepts:
@@ -36,6 +36,9 @@ import Header from "@/components/misc/Header";
 // change message retention times by add timeinterval error
 // make timeline name of big and small lines in code consistent
 // maybe limit grace period
+// implement own material symbol api
+// create TimeSpanPicker
+// make () Bereit not showing when noting changed (scheduleblock dialog)
 
 export default function TimeToWork() {
     const now = useTime();
@@ -53,48 +56,46 @@ export default function TimeToWork() {
 
     function showFirstTimeVisitMessage() {
         messaging.set(
-            {
-                title: "Neu hier?",
-                body: <div className={'flex flex-col'}>
-                    Gib' einige Informationen zu deiner Arbeitszeit an,
-                    damit time-to-work für dich Daten, wie zum Beispiel die restliche Arbeitszeit, berechnen kann.
-
-                    <FlatButton
-                        className={'mt-2'}
-                        onClick={() => {
-                            messaging.clear();
-                            setIsSettingsDialogOpen(true);
-                        }}
-                    >
-                        Zu den Einstellungen
-                    </FlatButton>
-                </div>,
-                retentionInSeconds: 45
-            }
+            createFirstTimeVisitMessage(
+                () => {
+                    messaging.clear();
+                    setIsSettingsDialogOpen(true);
+                }
+            )
         );
     }
 
-    function addTimeInterval(startTime: Time | undefined, endTime: Time | undefined, time: ScheduleBlockTimeType): boolean {
+    function addTimeInterval(
+        startTime: Time | undefined,
+        endTime: Time | undefined,
+        time: ScheduleBlockTimeType
+    ): boolean {
         if (!startTime || !endTime) {
-            messaging.set(createTimeIntervalErrorMessage('Das Start- und Endfeld ist leer.'));
+            messaging.set(
+                createTimeIntervalErrorMessage('Das Start- und Endfeld ist leer.')
+            );
             return false;
         }
 
         let timeInterval: TimeInterval;
         try {
             timeInterval = TimeInterval.of(startTime, endTime)
-        } catch (e) {
-            messaging.set(createTimeIntervalErrorMessage('Die Endzeit des Zeitintervalls darf nicht vor der Startzeit liegen.'));
+        } catch (ignored) {
+            messaging.set(
+                createTimeIntervalErrorMessage('Die Endzeit des Zeitintervalls darf nicht vor der Startzeit liegen.')
+            );
             return false;
         }
 
         let newSchedule: Schedule;
         try {
             newSchedule = ScheduleOperations.addTimeInterval(schedule, now, timeInterval, time);
-        } catch (e) {
-            if (e instanceof DisplayableError) {
-                messaging.set(createTimeIntervalErrorMessage(e.message, e.messageRetentionInSeconds));
-            }
+        } catch (error) {
+            messaging.set(
+                error instanceof DisplayableError
+                    ? createTimeIntervalErrorMessage(error.message, error.messageRetentionInSeconds)
+                    : createTimeIntervalErrorMessage(DisplayableError.unknown().message)
+            );
             return false;
         }
 
@@ -107,10 +108,12 @@ export default function TimeToWork() {
         let newSchedule: Schedule;
         try {
             newSchedule = ScheduleOperations.openTimeStamp(schedule, openTimeStampAt ?? now, now, time);
-        } catch (e) {
-            if (e instanceof DisplayableError) {
-                messaging.set(createTimeStampErrorMessage(e.message, e.messageRetentionInSeconds));
-            }
+        } catch (error) {
+            messaging.set(
+                error instanceof DisplayableError
+                    ? createTimeStampErrorMessage(error.message, error.messageRetentionInSeconds)
+                    : createTimeStampErrorMessage(DisplayableError.unknown().message)
+            );
             return;
         }
 
@@ -122,10 +125,12 @@ export default function TimeToWork() {
 
         try {
             newSchedule = ScheduleOperations.closeTimeStamp(schedule, closeTimeStampAt ?? now, now);
-        } catch (e) {
-            if (e instanceof DisplayableError) {
-                messaging.set(createTimeStampErrorMessage(e.message, e.messageRetentionInSeconds));
-            }
+        } catch (error) {
+            messaging.set(
+                error instanceof DisplayableError
+                    ? createTimeStampErrorMessage(error.message, error.messageRetentionInSeconds)
+                    : createTimeStampErrorMessage(DisplayableError.unknown().message)
+            );
             return;
         }
 
@@ -133,10 +138,7 @@ export default function TimeToWork() {
     }
 
     function remove(block: ScheduleBlock): boolean {
-        setSchedule(
-            schedule => ScheduleOperations.removeScheduleBlock(schedule, block)
-        );
-
+        setSchedule(schedule => ScheduleOperations.removeScheduleBlock(schedule, block));
         return true;
     }
 
@@ -160,7 +162,6 @@ export default function TimeToWork() {
                     }}
                 />
             }
-
             <SettingsDialog
                 isOpen={isSettingsDialogOpen}
                 onRequestClose={() => setIsSettingsDialogOpen(false)}
@@ -220,10 +221,28 @@ export default function TimeToWork() {
     );
 }
 
+const createFirstTimeVisitMessage = (onSettingsButtonClick: () => void) => (
+    {
+        title: "Neu hier?",
+        body: <div className={'flex flex-col'}>
+            Gib' einige Informationen zu deiner Arbeitszeit an,
+            damit time-to-work für dich Daten, wie zum Beispiel die restliche Arbeitszeit, berechnen kann.
+
+            <FlatButton
+                className={'mt-2'}
+                onClick={onSettingsButtonClick}
+            >
+                Zu den Einstellungen
+            </FlatButton>
+        </div>,
+        retentionInSeconds: 60
+    }
+);
+
 const createTimeIntervalErrorMessage: (body: string, retentionInSeconds?: number) => Message = (
     (body, retentionInSeconds) => ({
         body,
-        retentionInSeconds: retentionInSeconds ?? 2,
+        retentionInSeconds: retentionInSeconds ?? 5,
         title: 'Fehler beim Hinzufügen',
         type: 'error'
     })
@@ -232,7 +251,7 @@ const createTimeIntervalErrorMessage: (body: string, retentionInSeconds?: number
 const createTimeStampErrorMessage: (body: string, retentionInSeconds?: number) => Message = (
     (body, retentionInSeconds) => ({
         body,
-        retentionInSeconds: retentionInSeconds ?? 2,
+        retentionInSeconds: retentionInSeconds ?? 5,
         title: 'Fehler beim Stempeln',
         type: 'error'
     })
