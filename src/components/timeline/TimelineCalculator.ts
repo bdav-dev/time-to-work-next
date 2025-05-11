@@ -18,7 +18,6 @@ export class TimelineCalculator {
 
     readonly timeStepSize: number;
 
-
     constructor(config: {
         data: TimelineData[],
         currentTime: Time,

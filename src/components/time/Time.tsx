@@ -1,18 +1,25 @@
 import TimeClass from "@/time/Time";
 import TimeSpan from "@/time/TimeSpan";
+import TimeInterval from "@/time/TimeInterval";
 
 type TimeProps = {
-    time: TimeClass | TimeSpan | undefined,
+    time: TimeClass | TimeSpan | TimeInterval | undefined,
     showPositiveSign?: boolean,
     className?: string
 }
 
-function getTimeAndSignStrings(timeOrTimeSpan: TimeClass | TimeSpan | undefined, showPositiveSign: boolean) {
-    if (!timeOrTimeSpan) {
+function getTimeAndSignStrings(timeObject: TimeClass | TimeSpan | TimeInterval | undefined, showPositiveSign: boolean) {
+    if (!timeObject) {
         return { timeString: '--:--' };
     }
 
-    const timeSpan = timeOrTimeSpan instanceof TimeClass ? timeOrTimeSpan.asTimeSpan() : timeOrTimeSpan;
+    const timeSpan: TimeSpan = (
+        timeObject instanceof TimeClass
+            ? timeObject.asTimeSpan()
+            : timeObject instanceof TimeInterval
+                ? timeObject.getTimeDifference()
+                : timeObject
+    );
 
     return {
         timeString: timeSpan.absolute().toString(),

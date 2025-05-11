@@ -31,7 +31,7 @@ export default function Dialog({ closableWithEscKey = true, ...props }: DialogPr
             if (event.key === 'Escape' && !closableWithEscKey) {
                 event?.preventDefault();
             }
-        }
+        };
         dialog.current?.addEventListener('keydown', handleCancel);
 
         return () => dialog.current?.removeEventListener('keydown', handleCancel);

@@ -4,6 +4,7 @@ import TimeComponent from '@/components/time/Time';
 import KeyValueSection from "@/components/layout/KeyValueSection";
 import { compare } from "@/util/CompareUtils";
 import useTime from "@/hooks/UseTime";
+import TimeInterval from "@/time/TimeInterval";
 
 type TimeIntervalControl = {
     startTime: Time | undefined,
@@ -20,7 +21,7 @@ export default function TimeIntervalControl(props: TimeIntervalControl) {
     const timeDifference = (
         !props.startTime || !props.endTime || compare(props.startTime, 'greaterThan', props.endTime)
             ? undefined
-            : props.endTime.asTimeSpan().subtract(props.startTime.asTimeSpan())
+            : TimeInterval.of(props.startTime, props.endTime).getTimeDifference()
     );
 
     return (
