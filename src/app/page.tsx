@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import ScheduleControlPanel from "@/components/schedule/ScheduleControlPanel";
-import useTime from "@/hooks/UseTime";
 import { ScheduleBlock } from "@/schedule/Schedule";
 import Messaging from "@/components/message/Messaging";
 import EditScheduleBlockDialog from "@/components/dialog/EditScheduleBlockDialog";
@@ -29,7 +28,6 @@ import UnclosedTimeStampWatcher from "@/unclosedTimeStamp/UnclosedTimeStampWatch
 // maybe return clearTimeout: useTime
 
 export default function TimeToWork() {
-    const now = useTime();
     const messaging = useMessaging();
     const { schedule } = useSchedule();
 

@@ -3,7 +3,6 @@ import Time from "@/time/Time";
 import { BookingBlockProps } from "@/components/timeline/components/TimelineBlock";
 import { TimelineData } from "@/components/timeline/Timeline";
 import { compare } from "@/util/CompareUtils";
-import { scheduleBlockEquals } from "@/schedule/Schedule";
 
 export class TimelineCalculator {
     readonly startTime: Time;

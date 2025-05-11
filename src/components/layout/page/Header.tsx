@@ -3,7 +3,6 @@ import VerticalRuler from "@/components/layout/VerticalRuler";
 import Section from "@/components/layout/Section";
 import TimeComponent from "@/components/time/Time";
 import Elevation from "@/components/layout/Elevation";
-import Time from "@/time/Time";
 import SettingsButton from "../../settings/SettingsButton";
 import { useContext } from "react";
 import { TimeContext } from "@/contexts/TimeContext";
