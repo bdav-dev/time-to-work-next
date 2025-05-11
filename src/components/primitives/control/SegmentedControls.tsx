@@ -49,13 +49,13 @@ export default function SegmentedControls<T>(props: SegmentedControlsProps<T>) {
     return (
         <div className={`flex ${flexDirection} m-2 ${props.className} ${props.widthFull ? 'w-full' : 'w-fit'}`}>
             {
-                props.segments.map((segment, i) => {
+                props.segments.map((segment, index) => {
                     const isSelection = areSegmentsEqual(segment, props.selection);
-                    const position = positionFromIndex(i);
+                    const position = positionFromIndex(index);
                     return (
-                        <div className={`flex ${flexDirection} ${props.widthFull && 'w-full'}`} key={i}>
+                        <div className={`flex ${flexDirection} ${props.widthFull && 'w-full'}`} key={index}>
                             {
-                                i != 0 &&
+                                index != 0 &&
                                 <div
                                     className={`
                                         ${flexDirection}
