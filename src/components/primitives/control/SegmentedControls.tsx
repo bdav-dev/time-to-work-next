@@ -2,6 +2,7 @@ import { CSSProperties, ReactNode } from "react";
 import { NeumorphicBlueprint } from "@/neumorphic/NeumorphicStyle";
 import NeumorphicButton from "@/components/primitives/neumorphic/NeumorphicButton";
 
+
 export type Segment<T> = {
     id: number,
     value: T,
@@ -22,7 +23,8 @@ type SegmentedControlsProps<T> = {
     className?: string,
     widthFull?: boolean,
     roundedFull?: boolean,
-    disabled?: boolean
+    disabled?: boolean,
+    overrideSegmentPadding?: boolean
 }
 
 const BLUR = 10;
@@ -73,7 +75,7 @@ export default function SegmentedControls<T>(props: SegmentedControlsProps<T>) {
                                 style={createBorderRadiusStyle(position, orientation, borderRadius)}
                                 disabled={props.disabled}
                                 className={`
-                                    px-3 py-2
+                                    ${!props.overrideSegmentPadding && 'px-3 py-2'}
                                     ${isSelection && props.deselectable == false && 'pointer-events-none'}
                                     ${realizeSegmentClassName(props.segmentClassName, isSelection)}
                                     ${realizeSpecificSegmentClassName(segment, isSelection)}

@@ -1,20 +1,21 @@
-export type GenericSerialization<S, T> = {
-    serialize: (source: S) => T,
-    deserialize: (target: T) => S
+
+export type Codec<S, T> = {
+    encode: (source: S) => T,
+    decode: (target: T) => S
 };
 
-export type Serialization<S> = GenericSerialization<S, string>;
+export type Serialization<S> = Codec<S, string>;
 
-export function createJsonSerialization<S, T>(serialization?: GenericSerialization<S, T>): Serialization<S> {
-    if (!serialization) {
-        return createJsonSerialization({
-            serialize: source => source,
-            deserialize: target => target
+export function createSerialization<S, T>(codec?: Codec<S, T>): Serialization<S> {
+    if (!codec) {
+        return createSerialization({
+            encode: source => source,
+            decode: target => target
         });
     }
 
     return {
-        serialize: source => JSON.stringify(serialization.serialize(source)),
-        deserialize: target => serialization.deserialize(JSON.parse(target))
+        encode: source => JSON.stringify(codec.encode(source)),
+        decode: target => codec.decode(JSON.parse(target))
     };
 }

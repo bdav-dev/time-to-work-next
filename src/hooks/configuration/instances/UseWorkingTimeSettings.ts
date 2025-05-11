@@ -1,6 +1,6 @@
 import useStateWithLocalStorage from "@/hooks/UseStateWithLocalStorage";
 import { convertConfigurationToReadWriteConfiguration } from "@/contexts/ConfigurationContext";
-import { createJsonSerialization, Serialization } from "@/serialization/Serialization";
+import { createSerialization, Serialization } from "@/serialization/Serialization";
 import { ReadWriteConfiguration } from "@/configuration/Configuration";
 import TimeSpan from "@/time/TimeSpan";
 
@@ -24,13 +24,13 @@ export default function useWorkingTimeConfiguration(): ReadWriteConfiguration<Wo
     return convertConfigurationToReadWriteConfiguration(workingTimeConfiguration, setWorkingTimeConfiguration);
 }
 
-const WorkingTimeConfigurationSerialization: Serialization<WorkingTimeConfiguration> = createJsonSerialization({
-    serialize: source => ({
+const WorkingTimeConfigurationSerialization: Serialization<WorkingTimeConfiguration> = createSerialization({
+    encode: source => ({
         dailyWorkingTime: source.dailyWorkingTime?.toString(),
         timeBalance: source.timeBalance?.toString()
     }),
-    deserialize: target => ({
-        dailyWorkingTime: target.dailyWorkingTime && TimeSpan.ofString(target.dailyWorkingTime) || undefined,
-        timeBalance: target.timeBalance && TimeSpan.ofString(target.timeBalance) || undefined,
+    decode: target => ({
+        dailyWorkingTime: target.dailyWorkingTime ? TimeSpan.ofString(target.dailyWorkingTime) : undefined,
+        timeBalance: target.timeBalance ? TimeSpan.ofString(target.timeBalance) : undefined,
     })
 });

@@ -3,79 +3,75 @@ import Button from "@/components/primitives/control/Button";
 import Elevation from "@/components/layout/Elevation";
 import { useState } from "react";
 import Time from "@/time/Time";
-import AddTimeInterval from "@/components/schedule/AddTimeInterval";
-import TimeStampInfo from "@/components/schedule/TimeStampInfo";
+import TimeIntervalControl from "@/components/schedule/TimeIntervalControl";
+import TimeStampControl from "@/components/schedule/TimeStampControl";
 import { ScheduleBlockTimeType, ScheduleBlockTimeTypes } from "@/schedule/ScheduleBlockTimeType";
 import { ScheduleBlockType, ScheduleBlockTypes } from "@/schedule/ScheduleBlockType";
 import ScheduleOperations from "@/schedule/ScheduleOperations";
 import ScheduleBlockTimeTypeSelect from "@/components/select/ScheduleBlockTimeTypeSelect";
 import ScheduleBlockTypeSelect from "@/components/select/ScheduleBlockTypeSelect";
+import { Schedule } from "@/schedule/Schedule";
+import TimeInterval from "@/time/TimeInterval";
+import { DisplayableError } from "@/error/DisplayableError";
 import useSchedule from "@/hooks/UseSchedule";
+import { Message } from "@/contexts/MessageContext";
+import useTime from "@/hooks/UseTime";
+import useMessaging from "@/hooks/UseMessaging";
 
 
-type ScheduleControlPanelProps = {
-    onAddTimeIntervalRequest?: (startTime: Time | undefined, endTime: Time | undefined, timeType: ScheduleBlockTimeType) => boolean,
-    onOpenTimeStampRequest?: (timeType: ScheduleBlockTimeType, openTimeStampAt?: Time) => void,
-    onCloseTimeStampRequest?: (closeTimeStampAt?: Time) => void
-}
+export default function ScheduleControlPanel() {
+    const now = useTime();
+    const { schedule, setSchedule } = useSchedule();
+    const { set: setMessage } = useMessaging();
 
-export default function ScheduleControlPanel(props: ScheduleControlPanelProps) {
-    const [schedule] = useSchedule();
+    const context: ScheduleModificationContext = { now, schedule, setSchedule, setMessage };
 
-    const [selectedScheduleBlockType, setSelectedScheduleBlockType] = useState<ScheduleBlockType>(ScheduleBlockTypes.TIME_STAMP);
-    const [selectedScheduleBlockTimeType, setSelectedScheduleBlockTimeType] = useState<ScheduleBlockTimeType>(ScheduleBlockTimeTypes.WORK);
+    const [selectedBlockType, setSelectedBlockType] = useState<ScheduleBlockType>(ScheduleBlockTypes.TIME_STAMP);
+    const [selectedBlockTimeType, setSelectedBlockTimeType] = useState<ScheduleBlockTimeType>(ScheduleBlockTimeTypes.WORK);
 
-    const [startTime, setStartTime] = useState<Time>();
-    const [endTime, setEndTime] = useState<Time>();
+    const timeInterval = (() => {
+        const [startTime, setStartTime] = useState<Time>();
+        const [endTime, setEndTime] = useState<Time>();
+        return { startTime, setStartTime, endTime, setEndTime };
+    })();
+    const timeStamp = (() => {
+        const [openOrCloseTime, setOpenOrCloseTime] = useState<Time>();
+        const [useCurrentTimeAsOpenOrCloseTime, setUseCurrentTimeAsOpenOrCloseTime] = useState<boolean>(true);
+        return { openOrCloseTime, setOpenOrCloseTime, useCurrentTimeAsOpenOrCloseTime, setUseCurrentTimeAsOpenOrCloseTime };
+    })();
 
-    const openTimeStamp = ScheduleOperations.getOpenTimestamp(schedule);
+    const openTimeStampBlock = ScheduleOperations.getOpenTimestamp(schedule);
 
     const isScheduleBlockTypeSegmentedControlDisabled = (
-        !!openTimeStamp && selectedScheduleBlockType.identifier == 'timeStamp'
+        !!openTimeStampBlock && selectedBlockType.identifier == 'timeStamp'
     );
-    const isButtonDisabled = selectedScheduleBlockType.identifier == 'timeInterval' && !startTime && !endTime;
+    const isButtonDisabled = selectedBlockType.identifier == 'timeInterval' && (!timeInterval.startTime || !timeInterval.endTime);
 
     const maskingScheduleBlockTimeType = (
-        (!!openTimeStamp && selectedScheduleBlockType.identifier == 'timeStamp')
-            ? openTimeStamp.timeType
+        (!!openTimeStampBlock && selectedBlockType.identifier == 'timeStamp')
+            ? openTimeStampBlock.timeType
             : undefined
     );
 
-    const buttonText = (
-        selectedScheduleBlockType.identifier == 'timeInterval'
-            ? 'Hinzufügen'
-            : openTimeStamp ? 'Zeitstempel schließen' : 'Zeitstempel öffnen'
-    );
-
     function onButtonClick() {
-        const timeType = selectedScheduleBlockTimeType;
+        const timeType = selectedBlockTimeType;
 
-        if (selectedScheduleBlockType.identifier == 'timeInterval') {
-            if (startTime && !endTime) {
-                props.onOpenTimeStampRequest?.(timeType, startTime);
-                return;
-            }
-
-            if (!startTime && endTime) {
-                props.onCloseTimeStampRequest?.(endTime);
-                return;
-            }
-
-            if (!props.onAddTimeIntervalRequest) {
-                return;
-            }
-
-            const success = props.onAddTimeIntervalRequest?.(startTime, endTime, timeType);
+        if (selectedBlockType.identifier == 'timeInterval') {
+            const success = addTimeInterval(timeInterval.startTime, timeInterval.endTime, timeType, context);
             if (success) {
-                setStartTime(undefined);
-                setEndTime(undefined);
+                timeInterval.setStartTime(undefined);
+                timeInterval.setEndTime(undefined);
             }
 
-        } else if (selectedScheduleBlockType.identifier == 'timeStamp') {
-            if (openTimeStamp) {
-                props.onCloseTimeStampRequest?.();
-            } else {
-                props.onOpenTimeStampRequest?.(timeType);
+        } else if (selectedBlockType.identifier == 'timeStamp') {
+            const success = (
+                openTimeStampBlock
+                    ? closeTimeStamp(timeStamp.openOrCloseTime ?? now, context)
+                    : openTimeStamp(timeType, timeStamp.openOrCloseTime ?? now, context)
+            );
+
+            if (success && !timeStamp.useCurrentTimeAsOpenOrCloseTime) {
+                timeStamp.setOpenOrCloseTime(undefined);
             }
         }
     }
@@ -85,8 +81,8 @@ export default function ScheduleControlPanel(props: ScheduleControlPanelProps) {
 
             <div className={'p-2.5 flex'}>
                 <ScheduleBlockTypeSelect
-                    value={selectedScheduleBlockType}
-                    onValueChange={setSelectedScheduleBlockType}
+                    value={selectedBlockType}
+                    onValueChange={setSelectedBlockType}
                 />
             </div>
 
@@ -94,15 +90,25 @@ export default function ScheduleControlPanel(props: ScheduleControlPanelProps) {
 
             <div className={'p-3 min-h-32 flex items-center'}>
                 {
-                    selectedScheduleBlockType.identifier == 'timeStamp'
-                        ? <TimeStampInfo className={'flex-1'} openTimeStamp={openTimeStamp?.startTime ?? undefined}/>
-                        : <AddTimeInterval
+                    selectedBlockType.identifier == 'timeStamp'
+                        ? <TimeStampControl
+                            currentTime={now}
+                            openTimeStamp={openTimeStampBlock?.startTime}
+                            openOrCloseTime={timeStamp.useCurrentTimeAsOpenOrCloseTime ? now : timeStamp.openOrCloseTime}
+                            onOpenOrCloseTimeChange={timeStamp.setOpenOrCloseTime}
+                            useCurrentTimeAsOpenOrCloseTime={timeStamp.useCurrentTimeAsOpenOrCloseTime}
+                            onUseCurrentTimeAsOpenOrCloseTimeChange={timeStamp.setUseCurrentTimeAsOpenOrCloseTime}
+                            isTimePickerDisabled={timeStamp.useCurrentTimeAsOpenOrCloseTime}
+                            onRequestStamp={() => !isButtonDisabled && onButtonClick()}
                             className={'flex-1'}
-                            startTime={startTime}
-                            setStartTime={setStartTime}
-                            endTime={endTime}
-                            setEndTime={setEndTime}
+                        />
+                        : <TimeIntervalControl
+                            startTime={timeInterval.startTime}
+                            setStartTime={timeInterval.setStartTime}
+                            endTime={timeInterval.endTime}
+                            setEndTime={timeInterval.setEndTime}
                             onRequestAdd={() => !isButtonDisabled && onButtonClick()}
+                            className={'flex-1'}
                         />
                 }
             </div>
@@ -111,8 +117,8 @@ export default function ScheduleControlPanel(props: ScheduleControlPanelProps) {
 
             <div className={'p-3 flex sm:flex-row flex-col items-center'}>
                 <ScheduleBlockTimeTypeSelect
-                    value={maskingScheduleBlockTimeType ?? selectedScheduleBlockTimeType}
-                    onValueChange={setSelectedScheduleBlockTimeType}
+                    value={maskingScheduleBlockTimeType ?? selectedBlockTimeType}
+                    onValueChange={setSelectedBlockTimeType}
                     disabled={isScheduleBlockTypeSegmentedControlDisabled}
                 />
 
@@ -121,7 +127,11 @@ export default function ScheduleControlPanel(props: ScheduleControlPanelProps) {
                     onClick={onButtonClick}
                     disabled={isButtonDisabled}
                 >
-                    {buttonText}
+                    {
+                        selectedBlockType.identifier == 'timeInterval'
+                            ? 'Hinzufügen'
+                            : openTimeStampBlock ? 'Zeitstempel schließen' : 'Zeitstempel öffnen'
+                    }
                 </Button>
             </div>
 
@@ -129,3 +139,103 @@ export default function ScheduleControlPanel(props: ScheduleControlPanelProps) {
     );
 }
 
+function addTimeInterval(
+    startTime: Time | undefined,
+    endTime: Time | undefined,
+    time: ScheduleBlockTimeType,
+    context: ScheduleModificationContext
+): boolean {
+    if (!startTime || !endTime) {
+        context.setMessage(
+            createTimeIntervalErrorMessage('Das Start- oder Endfeld ist leer.')
+        );
+        return false;
+    }
+
+    let timeInterval: TimeInterval;
+    try {
+        timeInterval = TimeInterval.of(startTime, endTime)
+    } catch (ignored) {
+        context.setMessage(
+            createTimeIntervalErrorMessage('Die Endzeit des Zeitintervalls darf nicht vor der Startzeit liegen.')
+        );
+        return false;
+    }
+
+    let newSchedule: Schedule;
+    try {
+        newSchedule = ScheduleOperations.addTimeInterval(context.schedule, context.now, timeInterval, time);
+    } catch (error) {
+        context.setMessage(
+            error instanceof DisplayableError
+                ? createTimeIntervalErrorMessage(error.message, error.messageRetentionInSeconds)
+                : createTimeIntervalErrorMessage(DisplayableError.unknown().message)
+        );
+        return false;
+    }
+
+    context.setSchedule(newSchedule);
+
+    return true;
+}
+
+function openTimeStamp(time: ScheduleBlockTimeType, openTimeStampAt: Time, context: ScheduleModificationContext): boolean {
+    let newSchedule: Schedule;
+    try {
+        newSchedule = ScheduleOperations.openTimeStamp(context.schedule, openTimeStampAt, context.now, time);
+    } catch (error) {
+        context.setMessage(
+            error instanceof DisplayableError
+                ? createTimeStampErrorMessage(error.message, error.messageRetentionInSeconds)
+                : createTimeStampErrorMessage(DisplayableError.unknown().message)
+        );
+        return false;
+    }
+
+    context.setSchedule(newSchedule);
+    return true;
+}
+
+function closeTimeStamp(closeTimeStampAt: Time, context: ScheduleModificationContext): boolean {
+    let newSchedule: Schedule;
+
+    try {
+        newSchedule = ScheduleOperations.closeTimeStamp(context.schedule, closeTimeStampAt, context.now);
+    } catch (error) {
+        context.setMessage(
+            error instanceof DisplayableError
+                ? createTimeStampErrorMessage(error.message, error.messageRetentionInSeconds)
+                : createTimeStampErrorMessage(DisplayableError.unknown().message)
+        );
+        return false;
+    }
+
+    context.setSchedule(newSchedule);
+    return true;
+}
+
+
+const createTimeIntervalErrorMessage: (body: string, retentionInSeconds?: number) => Message = (
+    (body, retentionInSeconds) => ({
+        body,
+        retentionInSeconds: retentionInSeconds ?? 5,
+        title: 'Fehler beim Hinzufügen',
+        type: 'error'
+    })
+);
+
+const createTimeStampErrorMessage: (body: string, retentionInSeconds?: number) => Message = (
+    (body, retentionInSeconds) => ({
+        body,
+        retentionInSeconds: retentionInSeconds ?? 5,
+        title: 'Fehler beim Stempeln',
+        type: 'error'
+    })
+);
+
+type ScheduleModificationContext = {
+    now: Time,
+    schedule: Schedule,
+    setSchedule: (schedule: Schedule) => void,
+    setMessage: (message: Message) => void
+}

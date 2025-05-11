@@ -5,7 +5,7 @@ import KeyValueSection from "@/components/layout/KeyValueSection";
 import { compare } from "@/util/CompareUtils";
 import useTime from "@/hooks/UseTime";
 
-type AddTimeIntervalProps = {
+type TimeIntervalControl = {
     startTime: Time | undefined,
     setStartTime: (value: Time | undefined) => void
     endTime: Time | undefined,
@@ -14,7 +14,7 @@ type AddTimeIntervalProps = {
     onRequestAdd?: () => void
 }
 
-export default function AddTimeInterval(props: AddTimeIntervalProps) {
+export default function TimeIntervalControl(props: TimeIntervalControl) {
     const now = useTime();
 
     const timeDifference = (

@@ -3,7 +3,7 @@ import TimeSpan from "@/time/TimeSpan";
 import { convertConfigurationToReadWriteConfiguration } from "@/contexts/ConfigurationContext";
 import useStateWithLocalStorage from "@/hooks/UseStateWithLocalStorage";
 import useConfiguration from "@/hooks/configuration/UseConfiguration";
-import { createJsonSerialization, Serialization } from "@/serialization/Serialization";
+import { createSerialization, Serialization } from "@/serialization/Serialization";
 import { PublicTransitType, PublicTransitTypes } from "@/publicTransit/PublicTransitType";
 import { ReadWriteConfiguration } from "@/configuration/Configuration";
 
@@ -48,8 +48,8 @@ export function useVerifiedPublicTransitConfiguration(): VerifiedPublicTransitCo
     );
 }
 
-const PublicTransitConfigurationSerialization: Serialization<PublicTransitConfiguration> = createJsonSerialization({
-    serialize: source => ({
+const PublicTransitConfigurationSerialization: Serialization<PublicTransitConfiguration> = createSerialization({
+    encode: source => ({
         isPublicTransitFeatureEnabled: source.isPublicTransitFeatureEnabled,
         type: source.type.identifier,
         startTime: source.startTime.toString(),
@@ -57,7 +57,7 @@ const PublicTransitConfigurationSerialization: Serialization<PublicTransitConfig
         travelTime: source.travelTime?.toString(),
         gracePeriod: source.gracePeriod.toString()
     }),
-    deserialize: target => ({
+    decode: target => ({
         isPublicTransitFeatureEnabled: target.isPublicTransitFeatureEnabled,
         type: PublicTransitTypes.ofIdentifier(target.type),
         startTime: Time.ofString(target.startTime),

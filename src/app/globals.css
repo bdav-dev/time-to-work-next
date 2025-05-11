@@ -2,21 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
-@font-face {
-    font-family: 'Cascadia Code';
-    src: url('/fonts/CascadiaCode.woff2') format('woff2');
-}
-
-@font-face {
-    font-family: 'Material Symbols Rounded Regular';
-    src: url('/fonts/MaterialSymbolsRounded_28pt-Regular.ttf') format('truetype');
-}
-
-body {
-    font-family: 'Cascadia Code', sans-serif;
-}
-
 @keyframes grow-relative-width {
     0% {
         width: 0;
@@ -44,6 +29,15 @@ body {
     }
 }
 
+@keyframes dialog-backdrop-fade-in {
+    from {
+        background-color: rgb(0 0 0 / 0%);
+    }
+    to {
+        background-color: rgb(0 0 0 / 60%);
+    }
+}
+
 input[type="time"]::-webkit-calendar-picker-indicator {
     display: none;
 }
@@ -54,13 +48,4 @@ dialog[open]::backdrop {
 
 dialog::backdrop {
     background-color: rgb(0 0 0 / 60%);
-}
-
-@keyframes dialog-backdrop-fade-in {
-    from {
-        background-color: rgb(0 0 0 / 0%);
-    }
-    to {
-        background-color: rgb(0 0 0 / 60%);
-    }
 }

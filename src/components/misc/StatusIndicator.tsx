@@ -1,11 +1,19 @@
+import { ReactNode } from "react";
+
 export type Status = 'green' | 'yellow' | 'red';
 
 type StatusIndicatorProps = {
-    status: Status
+    status: Status,
+    text?: { [key in Status]?: ReactNode }
 };
 
-export default function StatusIndicator({ status }: StatusIndicatorProps) {
-    return <div className={`min-w-5 min-h-5 size-5 rounded-full ${MessageTypeClassNames[status]}`}/>;
+export default function StatusIndicator({ status, text }: StatusIndicatorProps) {
+    return (
+        <div className={'w-fit flex gap-2 items-center font-bold'}>
+            <div className={`min-w-5 min-h-5 size-5 rounded-full ${MessageTypeClassNames[status]}`}/>
+            {text && text[status]}
+        </div>
+    );
 }
 
 const MessageTypeClassNames: { [key in Status]: string } = {

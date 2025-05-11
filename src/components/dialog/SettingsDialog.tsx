@@ -1,5 +1,5 @@
 import Dialog from "@/components/primitives/Dialog";
-import SegmentedControls, { Segment } from "@/components/control/SegmentedControls";
+import SegmentedControls, { Segment } from "@/components/primitives/control/SegmentedControls";
 import { ReactNode, useState } from "react";
 import Frame from "@/components/layout/Frame";
 import TimelineSettings from "@/components/settings/instances/TimelineSettings";
@@ -14,7 +14,7 @@ type SettingsDialogProps = {
 };
 
 export default function SettingsDialog(props: SettingsDialogProps) {
-    const [selectedSettings, setSelectedSettings] = useState<Segment<Settings>>(SettingsSegments.general);
+    const [selectedSettings, setSelectedSettings] = useState<Segment<Settings>>(SettingsSegments.workingTime);
 
     return (
         <Dialog
@@ -23,7 +23,7 @@ export default function SettingsDialog(props: SettingsDialogProps) {
             title={'Einstellungen'}
             overrideSize
             className={'max-w-[95rem] min-h-[51rem]'}
-        > {/* TODO: Make it so that dialog adapts to screen size, content inside gets scroll bar */}
+        >
             <div className={'flex flex-row gap-2 flex-1'}>
                 <div className={'flex flex-col justify-between'}>
                     <SegmentedControls
@@ -41,21 +41,23 @@ export default function SettingsDialog(props: SettingsDialogProps) {
                     <div className={'text-2xl font-bold'}>
                         {selectedSettings.displayAs}
                     </div>
-                    {SettingsToComponentMap[selectedSettings.value]}
+                    {SettingViewMap[selectedSettings.value]}
                 </Frame>
             </div>
         </Dialog>
     );
 }
 
-type Settings = 'general' | 'workingTime' | 'about' | 'timeline' | 'publicTransit';
+type Settings = 'workingTime' | 'about' | 'timeline' | 'publicTransit'; // 'general'
 
 const SettingsSegments: { [key in Settings]: Segment<Settings> } = {
+    /* TODO
     general: {
         id: 0,
         value: "general",
         displayAs: "Allgemein"
     },
+    */
     workingTime: {
         id: 1,
         value: "workingTime",
@@ -78,10 +80,10 @@ const SettingsSegments: { [key in Settings]: Segment<Settings> } = {
     }
 };
 
-const SettingsToComponentMap: { [key in Settings]: ReactNode } = {
+const SettingViewMap: { [key in Settings]: ReactNode } = {
     timeline: <TimelineSettings/>,
     about: <About/>,
     publicTransit: <PublicTransitSettings/>,
-    general: <></>,
+    //general: <></>,
     workingTime: <WorkingTimeSettings/>
 }

@@ -1,7 +1,8 @@
 import Time from "@/time/Time";
 import { ScheduleBlockTimeType, ScheduleBlockTimeTypeIdentifier, ScheduleBlockTimeTypes } from "@/schedule/ScheduleBlockTimeType";
 import { TimelineData } from "@/components/timeline/Timeline";
-import { createJsonSerialization, Serialization } from "@/serialization/Serialization";
+import { createSerialization, Serialization } from "@/serialization/Serialization";
+import { DisplayableError } from "@/error/DisplayableError";
 
 export type ScheduleBlock = {
     startTime: Time,
@@ -10,6 +11,15 @@ export type ScheduleBlock = {
 }
 
 export type Schedule = ScheduleBlock[];
+
+export type ScheduleModificationResult = {
+    submissionSchedule?: Schedule,
+    error?: DisplayableError,
+    timeline: {
+        previewSchedule: Schedule,
+        highlightBlock?: ScheduleBlock
+    },
+};
 
 export function scheduleBlockEquals(a: ScheduleBlock | undefined, b: ScheduleBlock | undefined) {
     if (!a || !b) {
@@ -47,15 +57,21 @@ export function mapScheduleToTimelineData(schedule: Schedule, options?: Schedule
     );
 }
 
-export const ScheduleSerialization: Serialization<Schedule> = createJsonSerialization({
-    serialize: source => (
+export function highlightBlock(highlightBlock: ScheduleBlock, isErroneous?: boolean) {
+    return (block: ScheduleBlock) => (
+        scheduleBlockEquals(block, highlightBlock) ? `${isErroneous && 'border-2 border-red-500'}` : 'opacity-40'
+    );
+}
+
+export const ScheduleSerialization: Serialization<Schedule> = createSerialization({
+    encode: source => (
         source.map(block => ({
             startTime: block.startTime.toString(),
             endTime: block.endTime?.toString() ?? undefined,
             timeTypeIdentifier: block.timeType.identifier
         }))
     ),
-    deserialize: target => (
+    decode: target => (
         target.map(block => ({
             startTime: Time.ofString(block.startTime),
             endTime: block.endTime ? Time.ofString(block.endTime) : undefined,

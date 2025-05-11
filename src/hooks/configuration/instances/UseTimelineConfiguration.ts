@@ -1,7 +1,7 @@
 import Time from "@/time/Time";
 import useStateWithLocalStorage from "@/hooks/UseStateWithLocalStorage";
 import { convertConfigurationToReadWriteConfiguration } from "@/contexts/ConfigurationContext";
-import { createJsonSerialization, Serialization } from "@/serialization/Serialization";
+import { createSerialization, Serialization } from "@/serialization/Serialization";
 import { ReadWriteConfiguration } from "@/configuration/Configuration";
 
 
@@ -34,13 +34,13 @@ export default function useTimelineConfiguration(): ReadWriteConfiguration<Timel
     return convertConfigurationToReadWriteConfiguration(timelineConfiguration, setTimelineConfiguration);
 }
 
-const TimelineConfigurationSerialization: Serialization<TimelineConfiguration> = createJsonSerialization({
-    serialize: source => ({
+const TimelineConfigurationSerialization: Serialization<TimelineConfiguration> = createSerialization({
+    encode: source => ({
         ...source,
         startTime: source.startTime.toString(),
         endTime: source.endTime.toString()
     }),
-    deserialize: target => ({
+    decode: target => ({
         ...target,
         startTime: Time.ofString(target.startTime),
         endTime: Time.ofString(target.endTime)

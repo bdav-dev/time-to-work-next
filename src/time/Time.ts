@@ -43,7 +43,7 @@ export default class Time {
     }
 
     add(timeSpan: TimeSpan) {
-        return this.timeSpan.add(timeSpan).asTime();
+        return this.timeSpan.add(timeSpan).asTime(true); // TODO: wrap subtract / multiply as well?
     }
 
     divide(divisor: number) {

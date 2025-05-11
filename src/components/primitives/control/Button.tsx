@@ -25,6 +25,7 @@ export default function Button({ className, children, overrideMargin, circular, 
                 ${circular ? 'rounded-full' : 'rounded-xl'}
                 border-none
                 ${className}
+                flex items-center justify-center
             `}
             {...rest}
         >

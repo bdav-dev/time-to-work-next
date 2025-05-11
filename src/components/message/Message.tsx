@@ -1,6 +1,8 @@
 import { Message as Msg, MessageType } from "@/contexts/MessageContext";
 import { CSSProperties } from "react";
 import StatusIndicator, { Status } from "@/components/misc/StatusIndicator";
+import MaterialSymbol from "@/components/icon/MaterialSymbol";
+import { MaterialSymbols } from "@/icon/MaterialSymbols";
 
 type MessageProps = {
     message: Msg,
@@ -23,7 +25,8 @@ export default function Message(props: MessageProps) {
                 relative min-w-60 max-w-[30rem]
                 p-3.5
                 bg-neumorphic-50 dark:bg-neumorphic-850
-                drop-shadow-xl rounded-2xl overflow-hidden
+                shadow-xl rounded-2xl overflow-hidden
+                shadow-white-neumorphic-accent-shadow dark:shadow-gray-neumorphic-accent-shadow
             `}
             style={props.style}
             onClick={props.onClick}
@@ -39,7 +42,7 @@ export default function Message(props: MessageProps) {
                 </div>
 
                 <button onClick={props.onRequestClose} className={'ml-auto'}>
-                    [X]
+                    <MaterialSymbol symbol={MaterialSymbols.CLOSE}/>
                 </button>
             </div>
 

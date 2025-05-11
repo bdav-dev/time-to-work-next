@@ -22,8 +22,12 @@ export default {
                     850: '#1b1c1f',
                     900: '#111217',
                     950: '#04050a'
-                }
-            },
+                },
+                'white-neumorphic-accent-bright': 'rgb(255, 255, 255)',
+                'white-neumorphic-accent-shadow': 'rgb(209, 217, 230)',
+                'gray-neumorphic-accent-bright': 'rgb(62, 63, 70)',
+                'gray-neumorphic-accent-shadow': 'rgb(35, 35, 35)'
+            }
         },
     },
     darkMode: 'class',

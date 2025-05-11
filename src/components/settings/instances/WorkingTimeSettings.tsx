@@ -2,7 +2,7 @@ import Settings from "@/components/settings/Settings";
 import TimeSpan from "@/time/TimeSpan";
 import TimePicker from "@/components/primitives/control/TimePicker";
 import useMutatingConfigurationValue from "@/hooks/configuration/UseMutatingConfigurationValue";
-import SignedTimePicker from "@/components/control/SignedTimePicker";
+import SignedTimeSpanPicker from "@/components/primitives/control/SignedTimeSpanPicker";
 
 
 export default function WorkingTimeSettings() {
@@ -26,7 +26,7 @@ export default function WorkingTimeSettings() {
                             },
                             {
                                 label: 'Zeitsaldo',
-                                setting: <SignedTimePicker
+                                setting: <SignedTimeSpanPicker
                                     value={timeBalance}
                                     setValue={setTimeBalance}
                                     invalid={!timeBalance}

@@ -1,5 +1,6 @@
-import MaterialSymbol, { MaterialSymbols } from "@/icons/MaterialSymbol";
 import Button from "@/components/primitives/control/Button";
+import { MaterialSymbols } from "@/icon/MaterialSymbols";
+import MaterialSymbol from "@/components/icon/MaterialSymbol";
 
 
 type SettingsButtonProps = {
@@ -14,7 +15,11 @@ export default function SettingsButton(props: SettingsButtonProps) {
             onClick={props.onClick}
             overridePadding
         >
-            <MaterialSymbol symbol={MaterialSymbols.SETTINGS} className={'text-3xl'}/>
+            <MaterialSymbol
+                symbol={MaterialSymbols.SETTINGS}
+                weight={300}
+                className={'size-7'}
+            />
         </Button>
     );
 }

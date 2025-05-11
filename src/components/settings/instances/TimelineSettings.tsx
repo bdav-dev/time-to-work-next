@@ -12,7 +12,7 @@ import TimeSpan from "@/time/TimeSpan";
 import useSchedule from "@/hooks/UseSchedule";
 
 export default function TimelineSettings() {
-    const [schedule] = useSchedule();
+    const { schedule } = useSchedule();
 
     const [startTime, setStartTime] = useMutatingConfigurationValue(config => config.timeline.startTime);
     const [endTime, setEndTime] = useMutatingConfigurationValue(config => config.timeline.endTime);
@@ -121,5 +121,3 @@ export default function TimelineSettings() {
         </>
     );
 }
-
-

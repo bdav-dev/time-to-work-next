@@ -1,6 +1,9 @@
 import Elevation from "@/components/layout/Elevation";
 import Section from "@/components/layout/Section";
 import Hyperlink from "@/components/misc/Hyperlink";
+import MaterialSymbol from "@/components/icon/MaterialSymbol";
+import { MaterialSymbols } from "@/icon/MaterialSymbols";
+import VerticalRuler from "@/components/layout/VerticalRuler";
 
 
 export default function About() {
@@ -15,12 +18,8 @@ export default function About() {
                 <div className={'text-xl'}>Arbeitszeitdashboard</div>
             </div>
 
-            <div>
-                David Berezowski
-            </div>
-
             <div className={'flex flex-col items-center gap-1'}>
-                <div>Visit this project</div>
+                <div>Besuche dieses Projekt</div>
 
                 <div className={'flex flex-row gap-6'}>
                     <Hyperlink href={'https://www.bdav.dev/code/time-to-work-next'} openInNewTab>
@@ -36,10 +35,18 @@ export default function About() {
                 Version 0.0.1-SNAPSHOT
             </div>
 
-            <Section className={'w-full'}>
+            {
                 // TODO: Explain that data is only stored in the browser
+            }
+            <Section className={'flex items-center gap-3'}>
+                <div className={'flex gap-1'}>
+                    <MaterialSymbol symbol={MaterialSymbols.DARK_MODE}/>
+                    <MaterialSymbol symbol={MaterialSymbols.SETTINGS}/>
+                    <MaterialSymbol symbol={MaterialSymbols.TIMER}/>
+                </div>
+                <VerticalRuler className={'h-7'}/>
+                Dieses Projekt nutzt <Hyperlink href={'https://fonts.google.com/icons'} openInNewTab>Google Material Symbole</Hyperlink>
             </Section>
-
         </div>
     );
 }

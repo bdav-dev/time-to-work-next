@@ -3,7 +3,7 @@ import { NeumorphicBlueprintFactory } from "@/neumorphic/NeumorphicStyle";
 import Time from "@/time/Time";
 import { useEffect, useRef } from "react";
 
-type TimePickerProps = {
+export type TimePickerProps = {
     value: Time | undefined,
     onValueChange: (value: Time | undefined) => void,
     onEnterKeyPressed?: () => void,

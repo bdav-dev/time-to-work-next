@@ -65,7 +65,7 @@ export default function NumberPicker(props: NumberPickerProps) {
             <NeumorphicInput
                 blueprint={inputBlueprint}
                 type={"text"}
-                className={'w-16 py-2 text-center'}
+                className={'w-16 py-2 text-center focus:outline outline-1 outline-neumorphic-400 dark:outline-neumorphic-500'}
                 value={props.value}
                 onChange={event => onChange(event.target.value)}
                 disabled={props.disabled}

@@ -17,7 +17,5 @@ export default function Frame({ className, children, overridePadding, ...rest }:
         >
             {children}
         </div>
-
     );
-
 }

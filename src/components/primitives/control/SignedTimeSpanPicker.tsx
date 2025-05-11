@@ -8,8 +8,7 @@ type SignedTimeSpanPickerProps = {
     invalid?: boolean,
 }
 
-export default function SignedTimePicker(props: SignedTimeSpanPickerProps) {
-
+export default function SignedTimeSpanPicker(props: SignedTimeSpanPickerProps) {
     return (
         <div className={'flex flex-row items-center justify-center w-fit gap-1'}>
             <SignSelect

@@ -1,9 +1,7 @@
-import { TimelineConfiguration } from "@/hooks/configuration/instances/UseTimelineConfiguration";
-import { PublicTransitConfiguration } from "@/hooks/configuration/instances/UsePublicTransitConfiguration";
-import EmptyConfigurationReadWriteValue from "@/configuration/EmptyConfigurationReadWriteValue";
-import { PublicTransitTypes } from "@/publicTransit/PublicTransitType";
-import TimeSpan from "@/time/TimeSpan";
-import { WorkingTimeConfiguration } from "@/hooks/configuration/instances/UseWorkingTimeSettings";
+import { DefaultTimelineConfiguration, TimelineConfiguration } from "@/hooks/configuration/instances/UseTimelineConfiguration";
+import { DefaultPublicTransitConfiguration, PublicTransitConfiguration } from "@/hooks/configuration/instances/UsePublicTransitConfiguration";
+import { DefaultWorkingTimeConfiguration, WorkingTimeConfiguration } from "@/hooks/configuration/instances/UseWorkingTimeSettings";
+import { convertConfigurationToReadWriteConfiguration } from "@/contexts/ConfigurationContext";
 
 
 export type ReadWriteConfigurationValue<T> = {
@@ -23,25 +21,11 @@ export type ConfigurationContextType = {
 }
 
 export const EmptyConfiguration: ConfigurationContextType = {
-    timeline: {
-        startTime: EmptyConfigurationReadWriteValue.TIME,
-        endTime: EmptyConfigurationReadWriteValue.TIME,
-        amountOfSubTimeSteps: EmptyConfigurationReadWriteValue.NUMBER,
-        amountOfTimeSteps: EmptyConfigurationReadWriteValue.NUMBER,
-        automaticTimeBoundsOnOverflow: EmptyConfigurationReadWriteValue.BOOLEAN,
-        automaticAmountOfTimeSteps: EmptyConfigurationReadWriteValue.BOOLEAN,
-        marginSize: EmptyConfigurationReadWriteValue.NUMBER
-    },
-    publicTransit: {
-        isPublicTransitFeatureEnabled: EmptyConfigurationReadWriteValue.BOOLEAN,
-        type: { value: PublicTransitTypes.TRAIN, set: () => {} },
-        startTime: EmptyConfigurationReadWriteValue.TIME,
-        period: EmptyConfigurationReadWriteValue.TIME_SPAN,
-        travelTime: EmptyConfigurationReadWriteValue.UNDEFINED as ReadWriteConfigurationValue<TimeSpan | undefined>,
-        gracePeriod: EmptyConfigurationReadWriteValue.TIME_SPAN
-    },
-    workingTime: {
-        dailyWorkingTime: EmptyConfigurationReadWriteValue.UNDEFINED as ReadWriteConfigurationValue<TimeSpan | undefined>,
-        timeBalance: EmptyConfigurationReadWriteValue.UNDEFINED as ReadWriteConfigurationValue<TimeSpan | undefined>
-    }
+    timeline: createEmptyConfiguration(DefaultTimelineConfiguration),
+    publicTransit: createEmptyConfiguration(DefaultPublicTransitConfiguration),
+    workingTime: createEmptyConfiguration(DefaultWorkingTimeConfiguration)
+}
+
+function createEmptyConfiguration<T extends object>(configuration: T) {
+    return convertConfigurationToReadWriteConfiguration(configuration, () => {});
 }

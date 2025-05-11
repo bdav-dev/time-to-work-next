@@ -9,6 +9,7 @@ import useTime from "@/hooks/UseTime";
 import Section from "@/components/layout/Section";
 import TimeSpan from "@/time/TimeSpan";
 import PublicTransitTypeSelect from "@/components/select/PublicTransitTypeSelect";
+import { compare } from "@/util/CompareUtils";
 
 export default function PublicTransitSettings() {
     const now = useTime();
@@ -30,11 +31,25 @@ export default function PublicTransitSettings() {
     );
     const [gracePeriod, setGracePeriod] = useMutatingConfigurationValueWithFallback(
         config => config.publicTransit.gracePeriod,
-        DefaultPublicTransitConfiguration.gracePeriod
+        TimeSpan.empty()
     );
     const [type, setType] = useMutatingConfigurationValue(config => config.publicTransit.type);
 
     const isPeriodInvalid = period.equals(TimeSpan.empty());
+
+    function rectifyGracePeriod(gracePeriodInput?: TimeSpan) {
+        const clampValue = TimeSpan.ofMinutes(59);
+
+        if (!gracePeriodInput) {
+            return undefined;
+        }
+
+        return (
+            compare(gracePeriodInput, 'greaterThan', clampValue)
+                ? clampValue
+                : gracePeriodInput
+        );
+    }
 
     return (
         <div>
@@ -115,7 +130,8 @@ export default function PublicTransitSettings() {
                                 label: 'Grace period', // TODO: translate correctly
                                 setting: disabled => <TimePicker
                                     value={gracePeriod?.asTime()}
-                                    onValueChange={gracePeriod => setGracePeriod(gracePeriod?.asTimeSpan())}
+                                    onValueChange={gracePeriod => setGracePeriod(rectifyGracePeriod(gracePeriod?.asTimeSpan()))}
+                                    valueOnSpaceKeyPressed={DefaultPublicTransitConfiguration.gracePeriod.asTime()}
                                     disabled={disabled}
                                 />,
                                 tooltip: "TODO", // TODO: write tooltip

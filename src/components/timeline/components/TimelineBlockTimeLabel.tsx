@@ -1,7 +1,8 @@
-import MaterialSymbol, { MaterialSymbols } from "@/icons/MaterialSymbol";
 import TimeSpan from "@/time/TimeSpan";
 import Time from "@/time/Time";
 import { ColorPair } from "@/color/Color";
+import { MaterialSymbols } from "@/icon/MaterialSymbols";
+import MaterialSymbol from "@/components/icon/MaterialSymbol";
 
 
 type TimelineBlockTimeLabelProps = {
@@ -35,8 +36,13 @@ export default function TimelineBlockTimeLabel(props: TimelineBlockTimeLabelProp
                 {props.isOpen ? '...' : props.endTime.toString()}
             </div>
 
-            <div className={'flex flex-row gap-0.5 justify-center items-center'}>
-                <MaterialSymbol symbol={MaterialSymbols.TIMER} style={{ fontSize: 'clamp(0px, 2vw, 1rem)' }}/>
+            <div className={'flex flex-row gap-[1px] justify-center items-center'}>
+                <MaterialSymbol
+                    symbol={MaterialSymbols.TIMER}
+                    opticalSize={"20px"}
+                    className={'fill-white'}
+                    style={{ width: 'clamp(0px, 2vw, 1.05rem)', height: 'clamp(0px, 2vw, 1.05rem)' }}
+                />
                 {TimeSpan.ofTimeDifference(props.startTime, props.endTime).toString()}
             </div>
         </div>

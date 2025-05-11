@@ -21,8 +21,7 @@ export default function Setting(props: SettingProps) {
                 </Tooltip>
             }
 
-
-            <hr className={`flex-1 mx-3.5 border-neumorphic-200 dark:border-neumorphic-700 ${props.disabled && 'opacity-60'}`}/>
+            <hr className={`flex-1 mx-3.5 border-neumorphic-300 dark:border-neumorphic-700 ${props.disabled && 'opacity-60'}`}/>
 
             <div className={'flex flex-row items-center gap-1'}>
                 {

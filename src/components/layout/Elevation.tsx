@@ -28,5 +28,5 @@ export default function Elevation(
         >
             {children}
         </NeumorphicDiv>
-    )
+    );
 }

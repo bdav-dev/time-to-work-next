@@ -5,14 +5,16 @@ import TimeComponent from "@/components/time/Time";
 import Elevation from "@/components/layout/Elevation";
 import Time from "@/time/Time";
 import SettingsButton from "../../settings/SettingsButton";
+import { useContext } from "react";
+import { TimeContext } from "@/contexts/TimeContext";
 
 
 type HeaderProps = {
-    time: Time,
     onSettingsButtonClick: () => void
 }
 
 export default function Header(props: HeaderProps) {
+    const now = useContext(TimeContext);
 
     return (
         <Elevation
@@ -34,7 +36,7 @@ export default function Header(props: HeaderProps) {
             <VerticalRuler className={'h-8'}/>
 
             <Section className={'text-xl font-bold flex items-center px-5'}>
-                <TimeComponent time={props.time}/>
+                <TimeComponent time={now}/>
             </Section>
 
         </Elevation>

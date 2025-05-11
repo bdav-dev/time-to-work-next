@@ -1,5 +1,6 @@
-import SegmentedControls, { Segment } from "@/components/control/SegmentedControls";
-import MaterialSymbol, { MaterialSymbols } from "@/icons/MaterialSymbol";
+import SegmentedControls, { Segment } from "@/components/primitives/control/SegmentedControls";
+import { MaterialSymbols } from "@/icon/MaterialSymbols";
+import MaterialSymbol from "@/components/icon/MaterialSymbol";
 
 
 export default function SignSelect(props: SelectProps<number>) {
@@ -8,7 +9,8 @@ export default function SignSelect(props: SelectProps<number>) {
             segments={Object.values(SignSegments)}
             selection={SignSegments[props.value == 1 ? 'positive' : 'negative']}
             orientation={'horizontal'}
-            segmentClassName={'font-bold text-xl w-9 h-9'}
+            overrideSegmentPadding
+            segmentClassName={'w-9 h-9'}
             onSelectionChange={selected => props.onValueChange(selected!.value)}
             deselectable={false}
             disabled={props.disabled}
@@ -21,12 +23,12 @@ const SignSegments: { [key in 'positive' | 'negative']: Segment<number> } = {
         id: 0,
         value: 1,
         displayAs: <MaterialSymbol symbol={MaterialSymbols.ADD}/>,
-        className: isSelection => `${isSelection && 'text-green-500 dark:text-green-400'}`
+        className: isSelection => `${isSelection && 'fill-green-500 dark:fill-green-400'}`
     },
     negative: {
         id: 1,
         value: -1,
         displayAs: <MaterialSymbol symbol={MaterialSymbols.REMOVE}/>,
-        className: isSelection => `${isSelection && 'text-red-500 dark:text-red-400'}`
+        className: isSelection => `${isSelection && 'fill-red-500 dark:fill-red-400'}`
     }
 };

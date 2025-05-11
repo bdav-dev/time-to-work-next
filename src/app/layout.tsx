@@ -10,6 +10,7 @@ import ScheduleProvider from "@/contexts/ScheduleContext";
 import MessageProvider from "@/contexts/MessageContext";
 import ConfigurationProvider from "@/contexts/ConfigurationContext";
 import Footer from "@/components/layout/page/Footer";
+import { CascadiaCode } from "@/font/CascadiaCode";
 
 
 export const metadata: Metadata = {
@@ -21,7 +22,7 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
     return (
         <html lang="de">
         <ContextProvider>
-            <body>
+            <body className={CascadiaCode.className}>
             <ThemeApplier>
                 <StyledJsxRegistry>
                     <div
@@ -31,6 +32,7 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
                             bg-neumorphic-100 dark:bg-neumorphic-750 
                             text-neumorphic-700 dark:text-neumorphic-150 
                             stroke-neumorphic-700 dark:stroke-neumorphic-150
+                            fill-neumorphic-700 dark:fill-neumorphic-150 
                         `}
                     >
                         <div className={'flex-1 flex flex-col'}>

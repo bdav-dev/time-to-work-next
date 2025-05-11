@@ -100,9 +100,9 @@ export default class TimeSpan {
         return this.reduceToMinutes() == 0;
     }
 
-    asTime() {
+    asTime(wrap = false) {
         return Time.of(
-            this.hours,
+            wrap ? this.hours % 24 : this.hours,
             this.minutes
         );
     }

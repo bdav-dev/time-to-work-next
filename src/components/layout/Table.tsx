@@ -25,7 +25,6 @@ export default function Table(props: TableProps) {
 
     return (
         <NeumorphicDiv blueprint={NeumorphicBlueprintFactory.createLarge()} className={'rounded-3xl'}>
-
             <table className={`w-full ${props.className} `}>
                 {
                     header &&

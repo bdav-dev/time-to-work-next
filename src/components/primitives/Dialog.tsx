@@ -1,5 +1,7 @@
 import { ReactNode, useEffect, useRef } from "react";
 import Button from "@/components/primitives/control/Button";
+import MaterialSymbol from "@/components/icon/MaterialSymbol";
+import { MaterialSymbols } from "@/icon/MaterialSymbols";
 
 
 type DialogProps = {
@@ -8,10 +10,12 @@ type DialogProps = {
     onRequestClose: () => void,
     overrideSize?: boolean,
     children?: ReactNode,
-    className?: string
+    className?: string,
+    showCloseButton?: boolean,
+    closableWithEscKey?: boolean
 }
 
-export default function Dialog(props: DialogProps) {
+export default function Dialog({ closableWithEscKey = true, ...props }: DialogProps) {
     const dialog = useRef<HTMLDialogElement>(null);
 
     useEffect(() => {
@@ -22,11 +26,24 @@ export default function Dialog(props: DialogProps) {
         }
     }, [props.isOpen]);
 
+    useEffect(() => {
+        const handleCancel = (event: KeyboardEvent) => {
+            if (event.key === 'Escape' && !closableWithEscKey) {
+                event?.preventDefault();
+            }
+        }
+        dialog.current?.addEventListener('keydown', handleCancel);
+
+        return () => dialog.current?.removeEventListener('keydown', handleCancel);
+    }, []);
+
+    // TODO: Make it so that dialog adapts to screen size, content inside gets scroll bar
     return (
         <dialog
             onClose={props.onRequestClose}
             className={'w-full h-screen p-9 bg-transparent content-center z-40'}
             ref={dialog}
+            onCancel={closableWithEscKey ? undefined : event => event.preventDefault()}
         >
             <div
                 className={`
@@ -47,15 +64,21 @@ export default function Dialog(props: DialogProps) {
                             {props.title}
                         </h1>
                     }
-                    <div className={'px-3 pt-3 ml-auto'}>
-                        <Button
-                            className={'size-12 text-xl'}
-                            circular
-                            onClick={props.onRequestClose}
-                        >
-                            &#10005;
-                        </Button>
-                    </div>
+                    {
+                        (props.showCloseButton ?? true) &&
+                        <div className={'px-3 pt-3 ml-auto'}>
+                            <Button
+                                className={'size-12 text-xl'}
+                                circular
+                                onClick={props.onRequestClose}
+                            >
+                                <MaterialSymbol
+                                    symbol={MaterialSymbols.CLOSE}
+                                    className={'size-7 fill-neumorphic-600 dark:fill-neumorphic-300'}
+                                />
+                            </Button>
+                        </div>
+                    }
                 </div>
 
                 <div className={'flex flex-col px-7 pb-7 flex-1'}>

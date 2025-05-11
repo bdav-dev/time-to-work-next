@@ -1,4 +1,3 @@
-import MaterialSymbol, { MaterialSymbols } from "@/icons/MaterialSymbol";
 import TimeComponent from "@/components/time/Time";
 import { VerifiedPublicTransitConfiguration } from "@/hooks/configuration/instances/UsePublicTransitConfiguration";
 import PublicTransitCalculations from "@/publicTransit/PublicTransitCalculations";
@@ -6,6 +5,8 @@ import Time from "@/time/Time";
 import TimeSpan from "@/time/TimeSpan";
 import { ReactNode } from "react";
 import { compare } from "@/util/CompareUtils";
+import { MaterialSymbols } from "@/icon/MaterialSymbols";
+import MaterialSymbol from "@/components/icon/MaterialSymbol";
 
 
 type PublicTransitInformationBoardProps = {
@@ -22,13 +23,19 @@ export default function PublicTransitInformationBoard(props: PublicTransitInform
         timeUntilLeave
     } = PublicTransitCalculations.calculatePublicTransitInformation(props.config, props.now);
 
+    const humanSymbol = (
+        timeUntilLeave && compare(timeUntilLeave, 'lessThan', TimeSpan.empty())
+            ? MaterialSymbols.DIRECTIONS_RUN
+            : MaterialSymbols.DIRECTIONS_WALK
+    );
+
     return (
         <div className={`w-fit flex flex-row items-center ${props.className}`}>
             {
                 props.config.travelTime &&
                 <>
                     <TimeEvent
-                        icon={<MaterialSymbol symbol={MaterialSymbols.DIRECTIONS_WALK} className={'text-3xl mr-1'}/>}
+                        icon={<MaterialSymbol symbol={humanSymbol} opticalSize={"40px"} className={"size-8 mr-0.5"}/>}
                         atTime={leaveTime}
                         timeRemaining={timeUntilLeave}
                     />
@@ -36,7 +43,7 @@ export default function PublicTransitInformationBoard(props: PublicTransitInform
                 </>
             }
             <TimeEvent
-                icon={<MaterialSymbol symbol={props.config.type.icon} className={'text-3xl mr-1.5'}/>}
+                icon={<MaterialSymbol symbol={props.config.type.icon} opticalSize={"40px"} className={'size-8 mr-1'}/>}
                 atTime={nextDeparture}
                 timeRemaining={timeUntilNextDeparture}
             />
@@ -49,7 +56,7 @@ function TimeEvent({ icon, atTime, timeRemaining }: { icon: ReactNode, atTime?: 
         <>
             {icon}
             <div className={'flex flex-col'}>
-                <TimeComponent time={atTime} className={'font-bold leading-5'}/>
+                <TimeComponent time={atTime} className={'text-left font-bold leading-5'}/>
                 <span className={`font-[350] leading-5`}>
                     <TimeRemaining timeRemaining={timeRemaining}/>
                 </span>

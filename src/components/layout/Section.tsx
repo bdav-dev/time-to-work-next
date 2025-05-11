@@ -9,5 +9,4 @@ export default function Section({ children, className, ...rest }: SectionProps) 
             {children}
         </div>
     );
-
 }

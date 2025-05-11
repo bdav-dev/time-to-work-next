@@ -30,6 +30,7 @@ export type TimelineProps = {
     amountOfTimeSteps?: number,
     amountOfSubTimeSteps?: number,
     marginSize?: number,
+    showNowLine?: boolean
 }
 
 export default function Timeline(props: TimelineProps) {
@@ -79,7 +80,7 @@ export default function Timeline(props: TimelineProps) {
                 blockBlueprints.map((block, i) => <TimelineBlock key={i} {...block}/>)
             }
             {
-                calculator.isCurrentTimeInsideActiveArea(props.currentTime) &&
+                (props.showNowLine ?? true) && calculator.isCurrentTimeInsideActiveArea(props.currentTime) &&
                 <NowLine position={calculator.calculateNowLinePosition(props.currentTime)}/>
             }
         </NeumorphicDiv>

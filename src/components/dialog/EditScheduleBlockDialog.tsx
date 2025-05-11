@@ -1,6 +1,6 @@
 import Dialog from "@/components/primitives/Dialog";
 import Time from "@/time/Time";
-import { Schedule, ScheduleBlock, scheduleBlockEquals } from "@/schedule/Schedule";
+import { highlightBlock, ScheduleBlock, scheduleBlockEquals, ScheduleModificationResult } from "@/schedule/Schedule";
 import Button from "@/components/primitives/control/Button";
 import { useEffect, useMemo, useState } from "react";
 import TimePicker from "@/components/primitives/control/TimePicker";
@@ -14,32 +14,24 @@ import StatusIndicator from "@/components/misc/StatusIndicator";
 import Frame from "@/components/layout/Frame";
 import ConfiguredTimeline from "@/components/timeline/ConfiguredTimeline";
 import { compare } from "@/util/CompareUtils";
+import useSchedule from "@/hooks/UseSchedule";
+import useTime from "@/hooks/UseTime";
 
-
-type SchedulePreview = {
-    schedule: Schedule,
-    block?: ScheduleBlock,
-    error?: DisplayableError
-};
-
-type ScheduleBlockDialogProps = {
+type EditScheduleBlockDialogProps = {
     isOpen: boolean,
     onRequestClose: () => void,
-    currentTime: Time,
-    schedule: Schedule,
-    block: ScheduleBlock,
-    onRequestRemoveScheduleBlock?: (block: ScheduleBlock) => void,
-    onRequestSubmitSchedule?: (schedule: Schedule) => void,
+    block: ScheduleBlock
 }
 
-export default function ScheduleBlockDialog(props: ScheduleBlockDialogProps) {
+export default function EditScheduleBlockDialog(props: EditScheduleBlockDialogProps) {
+    const now = useTime();
+    const { schedule, setSchedule } = useSchedule();
+
     const [startTime, setStartTime] = useState<Time | undefined>(props.block.startTime);
     const [endTime, setEndTime] = useState<Time | undefined>(props.block.endTime);
     const [selectedTimeType, setSelectedTimeType] = useState<ScheduleBlockTimeType>(props.block.timeType);
 
-    useEffect(() => {
-        reset();
-    }, [props.block]);
+    useEffect(() => reset(), [props.block]);
 
     function reset() {
         setStartTime(props.block.startTime);
@@ -47,57 +39,65 @@ export default function ScheduleBlockDialog(props: ScheduleBlockDialogProps) {
         setSelectedTimeType(props.block.timeType);
     }
 
-    const preview = useMemo<SchedulePreview>(() => {
-        let schedule = ScheduleOperations.removeScheduleBlock(props.schedule, props.block);
+    const { submissionSchedule, error, timeline } = useMemo<ScheduleModificationResult>(() => {
+        let previewSchedule = ScheduleOperations.removeScheduleBlock(schedule, props.block);
 
         if (!startTime) {
-            return { schedule, error: DisplayableError.of('Es ist keine Startzeit definiert.') };
+            return {
+                timeline: { previewSchedule },
+                error: DisplayableError.of('Es ist keine Startzeit definiert.')
+            };
         }
         if (endTime && compare(endTime, 'lessThan', startTime)) {
-            return { schedule, error: DisplayableError.of('Die Endzeit liegt vor der Startzeit.') };
+            return { timeline: { previewSchedule }, error: DisplayableError.of('Die Endzeit liegt vor der Startzeit.') };
         }
 
-        const block: ScheduleBlock = { startTime, endTime, timeType: selectedTimeType };
+        const highlightBlock: ScheduleBlock = { startTime, endTime, timeType: selectedTimeType };
         try {
-            schedule = endTime
+            previewSchedule = endTime
                 ? ScheduleOperations.addTimeInterval(
-                    schedule,
-                    props.currentTime,
+                    previewSchedule,
+                    now,
                     TimeInterval.of(startTime, endTime),
                     selectedTimeType
                 )
                 : ScheduleOperations.openTimeStamp(
-                    schedule,
+                    previewSchedule,
                     startTime,
-                    props.currentTime,
+                    now,
                     selectedTimeType
                 );
         } catch (error) {
             return error instanceof DisplayableError
-                ? { schedule: [...schedule, block], block, error }
-                : { schedule, error: DisplayableError.unknown() };
+                ? { timeline: { previewSchedule: [...previewSchedule, highlightBlock], highlightBlock }, error }
+                : { timeline: { previewSchedule }, error: DisplayableError.unknown() }
         }
 
-        return { schedule, block };
-    }, [startTime, endTime, selectedTimeType]);
+        return { submissionSchedule: previewSchedule, timeline: { previewSchedule, highlightBlock } };
+    }, [startTime, endTime, selectedTimeType, schedule, now, props.block]);
 
-    function remove() {
-        const success = props.onRequestRemoveScheduleBlock?.(props.block);
-        if (success) {
-            props.onRequestClose?.();
-        }
+    const isBlockUnmodified = scheduleBlockEquals(props.block, timeline.highlightBlock);
+
+    function closeAndRemoveBlock() {
+        props.onRequestClose?.();
+        setSchedule(schedule => ScheduleOperations.removeScheduleBlock(schedule, props.block));
+    }
+
+    function closeAndSaveBlock() {
+        props.onRequestClose?.();
+        setSchedule(submissionSchedule!);
     }
 
     return (
         <Dialog
             isOpen={props.isOpen}
             onRequestClose={props.onRequestClose}
-            title={(props.block.endTime ? 'Zeitintervall' : 'Zeitstempel') + ' bearbeiten'}
+            title={`${props.block.endTime ? 'Zeitintervall' : 'Zeitstempel'} bearbeiten`}
         >
             <ConfiguredTimeline
-                schedule={preview.schedule}
+                schedule={timeline.previewSchedule}
                 scheduleMapOptions={{
-                    className: block => scheduleBlockEquals(block, preview.block) ? `${preview.error && 'border-2 border-red-500'}` : 'opacity-40'
+                    className: timeline.highlightBlock && highlightBlock(timeline.highlightBlock, !!error)
                 }}
                 height={7}
             />
@@ -117,18 +117,18 @@ export default function ScheduleBlockDialog(props: ScheduleBlockDialogProps) {
                 </Frame>
 
                 <Section className={'flex-1 flex flex-col gap-0.5'}>
-                    <div className={'flex flex-row gap-2 items-center font-bold'}>
-                        <StatusIndicator status={preview.error ? 'red' : 'green'}/>
-                        {
-                            preview.error
-                                ? 'Fehler'
-                                : 'Bereit'
-                        }
-                    </div>
+                    <StatusIndicator
+                        status={isBlockUnmodified ? 'yellow' : error ? 'red' : 'green'}
+                        text={{
+                            red: 'Fehler',
+                            yellow: 'Keine Änderungen vorgenommen',
+                            green: 'Bereit'
+                        }}
+                    />
                     {
-                        preview.error &&
+                        error &&
                         <div>
-                            {preview.error.message}
+                            {error.message}
                         </div>
                     }
                 </Section>
@@ -136,14 +136,14 @@ export default function ScheduleBlockDialog(props: ScheduleBlockDialogProps) {
 
 
             <div className={'flex justify-between gap-3 mt-8'}>
-                <Button onClick={remove} overrideMargin className={'text-red-500 dark:text-red-400'}>
+                <Button onClick={closeAndRemoveBlock} overrideMargin className={'text-red-500 dark:text-red-400'}>
                     Löschen
                 </Button>
 
                 <Button
                     overrideMargin
-                    disabled={!!preview.error || scheduleBlockEquals(props.block, preview.block)}
-                    onClick={() => !preview.error && props.onRequestSubmitSchedule?.(preview.schedule)}
+                    disabled={!!error || isBlockUnmodified}
+                    onClick={closeAndSaveBlock}
                 >
                     Speichern
                 </Button>

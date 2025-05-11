@@ -25,6 +25,7 @@ export default function Settings(props: SettingsProps) {
                         (section, sectionIndex) => (
                             <div key={sectionIndex}>
                                 {
+                                    (section?.title || !section?.hideHorizontalRuler) &&
                                     <div className={'flex flex-row items-center gap-2.5 px-1 min-h-8'}>
                                         {
                                             section.title &&
