@@ -14,7 +14,7 @@ export function TimeProvider(props: ContextProviderProps) {
 
     /*
     useEffect(() => {
-        setTime(Time.of(13, 0));
+        setTime(Time.of(17, 36));
     }, []);
     */
 

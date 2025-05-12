@@ -25,10 +25,14 @@ export default class TimeInterval {
     }
 
     intersectsWith(other: TimeInterval) {
+        if (this.equals(other)) {
+            return true;
+        }
+
         return (
             (compare(this.startTime, 'greaterThan', other.startTime) && compare(this.startTime, 'lessThan', other.endTime)) ||
             (compare(this.endTime, 'greaterThan', other.startTime) && compare(this.endTime, 'lessThan', other.endTime)) ||
-            (compare(this.startTime, 'lessOrEqualThan', other.startTime) && compare(this.endTime, 'greaterOrEqualThan', other.endTime))
+            (compare(this.startTime, 'lessThan', other.startTime) && compare(this.endTime, 'greaterThan', other.endTime))
         );
     }
 
