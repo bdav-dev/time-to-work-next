@@ -77,7 +77,9 @@ export default function Timeline(props: TimelineProps) {
                 timeSteps.map((step, i) => <TimeLabel key={i} {...step}/>)
             }
             {
-                blockBlueprints.map((block, i) => <TimelineBlock key={i} {...block}/>)
+                blockBlueprints
+                    .toSorted((a, b) => a.startTime.compareTo(b.startTime))
+                    .map((block, i) => <TimelineBlock key={i} {...block}/>)
             }
             {
                 (props.showNowLine ?? true) && calculator.isCurrentTimeInsideActiveArea(props.currentTime) &&

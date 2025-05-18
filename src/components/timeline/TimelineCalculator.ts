@@ -189,7 +189,8 @@ export class TimelineCalculator {
 
                     const isBlockOutOfBounds = (
                         compare(endTime, 'lessOrEqualThan', this.startTime) ||
-                        compare(block.startTime, 'greaterOrEqualThan', this.endTime)
+                        compare(block.startTime, 'greaterOrEqualThan', this.endTime) ||
+                        compare(block.startTime, 'greaterThan', endTime)
                     );
 
                     return isBlockOutOfBounds
