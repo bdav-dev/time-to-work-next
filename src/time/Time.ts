@@ -24,6 +24,11 @@ export default class Time {
         return TimeSpan.ofString(time).asTime();
     }
 
+    public static now() {
+        const date = new Date();
+        return new Time(date.getHours(), date.getMinutes());
+    }
+
     public static midnight() {
         return new Time(0, 0);
     }
