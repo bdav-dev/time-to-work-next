@@ -12,6 +12,14 @@ export default class Time {
         return new Time(hours, minutes);
     }
 
+    public static ofMinutes(minutes: number) {
+        return new Time(0, minutes);
+    }
+
+    public static ofHours(hours: number) {
+        return new Time(hours, 0);
+    }
+
     public static ofString(time: string) {
         return TimeSpan.ofString(time).asTime();
     }
@@ -41,19 +49,19 @@ export default class Time {
     }
 
     add(timeSpan: TimeSpan) {
-        return this.timeSpan.add(timeSpan).asTime(true); // TODO: wrap subtract / multiply as well?
+        return this.timeSpan.add(timeSpan).asTime(true);
     }
 
     subtract(timeSpan: TimeSpan) {
-        return this.timeSpan.subtract(timeSpan).asTime();
+        return this.timeSpan.subtract(timeSpan).asTime(true);
     }
 
     multiply(factor: number) {
-        return this.timeSpan.multiply(factor).asTime();
+        return this.timeSpan.multiply(factor).asTime(true);
     }
 
     divide(divisor: number) {
-        return this.timeSpan.divide(divisor).asTime();
+        return this.timeSpan.divide(divisor).asTime(true);
     }
 
     asTimeSpan() {

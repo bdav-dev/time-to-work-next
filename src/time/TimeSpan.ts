@@ -1,6 +1,8 @@
 import Time from "@/time/Time";
 
 
+const ONE_DAY_IN_MINUTES = 24 * 60;
+
 export default class TimeSpan {
     private readonly reducedMinutes: number;
 
@@ -105,9 +107,10 @@ export default class TimeSpan {
     }
 
     asTime(wrap = false) {
-        return Time.of(
-            0,
-            wrap ? this.reducedMinutes % (24 * 60) : this.reducedMinutes
+        return Time.ofMinutes(
+            wrap
+                ? this.reducedMinutes % ONE_DAY_IN_MINUTES + (this.isNegative() ? ONE_DAY_IN_MINUTES : 0)
+                : this.reducedMinutes
         );
     }
 

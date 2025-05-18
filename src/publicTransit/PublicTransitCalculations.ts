@@ -16,7 +16,7 @@ export default class PublicTransitCalculations {
         return (
             compare(departureTime, "greaterOrEqualThan", TimeSpan.ofString('24:00'))
                 ? undefined
-                : departureTime.asTime() // TODO: maybe wrap=true here?
+                : departureTime.asTime()
         );
     }
 
