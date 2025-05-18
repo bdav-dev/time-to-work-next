@@ -1,38 +1,35 @@
 import Time from "@/time/Time";
 
-export default class TimeSpan {
-    public readonly hours: number;
-    public readonly minutes: number;
 
-    private constructor(hours: number, minutes: number) {
-        const { normalizedHours, normalizedMinutes } = this.normalize(hours, minutes);
-        this.hours = normalizedHours;
-        this.minutes = normalizedMinutes;
+const ONE_DAY_IN_MINUTES = 24 * 60;
+
+export default class TimeSpan {
+    private readonly reducedMinutes: number;
+
+    private constructor(reducedMinutes: number) {
+        this.reducedMinutes = Math.trunc(reducedMinutes);
     }
 
     static of(hours: number, minutes: number) {
-        return new TimeSpan(hours, minutes);
+        return new TimeSpan(hours * 60 + minutes);
     }
 
     static ofMinutes(minutes: number) {
-        return new TimeSpan(0, minutes);
+        return new TimeSpan(minutes);
     }
 
     static ofHours(hours: number) {
-        return new TimeSpan(hours, 0);
+        return new TimeSpan(hours * 60);
     }
 
     static ofString(timeSpan: string) {
         const [hoursAsString, minutesAsString] = timeSpan.split(":");
 
-        const hours = parseInt(hoursAsString);
-        let minutes = parseInt(minutesAsString);
+        const sign = hoursAsString.startsWith('-') ? -1 : 1;
+        const hours = sign * Math.abs(parseInt(hoursAsString));
+        const minutes = sign * Math.abs(parseInt(minutesAsString));
 
-        if (hoursAsString.startsWith('-') && hours == 0) {
-            minutes *= -1;
-        }
-
-        return new TimeSpan(hours, minutes);
+        return TimeSpan.of(hours, minutes);
     }
 
     static ofTimeDifference(startTime: Time, endTime: Time) {
@@ -40,24 +37,43 @@ export default class TimeSpan {
     }
 
     static empty() {
-        return new TimeSpan(0, 0);
+        return new TimeSpan(0);
     }
 
-    private normalize(hours: number, minutes: number) {
-        const asMinutes = hours * 60 + minutes;
+    sign() {
+        return Math.sign(this.reducedMinutes);
+    }
 
-        let normalizedHours = Math.trunc(Math.abs(asMinutes) / 60);
-        let normalizedMinutes = Math.trunc(Math.abs(asMinutes) % 60);
+    hours() {
+        return Math.trunc(Math.abs(this.reducedMinutes) / 60);
+    }
 
-        if (asMinutes < 0) {
-            if (normalizedHours != 0) {
-                normalizedHours *= -1;
-            } else if (normalizedMinutes != 0) {
-                normalizedMinutes *= -1;
-            }
-        }
+    minutes() {
+        return Math.abs(this.reducedMinutes) % 60;
+    }
 
-        return { normalizedMinutes, normalizedHours };
+    add(timeSpan: TimeSpan) {
+        return TimeSpan.ofMinutes(
+            this.reduceToMinutes() + timeSpan.reduceToMinutes()
+        );
+    }
+
+    subtract(timeSpan: TimeSpan) {
+        return TimeSpan.ofMinutes(
+            this.reduceToMinutes() - timeSpan.reduceToMinutes()
+        );
+    }
+
+    multiply(factor: number) {
+        return TimeSpan.ofMinutes(
+            this.reducedMinutes * factor
+        );
+    }
+
+    divide(divisor: number) {
+        return TimeSpan.ofMinutes(
+            this.reducedMinutes / divisor
+        );
     }
 
     static divide(numerator: TimeSpan, denominator: TimeSpan) {
@@ -68,68 +84,40 @@ export default class TimeSpan {
         return this.divide(numerator, denominator);
     }
 
-    subtract(timeSpan: TimeSpan) {
-        return new TimeSpan(
-            this.hours - timeSpan.hours,
-            this.minutes - timeSpan.minutes
-        );
-    }
-
-    add(timeSpan: TimeSpan) {
-        return new TimeSpan(
-            this.hours + timeSpan.hours,
-            this.minutes + timeSpan.minutes
-        );
-    }
-
-    divide(divisor: number) {
-        return new TimeSpan(
-            this.hours / divisor,
-            this.minutes / divisor
-        );
-    }
-
-    multiply(factor: number) {
-        return new TimeSpan(
-            this.hours * factor,
-            this.minutes * factor
-        );
-    }
-
     hasNoLength() {
-        return this.reduceToMinutes() == 0;
+        return this.reducedMinutes == 0;
     }
 
-    asTime(wrap = false) {
-        return Time.of(
-            wrap ? this.hours % 24 : this.hours,
-            this.minutes
-        );
+    isNegative() {
+        return this.reducedMinutes < 0;
     }
 
     absolute() {
-        return new TimeSpan(
-            Math.abs(this.hours),
-            Math.abs(this.minutes)
+        return TimeSpan.ofMinutes(
+            Math.abs(this.reducedMinutes)
         );
     }
 
     reduceToMinutes() {
-        return this.hours * 60 + this.minutes;
+        return this.reducedMinutes;
     }
 
     reduceToHours() {
-        return this.hours + this.minutes / 60;
+        return this.reducedMinutes / 60;
     }
 
-    isNegative() {
-        return this.hours < 0 || this.minutes < 0;
+    asTime(wrap = false) {
+        return Time.ofMinutes(
+            wrap
+                ? this.reducedMinutes % ONE_DAY_IN_MINUTES + (this.isNegative() ? ONE_DAY_IN_MINUTES : 0)
+                : this.reducedMinutes
+        );
     }
 
     toString() {
         const sign = this.isNegative() ? '-' : '';
-        const hours = Math.abs(this.hours).toString().padStart(2, '0');
-        const minutes = Math.abs(this.minutes).toString().padStart(2, '0');
+        const hours = this.hours().toString().padStart(2, '0');
+        const minutes = this.minutes().toString().padStart(2, '0');
 
         return `${sign}${hours}:${minutes}`;
     }

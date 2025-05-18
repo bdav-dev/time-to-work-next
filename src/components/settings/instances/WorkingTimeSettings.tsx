@@ -7,7 +7,7 @@ import SignedTimeSpanPicker from "@/components/primitives/control/SignedTimeSpan
 
 export default function WorkingTimeSettings() {
     const [dailyWorkingTime, setDailyWorkingTime] = useMutatingConfigurationValue(config => config.workingTime.dailyWorkingTime);
-    const [timeBalance, setTimeBalance] = useMutatingConfigurationValue<TimeSpan | undefined>(config => config.workingTime.timeBalance);
+    const [timeBalance, setTimeBalance] = useMutatingConfigurationValue(config => config.workingTime.timeBalance);
 
     return (
         <div>
