@@ -60,10 +60,9 @@ export class TimelineCalculator {
         const startTimeOfEarliestBlock = this.getEarliestBlock(data)?.startTime;
 
         if (startTimeOfEarliestBlock && compare(startTimeOfEarliestBlock, 'lessThan', startTime)) {
-            const minutes = startTimeOfEarliestBlock.asTimeSpan().minutes;
             return Time.of(
-                startTimeOfEarliestBlock.asTimeSpan().hours,
-                minutes >= 30 ? 30 : 0
+                startTimeOfEarliestBlock.hours(),
+                startTimeOfEarliestBlock.minutes() >= 30 ? 30 : 0
             );
         }
     }
@@ -73,8 +72,8 @@ export class TimelineCalculator {
         const endTimeOfLatestBlock = latestBlock ? latestBlock.endTime ?? currentTime : undefined;
 
         if (endTimeOfLatestBlock && compare(endTimeOfLatestBlock, 'greaterThan', endTime)) {
-            const minutes = endTimeOfLatestBlock.asTimeSpan().minutes;
-            const hours = endTimeOfLatestBlock.asTimeSpan().hours;
+            const minutes = endTimeOfLatestBlock.minutes();
+            const hours = endTimeOfLatestBlock.hours();
             if (minutes == 0) {
                 return Time.of(hours, 0);
             } else if (minutes > 30) {
