@@ -46,18 +46,4 @@ export default class ScheduleCalculations {
         return timeBalance.subtract(this.getRemainingTimeToWork(schedule, now, dailyWorkingTime));
     }
 
-    static getNextDayTimeBalance(schedule: Schedule, dailyWorkingTime: TimeSpan, timeBalance: TimeSpan) {
-        if (ScheduleCalculations.hasOpenTimeStamp(schedule)) {
-            throw new Error("Cannot calculate new time balance because schedule has unclosed time stamp.");
-        }
-
-        const remainingTimeToWork = ScheduleCalculations.getRemainingTimeToWork(
-            schedule,
-            Time.midnight(), // Will never be used since it is ensued that the schedule has no open time stamps.
-            dailyWorkingTime
-        );
-
-        return timeBalance.subtract(remainingTimeToWork);
-    }
-
 }

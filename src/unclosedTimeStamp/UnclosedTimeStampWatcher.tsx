@@ -7,6 +7,7 @@ import useConfigurationValue from "@/hooks/configuration/UseConfigurationValue";
 import { useEffect, useState } from "react";
 import useTime from "@/hooks/UseTime";
 import useSchedule from "@/hooks/UseSchedule";
+import Time from "@/time/Time";
 
 
 export default function UnclosedTimeStampWatcher() {
@@ -39,8 +40,17 @@ export default function UnclosedTimeStampWatcher() {
             return;
         }
 
+        if (ScheduleCalculations.hasOpenTimeStamp(schedule)) {
+            throw new Error("Cannot adjust time balance since schedule has unclosed time stamp.");
+        }
+
         setTimeBalance(
-            ScheduleCalculations.getNextDayTimeBalance(submittedSchedule, dailyWorkingTime, timeBalance)
+            ScheduleCalculations.getNewTimeBalance(
+                submittedSchedule,
+                Time.midnight(), // Will never be used since it is ensued that the schedule has no open time stamps.
+                dailyWorkingTime,
+                timeBalance
+            )
         );
 
         setSchedule(() => []);

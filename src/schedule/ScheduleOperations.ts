@@ -4,6 +4,7 @@ import { ScheduleBlockTimeType } from "@/schedule/ScheduleBlockTimeType";
 import TimeInterval from "@/time/TimeInterval";
 import { compare } from "@/util/CompareUtils";
 import { DisplayableError } from "@/error/DisplayableError";
+import ScheduleCalculations from "@/schedule/ScheduleCalculations";
 
 
 export default class ScheduleOperations {
@@ -59,7 +60,7 @@ export default class ScheduleOperations {
     static openTimeStamp(schedule: Schedule, startTime: Time, now: Time, timeType: ScheduleBlockTimeType): Schedule {
         const newSchedule = [...schedule];
 
-        if (this.doesOpenTimeStampExist(newSchedule)) {
+        if (ScheduleCalculations.hasOpenTimeStamp(newSchedule)) {
             throw new DisplayableError('Es existiert bereits ein offener Zeitstempel.');
         }
 
@@ -123,10 +124,6 @@ export default class ScheduleOperations {
 
     static removeScheduleBlock(schedule: Schedule, blockToRemove: ScheduleBlock) {
         return schedule.filter(block => !scheduleBlockEquals(block, blockToRemove));
-    }
-
-    private static doesOpenTimeStampExist(schedule: Schedule) {
-        return !!this.getOpenTimestamp(schedule);
     }
 
 }
