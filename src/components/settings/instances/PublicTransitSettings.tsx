@@ -38,12 +38,11 @@ export default function PublicTransitSettings() {
     const isPeriodInvalid = period.equals(TimeSpan.empty());
 
     function rectifyGracePeriod(gracePeriodInput?: TimeSpan) {
-        const clampValue = TimeSpan.ofMinutes(59);
-
         if (!gracePeriodInput) {
             return undefined;
         }
 
+        const clampValue = TimeSpan.ofMinutes(59);
         return (
             compare(gracePeriodInput, 'greaterThan', clampValue)
                 ? clampValue
