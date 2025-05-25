@@ -40,7 +40,7 @@ export default function UnclosedTimeStampWatcher() {
             return;
         }
 
-        if (ScheduleCalculations.hasOpenTimeStamp(schedule)) {
+        if (ScheduleCalculations.hasOpenTimeStamp(submittedSchedule)) {
             throw new Error("Cannot adjust time balance since schedule has unclosed time stamp.");
         }
 
