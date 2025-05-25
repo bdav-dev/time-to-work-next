@@ -10,12 +10,43 @@ import Time from "@/time/Time";
 import { compare } from "@/util/CompareUtils";
 import TimeSpan from "@/time/TimeSpan";
 import useSchedule from "@/hooks/UseSchedule";
+import useInputGuard from "@/hooks/UseInputGuard";
 
 export default function TimelineSettings() {
     const { schedule } = useSchedule();
 
     const [startTime, setStartTime] = useMutatingConfigurationValue(config => config.timeline.startTime);
     const [endTime, setEndTime] = useMutatingConfigurationValue(config => config.timeline.endTime);
+    const [startTimeInput, setStartTimeInput, applyStartTimeFallback, isStartTimeInputInvalid] = useInputGuard<Time | undefined, Time>(
+        startTimeInput => {
+            const createFallback = () => (
+                compare(DefaultTimelineConfiguration.startTime, 'greaterOrEqualThan', endTime)
+                    ? endTime.subtract(TimeSpan.ofMinutes(1))
+                    : DefaultTimelineConfiguration.startTime
+            );
+
+            return (!startTimeInput || compare(startTimeInput, 'greaterOrEqualThan', endTime))
+                ? { fallback: createFallback() }
+                : { value: startTimeInput };
+        },
+        startTime => startTime,
+        [startTime, setStartTime]
+    );
+    const [endTimeInput, setEndTimeInput, applyEndTimeFallback, isEndTimeInputInvalid] = useInputGuard<Time | undefined, Time>(
+        endTimeInput => {
+            const createFallback = () => (
+                compare(DefaultTimelineConfiguration.endTime, 'lessOrEqualThan', startTime)
+                    ? startTime.add(TimeSpan.ofMinutes(1))
+                    : DefaultTimelineConfiguration.endTime
+            );
+
+            return (!endTimeInput || compare(endTimeInput, 'lessOrEqualThan', startTime))
+                ? { fallback: createFallback() }
+                : { value: endTimeInput };
+        },
+        endTime => endTime,
+        [endTime, setEndTime]
+    );
     const [amountOfTimesteps, setAmountOfTimesteps] = useMutatingConfigurationValue(config => config.timeline.amountOfTimeSteps);
     const [amountOfSubTimesteps, setAmountOfSubTimesteps] = useMutatingConfigurationValue(config => config.timeline.amountOfSubTimeSteps);
 
@@ -23,28 +54,6 @@ export default function TimelineSettings() {
     const [automaticAmountOfTimeSteps, setAutomaticAmountOfTimeSteps] = useMutatingConfigurationValue(config => config.timeline.automaticAmountOfTimeSteps);
 
     const [marginSize, setMarginSize] = useMutatingConfigurationValue(config => config.timeline.marginSize);
-
-    function rectifyStartTimeInput(startTimeInput?: Time) {
-        const fallback = (
-            compare(DefaultTimelineConfiguration.startTime, 'greaterOrEqualThan', endTime)
-                ? endTime.subtract(TimeSpan.ofMinutes(1))
-                : DefaultTimelineConfiguration.startTime
-        );
-        return (!startTimeInput || compare(startTimeInput, 'greaterOrEqualThan', endTime))
-            ? fallback
-            : startTimeInput;
-    }
-
-    function rectifyEndTimeInput(endTimeInput?: Time) {
-        const fallback = (
-            compare(DefaultTimelineConfiguration.endTime, 'lessOrEqualThan', startTime)
-                ? startTime.add(TimeSpan.ofMinutes(1))
-                : DefaultTimelineConfiguration.endTime
-        );
-        return (!endTimeInput || compare(endTimeInput, 'lessOrEqualThan', startTime))
-            ? fallback
-            : endTimeInput;
-    }
 
     return (
         <>
@@ -58,17 +67,23 @@ export default function TimelineSettings() {
                             {
                                 label: 'Startzeit',
                                 setting: <TimePicker
-                                    value={startTime}
-                                    onValueChange={startTimeInput => setStartTime(rectifyStartTimeInput(startTimeInput))}
+                                    value={startTimeInput}
+                                    onValueChange={setStartTimeInput}
                                     valueOnSpaceKeyPressed={DefaultTimelineConfiguration.startTime}
+                                    showInvalidEvenWhenFocused
+                                    onBlur={applyStartTimeFallback}
+                                    invalid={isStartTimeInputInvalid}
                                 />
                             },
                             {
                                 label: 'Endzeit',
                                 setting: <TimePicker
-                                    value={endTime}
-                                    onValueChange={endTimeInput => setEndTime(rectifyEndTimeInput(endTimeInput))}
+                                    value={endTimeInput}
+                                    onValueChange={endTimeInput => setEndTimeInput(endTimeInput)}
                                     valueOnSpaceKeyPressed={DefaultTimelineConfiguration.endTime}
+                                    onBlur={applyEndTimeFallback}
+                                    showInvalidEvenWhenFocused
+                                    invalid={isEndTimeInputInvalid}
                                 />
                             },
                             {

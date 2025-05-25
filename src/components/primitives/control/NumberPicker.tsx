@@ -52,7 +52,7 @@ export default function NumberPicker(props: NumberPickerProps) {
         <div className={`flex flex-row ${props.className}`}>
             <NeumorphicButton
                 blueprint={leftButtonBlueprint}
-                className={'p-2 rounded-l-xl text-[1.3rem] leading-none'}
+                className={'p-2 rounded-l-xl text-[1.3rem] leading-none select-none'}
                 style={BUTTON_STYLE}
                 onClick={decrement}
                 disabled={props.disabled || (props.lowerLimit != undefined && props.value == props.lowerLimit)}
@@ -76,7 +76,7 @@ export default function NumberPicker(props: NumberPickerProps) {
             <NeumorphicButton
                 blueprint={rightButtonBlueprint}
                 style={BUTTON_STYLE}
-                className={'p-2 rounded-r-xl text-[1.3rem] leading-none'}
+                className={'p-2 rounded-r-xl text-[1.3rem] leading-none select-none'}
                 onClick={increment}
                 disabled={props.disabled || (props.upperLimit != undefined && props.value == props.upperLimit)}
             >
