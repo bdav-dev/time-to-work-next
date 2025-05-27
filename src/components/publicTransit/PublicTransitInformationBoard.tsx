@@ -7,6 +7,7 @@ import { ReactNode } from "react";
 import { compare } from "@/util/CompareUtils";
 import { MaterialSymbols } from "@/icon/MaterialSymbols";
 import MaterialSymbol from "@/components/icon/MaterialSymbol";
+import Arrow from "@/components/misc/Arrow";
 
 
 type PublicTransitInformationBoardProps = {
@@ -39,7 +40,9 @@ export default function PublicTransitInformationBoard(props: PublicTransitInform
                         atTime={leaveTime}
                         timeRemaining={timeUntilLeave}
                     />
-                    <Arrow travelTime={props.config.travelTime}/>
+                    <Arrow className={"mx-3"}>
+                        <TimeComponent time={props.config.travelTime} className={'text-sm leading-none'}/>
+                    </Arrow>
                 </>
             }
             <TimeEvent
@@ -93,15 +96,4 @@ function TimeRemaining({ timeRemaining }: { timeRemaining: TimeSpan | undefined 
     }
 
     return <>in <TimeComponent time={timeRemaining}/></>;
-}
-
-function Arrow({ travelTime }: { travelTime: TimeSpan }) {
-    return (
-        <div className={'mx-3 text-center leading-none'}>
-            <TimeComponent time={travelTime} className={'text-sm leading-none'}/>
-            <div className={'text-2xl leading-none'}>
-                {'->'}
-            </div>
-        </div>
-    );
 }
