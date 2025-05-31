@@ -1,10 +1,11 @@
 import TimePicker from "@/components/primitives/control/TimePicker";
 import Time from "@/time/Time";
 import TimeComponent from '@/components/time/Time';
-import KeyValueSection from "@/components/layout/KeyValueSection";
 import { compare } from "@/util/CompareUtils";
 import useTime from "@/hooks/UseTime";
 import TimeInterval from "@/time/TimeInterval";
+import KeyValueSection from "@/components/layout/KeyValueSection";
+import { SemanticKeys } from "@/shortcuts/SemanticKeys";
 
 type TimeIntervalControl = {
     startTime: Time | undefined,
@@ -12,7 +13,8 @@ type TimeIntervalControl = {
     endTime: Time | undefined,
     setEndTime: (value: Time | undefined) => void,
     className?: string,
-    onRequestAdd?: () => void
+    onRequestAdd?: () => void,
+    getLatestEndTimeOfSchedule: () => Time | undefined,
 }
 
 export default function TimeIntervalControl(props: TimeIntervalControl) {
@@ -30,15 +32,20 @@ export default function TimeIntervalControl(props: TimeIntervalControl) {
                 <TimePicker
                     value={props.startTime}
                     onValueChange={props.setStartTime}
-                    onEnterKeyPressed={props.onRequestAdd}
-                    valueOnSpaceKeyPressed={now}
+                    onKeyUp={{
+                        [SemanticKeys.SUBMIT]: { runAndBlur: props.onRequestAdd },
+                        [SemanticKeys.SET_TO_CURRENT_TIME]: { setValue: now },
+                        [SemanticKeys.SET_TO_ADJACENT]: { setValue: props.getLatestEndTimeOfSchedule() }
+                    }}
                 />
                 bis
                 <TimePicker
                     value={props.endTime}
                     onValueChange={props.setEndTime}
-                    onEnterKeyPressed={props.onRequestAdd}
-                    valueOnSpaceKeyPressed={now}
+                    onKeyUp={{
+                        [SemanticKeys.SUBMIT]: { runAndBlur: props.onRequestAdd },
+                        [SemanticKeys.SET_TO_CURRENT_TIME]: { setValue: now }
+                    }}
                 />
             </div>
 

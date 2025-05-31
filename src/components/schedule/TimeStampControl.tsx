@@ -4,6 +4,7 @@ import Time from "@/time/Time";
 import KeyValueSection from "@/components/layout/KeyValueSection";
 import TimePicker from "@/components/primitives/control/TimePicker";
 import Checkbox from "@/components/primitives/control/Checkbox";
+import { SemanticKeys } from "@/shortcuts/SemanticKeys";
 
 type TimeStampInfoProps = {
     openTimeStamp: Time | undefined,
@@ -14,7 +15,8 @@ type TimeStampInfoProps = {
     currentTime: Time,
     isTimePickerDisabled?: boolean,
     className?: string,
-    onRequestStamp?: () => void
+    onRequestStamp?: () => void,
+    getLatestEndTimeOfSchedule: () => Time | undefined
 }
 
 export default function TimeStampControl(props: TimeStampInfoProps) {
@@ -38,8 +40,11 @@ export default function TimeStampControl(props: TimeStampInfoProps) {
                     value={props.openOrCloseTime}
                     onValueChange={props.onOpenOrCloseTimeChange}
                     disabled={props.isTimePickerDisabled}
-                    valueOnSpaceKeyPressed={props.currentTime}
-                    onEnterKeyPressed={props.onRequestStamp}
+                    onKeyUp={{
+                        [SemanticKeys.SUBMIT]: { runAndBlur: props.onRequestStamp },
+                        [SemanticKeys.SET_TO_CURRENT_TIME]: { setValue: props.currentTime },
+                        [SemanticKeys.SET_TO_ADJACENT]: { setValue: props.getLatestEndTimeOfSchedule() }
+                    }}
                 />
                 (
                 <Checkbox

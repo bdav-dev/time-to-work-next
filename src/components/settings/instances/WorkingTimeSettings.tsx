@@ -1,8 +1,8 @@
 import Settings from "@/components/settings/Settings";
 import TimeSpan from "@/time/TimeSpan";
-import TimePicker from "@/components/primitives/control/TimePicker";
 import useMutatingConfigurationValue from "@/hooks/configuration/UseMutatingConfigurationValue";
 import SignedTimeSpanPicker from "@/components/primitives/control/SignedTimeSpanPicker";
+import TimeSpanPicker from "@/components/primitives/control/TimeSpanPicker";
 
 
 export default function WorkingTimeSettings() {
@@ -18,9 +18,9 @@ export default function WorkingTimeSettings() {
                         settings: [
                             {
                                 label: 'Tägliche Sollarbeitszeit',
-                                setting: <TimePicker
-                                    value={dailyWorkingTime?.asTime()}
-                                    onValueChange={dailyWorkingTime => setDailyWorkingTime(dailyWorkingTime?.asTimeSpan())}
+                                setting: <TimeSpanPicker
+                                    value={dailyWorkingTime}
+                                    onValueChange={setDailyWorkingTime}
                                     invalid={!dailyWorkingTime || dailyWorkingTime.equals(TimeSpan.empty())}
                                 />
                             },

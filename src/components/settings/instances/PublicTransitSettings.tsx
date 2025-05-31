@@ -10,6 +10,8 @@ import Section from "@/components/layout/Section";
 import TimeSpan from "@/time/TimeSpan";
 import PublicTransitTypeSelect from "@/components/select/PublicTransitTypeSelect";
 import { compare } from "@/util/CompareUtils";
+import { SemanticKeys } from "@/shortcuts/SemanticKeys";
+import TimeSpanPicker from "@/components/primitives/control/TimeSpanPicker";
 
 export default function PublicTransitSettings() {
     const now = useTime();
@@ -95,9 +97,9 @@ export default function PublicTransitSettings() {
                             },
                             {
                                 label: "Periode",
-                                setting: disabled => <TimePicker
-                                    value={period.asTime()}
-                                    onValueChange={period => setPeriod(period?.asTimeSpan())}
+                                setting: disabled => <TimeSpanPicker
+                                    value={period}
+                                    onValueChange={setPeriod}
                                     disabled={disabled}
                                     invalid={isPublicTransitFeatureEnabled && isPeriodInvalid}
                                 />,
@@ -115,9 +117,9 @@ export default function PublicTransitSettings() {
                         settings: [
                             {
                                 label: "Wegzeit",
-                                setting: disabled => <TimePicker
-                                    value={travelTime?.asTime()}
-                                    onValueChange={travelTime => setTravelTime(travelTime?.asTimeSpan())}
+                                setting: disabled => <TimeSpanPicker
+                                    value={travelTime}
+                                    onValueChange={setTravelTime}
                                     disabled={disabled}
                                 />,
                                 tooltip: <>
@@ -127,10 +129,12 @@ export default function PublicTransitSettings() {
                             },
                             {
                                 label: 'Grace period', // TODO: translate correctly
-                                setting: disabled => <TimePicker
-                                    value={gracePeriod?.asTime()}
-                                    onValueChange={gracePeriod => setGracePeriod(rectifyGracePeriod(gracePeriod?.asTimeSpan()))}
-                                    valueOnSpaceKeyPressed={DefaultPublicTransitConfiguration.gracePeriod.asTime()}
+                                setting: disabled => <TimeSpanPicker
+                                    value={gracePeriod}
+                                    onValueChange={gracePeriod => setGracePeriod(rectifyGracePeriod(gracePeriod))}
+                                    onKeyUp={{
+                                        [SemanticKeys.SET_TO_DEFAULT]: { setValue: DefaultPublicTransitConfiguration.gracePeriod.asTime() }
+                                    }}
                                     disabled={disabled}
                                 />,
                                 tooltip: "TODO", // TODO: write tooltip

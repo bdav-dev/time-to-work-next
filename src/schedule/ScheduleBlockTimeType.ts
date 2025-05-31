@@ -45,4 +45,9 @@ export class ScheduleBlockTimeTypes {
     static ofIdentifier(identifier: ScheduleBlockTimeTypeIdentifier) {
         return this.values().find(timeType => timeType.identifier === identifier)!;
     }
+
+    static toggle(timeType: ScheduleBlockTimeType) {
+        return timeType.identifier === 'workTime' ? this.BREAK : this.WORK;
+    }
+
 }
