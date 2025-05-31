@@ -169,7 +169,7 @@ function tryCloseTimeStamp(
     timeStampCloseTime: Time | undefined,
     simulatedNowTime: Time
 ): CloseOpenTimeStampResult {
-    const openTimeStamp = ScheduleOperations.getOpenTimestamp(schedule);
+    const openTimeStamp = ScheduleCalculations.getOpenTimestamp(schedule);
     if (!openTimeStamp) {
         return {
             submissionSchedule: schedule,

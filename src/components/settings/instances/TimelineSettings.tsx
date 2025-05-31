@@ -11,6 +11,7 @@ import { compare } from "@/util/CompareUtils";
 import TimeSpan from "@/time/TimeSpan";
 import useSchedule from "@/hooks/UseSchedule";
 import useInputGuard from "@/hooks/UseInputGuard";
+import { SemanticKeys } from "@/shortcuts/SemanticKeys";
 
 export default function TimelineSettings() {
     const { schedule } = useSchedule();
@@ -69,7 +70,9 @@ export default function TimelineSettings() {
                                 setting: <TimePicker
                                     value={startTimeInput}
                                     onValueChange={setStartTimeInput}
-                                    valueOnSpaceKeyPressed={DefaultTimelineConfiguration.startTime}
+                                    onKeyUp={{
+                                        [SemanticKeys.SET_TO_DEFAULT]: { setValue: DefaultTimelineConfiguration.startTime }
+                                    }}
                                     showInvalidEvenWhenFocused
                                     onBlur={applyStartTimeFallback}
                                     invalid={isStartTimeInputInvalid}
@@ -80,7 +83,9 @@ export default function TimelineSettings() {
                                 setting: <TimePicker
                                     value={endTimeInput}
                                     onValueChange={endTimeInput => setEndTimeInput(endTimeInput)}
-                                    valueOnSpaceKeyPressed={DefaultTimelineConfiguration.endTime}
+                                    onKeyUp={{
+                                        [SemanticKeys.SET_TO_DEFAULT]: { setValue: DefaultTimelineConfiguration.endTime }
+                                    }}
                                     onBlur={applyEndTimeFallback}
                                     showInvalidEvenWhenFocused
                                     invalid={isEndTimeInputInvalid}

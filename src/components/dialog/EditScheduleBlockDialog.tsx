@@ -16,6 +16,8 @@ import ConfiguredTimeline from "@/components/timeline/ConfiguredTimeline";
 import { compare } from "@/util/CompareUtils";
 import useSchedule from "@/hooks/UseSchedule";
 import useTime from "@/hooks/UseTime";
+import { SemanticKeys } from "@/shortcuts/SemanticKeys";
+import ScheduleCalculations from "@/schedule/ScheduleCalculations";
 
 type EditScheduleBlockDialogProps = {
     isOpen: boolean,
@@ -77,6 +79,7 @@ export default function EditScheduleBlockDialog(props: EditScheduleBlockDialogPr
     }, [startTime, endTime, selectedTimeType, schedule, now, props.block]);
 
     const isBlockUnmodified = scheduleBlockEquals(props.block, timeline.highlightBlock);
+    const isReadyToSubmit = !error && !isBlockUnmodified;
 
     function closeAndRemoveBlock() {
         props.onRequestClose?.();
@@ -84,6 +87,10 @@ export default function EditScheduleBlockDialog(props: EditScheduleBlockDialogPr
     }
 
     function closeAndSaveBlock() {
+        if (!isReadyToSubmit) {
+            return;
+        }
+
         props.onRequestClose?.();
         setSchedule(submissionSchedule!);
     }
@@ -105,9 +112,26 @@ export default function EditScheduleBlockDialog(props: EditScheduleBlockDialogPr
             <div className={'mt-5 flex gap-2.5 flex-col md:flex-row'}>
                 <Frame overridePadding className={'flex-1 p-4 flex flex-col items-center justify-center gap-1.5 flex-wrap'}>
                     <div className={'flex flex-row gap-2.5 items-center'}>
-                        <TimePicker value={startTime} onValueChange={setStartTime}/>
+                        <TimePicker
+                            value={startTime}
+                            onValueChange={setStartTime}
+                            onKeyUp={{
+                                [SemanticKeys.SET_TO_CURRENT_TIME]: { setValue: now },
+                                [SemanticKeys.SET_TO_DEFAULT]: { setValue: props.block.startTime },
+                                [SemanticKeys.SET_TO_ADJACENT]: { setValue: ScheduleCalculations.getLatestEndTime(timeline.previewSchedule, timeline.highlightBlock) },
+                                [SemanticKeys.SUBMIT]: { run: closeAndSaveBlock },
+                            }}
+                        />
                         bis
-                        <TimePicker value={endTime} onValueChange={setEndTime}/>
+                        <TimePicker
+                            value={endTime}
+                            onValueChange={setEndTime}
+                            onKeyUp={{
+                                [SemanticKeys.SET_TO_CURRENT_TIME]: { setValue: now },
+                                [SemanticKeys.SET_TO_DEFAULT]: { setValue: props.block.endTime ?? null },
+                                [SemanticKeys.SUBMIT]: { run: closeAndSaveBlock }
+                            }}
+                        />
                     </div>
 
                     <ScheduleBlockTimeTypeSelect
@@ -142,7 +166,7 @@ export default function EditScheduleBlockDialog(props: EditScheduleBlockDialogPr
 
                 <Button
                     overrideMargin
-                    disabled={!!error || isBlockUnmodified}
+                    disabled={!isReadyToSubmit}
                     onClick={closeAndSaveBlock}
                 >
                     Speichern

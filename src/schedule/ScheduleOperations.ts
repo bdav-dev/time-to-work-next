@@ -10,16 +10,6 @@ import ScheduleCalculations from "@/schedule/ScheduleCalculations";
 export default class ScheduleOperations {
     private constructor() {}
 
-    static getOpenTimestamp(schedule: Schedule) {
-        for (const block of schedule) {
-            if (!block.endTime) {
-                return block;
-            }
-        }
-
-        return null;
-    }
-
     static addTimeInterval(schedule: Schedule, now: Time, intervalToAdd: TimeInterval, timeType: ScheduleBlockTimeType): Schedule {
         const newSchedule = [...schedule];
 
@@ -43,7 +33,7 @@ export default class ScheduleOperations {
             }
         }
 
-        const openTimeStamp = this.getOpenTimestamp(schedule);
+        const openTimeStamp = ScheduleCalculations.getOpenTimestamp(schedule);
         if (openTimeStamp && compare(intervalToAdd.endTime, 'greaterThan', openTimeStamp.startTime)) {
             throw new DisplayableError('Das Zeitintervall überschneidet sich mit einem geöffnetem Zeitstempel.');
         }
@@ -97,7 +87,7 @@ export default class ScheduleOperations {
     static closeTimeStamp(schedule: Schedule, endTime: Time, now: Time): Schedule {
         let newSchedule = [...schedule];
 
-        const openTimeStamp = this.getOpenTimestamp(newSchedule);
+        const openTimeStamp = ScheduleCalculations.getOpenTimestamp(newSchedule);
         if (!openTimeStamp) {
             throw new DisplayableError("Es existiert kein offener Zeitstempel zum Schließen.");
         }

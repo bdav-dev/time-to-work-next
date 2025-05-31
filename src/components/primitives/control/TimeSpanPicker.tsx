@@ -8,12 +8,16 @@ type TimeSpanPickerProps = {
     valueOnSpaceKeyPressed?: TimeSpan
 } & Omit<TimePickerProps, 'value' | 'onValueChange' | 'valueOnSpaceKeyPressed'>
 
+/**
+ * A component which lets the user pick a time span between 00:00 and 23:59.
+ * Any time spans inputted in this component that are outside of this range will be clamped to the closest valid time span
+ * (00:00 for negative time spans, 23:59 for time spans larger than 23:59).
+ */
 export default function TimeSpanPicker({ value, onValueChange, valueOnSpaceKeyPressed, ...rest }: TimeSpanPickerProps) {
     return (
         <TimePicker
             value={rectifyTimeSpan(value)?.asTime()}
             onValueChange={value => onValueChange(value?.asTimeSpan())}
-            valueOnSpaceKeyPressed={rectifyTimeSpan(valueOnSpaceKeyPressed)?.asTime()}
             {...rest}
         />
     );

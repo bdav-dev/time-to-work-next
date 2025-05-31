@@ -1,5 +1,5 @@
 import TimeSpan from "@/time/TimeSpan";
-import { Schedule } from "@/schedule/Schedule";
+import { Schedule, ScheduleBlock, scheduleBlockEquals } from "@/schedule/Schedule";
 import Time from "@/time/Time";
 
 
@@ -8,6 +8,10 @@ export default class ScheduleCalculations {
 
     static hasOpenTimeStamp(schedule: Schedule) {
         return schedule.some(block => block.endTime == undefined);
+    }
+
+    static getOpenTimestamp(schedule: Schedule) {
+        return schedule.find(block => block.endTime == undefined);
     }
 
     static getSumOfWorkTime(schedule: Schedule, now: Time) {
@@ -44,6 +48,15 @@ export default class ScheduleCalculations {
 
     static getNewTimeBalance(schedule: Schedule, now: Time, dailyWorkingTime: TimeSpan, timeBalance: TimeSpan) {
         return timeBalance.subtract(this.getRemainingTimeToWork(schedule, now, dailyWorkingTime));
+    }
+
+    static getLatestEndTime(schedule: Schedule, omitBlock?: ScheduleBlock) {
+        return schedule
+            .filter(block => !scheduleBlockEquals(block, omitBlock))
+            .map(block => block.endTime)
+            .filter(endTime => !!endTime)
+            .toSorted((a, b) => b.compareTo(a))
+            .find(() => true);
     }
 
 }

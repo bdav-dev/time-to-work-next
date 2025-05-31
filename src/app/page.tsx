@@ -16,18 +16,6 @@ import InformationTable from "@/components/misc/InformationTable";
 import UnclosedTimeStampWatcher from "@/unclosedTimeStamp/UnclosedTimeStampWatcher";
 
 
-// .ttwc time to work config file
-// stempel hook => falls gestempelt wird
-// für schedule.equals => evtl to set umwandeln, dann normale scheduleblock equals anwenden
-// change message retention times by add timeinterval error
-// make timeline name of big and small lines in code consistent
-// create TimeSpanPicker -> aktuell 0 usages: replace
-// make () Bereit not showing when noting changed (scheduleblock dialog)
-// unreliable time untersuchen
-// fix bug: see desktop
-// maybe return clearTimeout: useTime
-// examine incorrect z stacking - timeline
-
 export default function TimeToWork() {
     const messaging = useMessaging();
     const { schedule } = useSchedule();
