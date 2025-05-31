@@ -42,7 +42,7 @@ export default function TimeStampControl(props: TimeStampInfoProps) {
                     disabled={props.isTimePickerDisabled}
                     onKeyUp={{
                         [SemanticKeys.SUBMIT]: { runAndBlur: props.onRequestStamp },
-                        [SemanticKeys.SET_TO_CURRENT_TIME]: { setValue: props.currentTime },
+                        [SemanticKeys.SET_TO_CURRENT_TIME]: { runAndBlur: () => props.onUseCurrentTimeAsOpenOrCloseTimeChange(true) },
                         [SemanticKeys.SET_TO_ADJACENT]: { setValue: props.getLatestEndTimeOfSchedule() }
                     }}
                 />
