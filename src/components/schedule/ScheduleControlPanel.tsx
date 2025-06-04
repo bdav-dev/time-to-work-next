@@ -87,11 +87,11 @@ export default function ScheduleControlPanel() {
         }
     }
 
-    function onButtonClick(ctrlKeyPressed: boolean) {
+    function onButtonClick(shiftKeyPressed: boolean) {
         if (selectedBlockType.identifier == 'timeInterval') {
             addTimeInterval();
         } else if (selectedBlockType.identifier == 'timeStamp') {
-            if (openTimeStampBlock && ctrlKeyPressed) {
+            if (openTimeStampBlock && shiftKeyPressed) {
                 openAndCloseTimeStamp();
             } else {
                 openOrCloseTimeStamp();
@@ -149,7 +149,7 @@ export default function ScheduleControlPanel() {
 
                 <Button
                     className={'min-w-56'}
-                    onClick={event => onButtonClick(event.ctrlKey)}
+                    onClick={event => onButtonClick(event.shiftKey)}
                     disabled={isButtonDisabled}
                 >
                     {
