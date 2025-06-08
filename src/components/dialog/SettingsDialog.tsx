@@ -7,6 +7,7 @@ import About from "@/components/settings/instances/About";
 import PublicTransitSettings from "@/components/settings/instances/PublicTransitSettings";
 import ThemeToggle from "@/components/theme/ThemeToggle";
 import WorkingTimeSettings from "@/components/settings/instances/WorkingTimeSettings";
+import WorkingTimeRestrictionSettings from "@/components/settings/instances/WorkingTimeRestrictionSettings";
 
 type SettingsDialogProps = {
     isOpen: boolean,
@@ -48,7 +49,7 @@ export default function SettingsDialog(props: SettingsDialogProps) {
     );
 }
 
-type Settings = 'workingTime' | 'about' | 'timeline' | 'publicTransit'; // 'general'
+type Settings = 'workingTime' | 'about' | 'timeline' | 'publicTransit' | 'workingTimeRestrictions';
 
 const SettingsSegments: { [key in Settings]: Segment<Settings> } = {
     /* TODO
@@ -73,6 +74,11 @@ const SettingsSegments: { [key in Settings]: Segment<Settings> } = {
         value: "publicTransit",
         displayAs: "Rückfahrt mit ÖPNV"
     },
+    workingTimeRestrictions: {
+        id: 6,
+        value: "workingTimeRestrictions",
+        displayAs: "Einschränkungen"
+    },
     about: {
         id: 4,
         value: "about",
@@ -85,5 +91,6 @@ const SettingViewMap: { [key in Settings]: ReactNode } = {
     about: <About/>,
     publicTransit: <PublicTransitSettings/>,
     //general: <></>,
-    workingTime: <WorkingTimeSettings/>
+    workingTime: <WorkingTimeSettings/>,
+    workingTimeRestrictions: <WorkingTimeRestrictionSettings/>
 }

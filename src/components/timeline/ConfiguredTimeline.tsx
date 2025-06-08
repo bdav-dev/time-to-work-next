@@ -1,58 +1,74 @@
-import Timeline, { TimelineProps } from "@/components/timeline/Timeline";
+import Timeline from "@/components/timeline/module/Timeline";
 import useTime from "@/hooks/UseTime";
 import useConfiguration from "@/hooks/configuration/UseConfiguration";
 import { mapScheduleToTimelineData, Schedule, ScheduleToTimelineDataMapOptions } from "@/schedule/Schedule";
-
+import { TimelineConfiguration, TimelineMarker } from "@/components/timeline/module/TimelineTypes";
+import { useTheme } from "@/hooks/UseTheme";
+import DefaultTimelineThemes from "@/components/timeline/module/DefaultTimelineThemes";
+import { TimelineBlockContent } from "@/components/timeline/TimelineBlockContent";
+import NeumorphicDiv from "@/components/primitives/neumorphic/NeumorphicDiv";
+import { NeumorphicBlueprintFactory } from "@/neumorphic/NeumorphicStyle";
+import { TimelineMarkerColors } from "@/components/timeline/TimelineColors";
 
 type ConfiguredTimelineProps = {
     schedule: Schedule,
+    markers?: TimelineMarker[],
     scheduleMapOptions?: ScheduleToTimelineDataMapOptions,
-    height?: number,
-    override?: Partial<Omit<TimelineProps, 'data' | 'height'>>
+    overrideConfiguration?: Partial<TimelineConfiguration>,
+    showCurrentTimeMarker?: boolean
 }
 
-export default function ConfiguredTimeline(props: ConfiguredTimelineProps) {
+export default function ConfiguredTimeline({ showCurrentTimeMarker = true, ...props }: ConfiguredTimelineProps) {
     const now = useTime();
+    const { darkTheme } = useTheme();
     const timelineConfig = useConfiguration(config => config.timeline);
 
+    const defaultConfigurationOverride = {
+        theme: darkTheme ? DefaultTimelineThemes.DARK : DefaultTimelineThemes.LIGHT,
+        currentTime: now,
+        startTime: timelineConfig.startTime,
+        endTime: timelineConfig.endTime,
+        automaticTimeBoundsOnOverflow: timelineConfig.automaticTimeBoundsOnOverflow,
+        amountOfSubTimeSteps: timelineConfig.amountOfSubTimeSteps,
+        amountOfTimeSteps: timelineConfig.amountOfTimeSteps,
+        marginSize: timelineConfig.marginSize / 2,
+        automaticAmountOfTimeSteps: timelineConfig.automaticAmountOfTimeSteps
+    };
+
     return (
-        <Timeline
-            data={mapScheduleToTimelineData(props.schedule, props.scheduleMapOptions)}
-            height={props.height}
-            currentTime={
-                props.override?.currentTime ??
-                now
-            }
-            startTime={
-                props.override?.startTime ??
-                timelineConfig.startTime
-            }
-            endTime={
-                props.override?.endTime ??
-                timelineConfig.endTime
-            }
-            automaticTimeBoundsOnOverflow={
-                props.override?.automaticTimeBoundsOnOverflow ??
-                timelineConfig.automaticTimeBoundsOnOverflow
-            }
-            amountOfSubTimeSteps={
-                props.override?.amountOfSubTimeSteps ??
-                timelineConfig.amountOfSubTimeSteps
-            }
-            amountOfTimeSteps={
-                props.override?.amountOfTimeSteps ??
-                timelineConfig.amountOfTimeSteps
-            }
-            marginSize={
-                (
-                    props.override?.marginSize ??
-                    timelineConfig.marginSize
-                ) / 2
-            }
-            automaticAmountOfTimeSteps={
-                props.override?.automaticAmountOfTimeSteps ??
-                timelineConfig.automaticAmountOfTimeSteps
-            }
-        />
+        <NeumorphicDiv
+            blueprint={NeumorphicBlueprintFactory.createLarge()}
+            className={"rounded-3xl"}
+            style={{ marginBottom: '36px', marginTop: '33px' }}
+        >
+            <Timeline
+                style={{ margin: 0 }}
+                blocks={mapScheduleToTimelineData(props.schedule, now, TimelineBlockContent, props.scheduleMapOptions)}
+                markers={
+                    [
+                        ...showCurrentTimeMarker ? [{ title: "Jetzt", time: now, color: TimelineMarkerColors.RED }] : [],
+                        /*
+                        {
+                            title: (
+                                <div
+                                    style={{ fill: TimelineMarkerColors.GREEN, stroke: TimelineMarkerColors.GREEN, strokeWidth: "0.5rem" }}
+                                    className={"flex flex-row gap-[0.1rem] items-center"}
+                                >
+                                    <MaterialSymbol symbol={MaterialSymbols.TIMER} opticalSize={"20px"}/>
+                                    11:00
+                                </div>
+                            ),
+                            color: TimelineMarkerColors.GREEN,
+                            time: Time.ofString("11:00")
+                        }
+                        */
+                    ]
+                }
+                configuration={{
+                    ...defaultConfigurationOverride,
+                    ...props.overrideConfiguration
+                }}
+            />
+        </NeumorphicDiv>
     );
 }

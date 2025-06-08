@@ -1,5 +1,5 @@
 import Time from "@/time/Time";
-import { WorkingTimeConfiguration } from "@/hooks/configuration/instances/UseWorkingTimeSettings";
+import { WorkingTimeConfiguration } from "@/hooks/configuration/instances/UseWorkingTimeConfiguration";
 import TimeComponent from "@/components/time/Time";
 import ScheduleCalculations from "@/schedule/ScheduleCalculations";
 import { Schedule } from "@/schedule/Schedule";

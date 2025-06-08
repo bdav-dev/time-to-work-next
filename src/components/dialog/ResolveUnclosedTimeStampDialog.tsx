@@ -67,8 +67,8 @@ export default function ResolveUnclosedTimeStampDialog(props: ResolveUnclosedTim
                 scheduleMapOptions={{
                     className: timeline.highlightBlock && highlightBlock(timeline.highlightBlock, !!error)
                 }}
-                override={{
-                    showNowLine: false,
+                showCurrentTimeMarker={false}
+                overrideConfiguration={{
                     automaticTimeBoundsOnOverflow: !!timeStampCloseTime,
                 }}
             />

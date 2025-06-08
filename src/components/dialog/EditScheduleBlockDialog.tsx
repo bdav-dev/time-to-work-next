@@ -106,7 +106,7 @@ export default function EditScheduleBlockDialog(props: EditScheduleBlockDialogPr
                 scheduleMapOptions={{
                     className: timeline.highlightBlock && highlightBlock(timeline.highlightBlock, !!error)
                 }}
-                height={7}
+                overrideConfiguration={{ height: "7rem" }}
             />
 
             <div className={'mt-5 flex gap-2.5 flex-col md:flex-row'}>

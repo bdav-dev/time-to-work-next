@@ -61,8 +61,9 @@ export default function TimeToWork() {
                 </div>
 
                 <ConfiguredTimeline
-                    height={12}
+                    overrideConfiguration={{ height: "12rem" }}
                     schedule={schedule}
+                    markers={[]}
                     scheduleMapOptions={{ onClick: setSelectedScheduleBlock }}
                 />
 
