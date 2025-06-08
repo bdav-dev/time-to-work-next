@@ -4,6 +4,7 @@ import SegmentedControls, { Segment } from "@/components/primitives/control/Segm
 type ToggleProps = {
     value: boolean,
     onValueChange: (isOn: boolean) => void,
+    disabled?: boolean,
     customLabels?: {
         true: string,
         false: string
@@ -26,10 +27,12 @@ export default function Toggle(props: ToggleProps) {
 
     return (
         <SegmentedControls
+            overrideSegmentPadding
+            disabled={props.disabled}
             orientation={"horizontal"}
             segments={[onSegment, offSegment]}
             selection={props.value ? onSegment : offSegment}
-            segmentClassName={(isSelection) => `min-w-14 ${isSelection && 'font-bold'}`}
+            segmentClassName={(isSelection) => `min-w-14 ${isSelection && 'font-bold'} px-2 py-1.5`}
             onSelectionChange={(selection) => props.onValueChange(selection!.value)}
             deselectable={false}
         />

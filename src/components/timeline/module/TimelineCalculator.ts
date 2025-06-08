@@ -116,7 +116,8 @@ export class TimelineCalculator {
                 {
                     marker: {
                         ...marker,
-                        height: marker.height ?? this.config.defaultMarkerHeight
+                        height: marker.height ?? this.config.defaultMarkerHeight,
+                        color: marker.color ?? this.config.theme.defaultMarkerColor
                     },
                     position: this.mapTimeToPosition(marker.time)
                 }

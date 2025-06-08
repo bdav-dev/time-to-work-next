@@ -13,7 +13,7 @@ export function TimelineBlockContent(props: { scheduleBlock: ScheduleBlock, now:
                 {props.scheduleBlock.timeType.timelineBlock.title}
             </div>
 
-            <div className={'absolute bottom-0 self-center rounded-lg z-10 py-0.5 px-1.5 mb-1.5'}
+            <div className={'absolute bottom-0 left-1/2 -translate-x-1/2 rounded-lg z-10 py-0.5 px-1.5 mb-1.5'}
                  style={{
                      backgroundColor: props.scheduleBlock.timeType.timelineBlock.color.labelBackground,
                      fontSize: 'clamp(0px, 2vw, 0.8125rem)'

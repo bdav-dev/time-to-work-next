@@ -46,22 +46,8 @@ export default function ConfiguredTimeline({ showCurrentTimeMarker = true, ...pr
                 blocks={mapScheduleToTimelineData(props.schedule, now, TimelineBlockContent, props.scheduleMapOptions)}
                 markers={
                     [
+                        ...props.markers ?? [],
                         ...showCurrentTimeMarker ? [{ title: "Jetzt", time: now, color: TimelineMarkerColors.RED }] : [],
-                        /*
-                        {
-                            title: (
-                                <div
-                                    style={{ fill: TimelineMarkerColors.GREEN, stroke: TimelineMarkerColors.GREEN, strokeWidth: "0.5rem" }}
-                                    className={"flex flex-row gap-[0.1rem] items-center"}
-                                >
-                                    <MaterialSymbol symbol={MaterialSymbols.TIMER} opticalSize={"20px"}/>
-                                    11:00
-                                </div>
-                            ),
-                            color: TimelineMarkerColors.GREEN,
-                            time: Time.ofString("11:00")
-                        }
-                        */
                     ]
                 }
                 configuration={{

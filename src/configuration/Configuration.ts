@@ -2,8 +2,6 @@ import { DefaultTimelineConfiguration, TimelineConfiguration } from "@/hooks/con
 import { DefaultPublicTransitConfiguration, PublicTransitConfiguration } from "@/hooks/configuration/instances/UsePublicTransitConfiguration";
 import { DefaultWorkingTimeConfiguration, WorkingTimeConfiguration } from "@/hooks/configuration/instances/UseWorkingTimeConfiguration";
 import { convertConfigurationToReadWriteConfiguration } from "@/contexts/ConfigurationContext";
-import { DefaultWorkingTimeRestrictionConfiguration, WorkingTimeRestrictionConfiguration } from "@/hooks/configuration/instances/UseWorkingTimeRestrictionConfiguration";
-
 
 export type ReadWriteConfigurationValue<T> = {
     value: T,
@@ -19,14 +17,12 @@ export type ConfigurationContextType = {
     timeline: ReadWriteConfiguration<TimelineConfiguration>,
     publicTransit: ReadWriteConfiguration<PublicTransitConfiguration>,
     workingTime: ReadWriteConfiguration<WorkingTimeConfiguration>,
-    workingTimeRestrictions: ReadWriteConfiguration<WorkingTimeRestrictionConfiguration>
 }
 
 export const EmptyConfiguration: ConfigurationContextType = {
     timeline: createEmptyConfiguration(DefaultTimelineConfiguration),
     publicTransit: createEmptyConfiguration(DefaultPublicTransitConfiguration),
     workingTime: createEmptyConfiguration(DefaultWorkingTimeConfiguration),
-    workingTimeRestrictions: createEmptyConfiguration(DefaultWorkingTimeRestrictionConfiguration)
 }
 
 function createEmptyConfiguration<T extends object>(configuration: T) {

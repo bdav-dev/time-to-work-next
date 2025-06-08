@@ -1,5 +1,5 @@
 import { TimelineMarker as TimelineMarkerType } from "../TimelineTypes";
-import { RequireProperty } from "@/util/TypeUtils";
+import { RequireProperty } from "@/util/UtilTypes";
 
 
 export type TimelineMarkerProps = {

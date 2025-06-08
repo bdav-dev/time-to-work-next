@@ -1,4 +1,4 @@
-import { RequireProperty } from "@/util/TypeUtils";
+import { RequireProperty } from "@/util/UtilTypes";
 import { TimelineBlock as TimelineBlockType } from '../TimelineTypes';
 
 

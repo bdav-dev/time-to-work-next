@@ -14,11 +14,13 @@ import useMessaging from "@/hooks/UseMessaging";
 import Header from "@/components/layout/page/Header";
 import InformationTable from "@/components/misc/InformationTable";
 import UnclosedTimeStampWatcher from "@/unclosedTimeStamp/UnclosedTimeStampWatcher";
+import useOptimalBreakEndTimeMarker from "@/hooks/UseOptimalBreakEndTimeMarker";
 
 
 export default function TimeToWork() {
     const messaging = useMessaging();
     const { schedule } = useSchedule();
+    const optimalBreakEndTimeMarker = useOptimalBreakEndTimeMarker();
 
     const [selectedScheduleBlock, setSelectedScheduleBlock] = useState<ScheduleBlock>();
     const [isSettingsDialogOpen, setIsSettingsDialogOpen] = useState(false);
@@ -63,7 +65,7 @@ export default function TimeToWork() {
                 <ConfiguredTimeline
                     overrideConfiguration={{ height: "12rem" }}
                     schedule={schedule}
-                    markers={[]}
+                    markers={optimalBreakEndTimeMarker ? [optimalBreakEndTimeMarker] : []}
                     scheduleMapOptions={{ onClick: setSelectedScheduleBlock }}
                 />
 
