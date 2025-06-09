@@ -14,7 +14,10 @@ export enum MaterialSymbols {
     ADD,
     REMOVE,
     CHECK,
-    CLOSE
+    CLOSE,
+    MENU,
+    INFO,
+    MORE_TIME
 }
 
 export const MaterialSymbolInstances: { [key in MaterialSymbols]: Partial<Record<MaterialSymbolStyle, MaterialSymbolInstance[]>> } = {
@@ -263,6 +266,46 @@ export const MaterialSymbolInstances: { [key in MaterialSymbols]: Partial<Record
                     <svg className={className} style={style} xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
                         <path
                             d="M480-424 284-228q-11 11-28 11t-28-11q-11-11-11-28t11-28l196-196-196-196q-11-11-11-28t11-28q11-11 28-11t28 11l196 196 196-196q11-11 28-11t28 11q11 11 11 28t-11 28L536-480l196 196q11 11 11 28t-11 28q-11 11-28 11t-28-11L480-424Z"/>
+                    </svg>
+            }
+        ]
+    },
+    [MaterialSymbols.MENU]: {
+        rounded: [
+            {
+                opticalSize: "24px",
+                weight: 300,
+                svg: (className, style) =>
+                    <svg className={className} style={style} xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px">
+                        <path
+                            d="M170-254.62q-12.75 0-21.37-8.63-8.63-8.62-8.63-21.38 0-12.75 8.63-21.37 8.62-8.61 21.37-8.61h620q12.75 0 21.37 8.62 8.63 8.63 8.63 21.39 0 12.75-8.63 21.37-8.62 8.61-21.37 8.61H170ZM170-450q-12.75 0-21.37-8.63-8.63-8.63-8.63-21.38 0-12.76 8.63-21.37Q157.25-510 170-510h620q12.75 0 21.37 8.63 8.63 8.63 8.63 21.38 0 12.76-8.63 21.37Q802.75-450 790-450H170Zm0-195.39q-12.75 0-21.37-8.62-8.63-8.63-8.63-21.39 0-12.75 8.63-21.37 8.62-8.61 21.37-8.61h620q12.75 0 21.37 8.63 8.63 8.62 8.63 21.38 0 12.75-8.63 21.37-8.62 8.61-21.37 8.61H170Z"
+                        />
+                    </svg>
+            }
+        ]
+    },
+    [MaterialSymbols.INFO]: {
+        rounded: [
+            {
+                opticalSize: "24px",
+                svg: (className, style) =>
+                    <svg className={className} style={style} xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px">
+                        <path
+                            d="M480-280q17 0 28.5-11.5T520-320v-160q0-17-11.5-28.5T480-520q-17 0-28.5 11.5T440-480v160q0 17 11.5 28.5T480-280Zm0-320q17 0 28.5-11.5T520-640q0-17-11.5-28.5T480-680q-17 0-28.5 11.5T440-640q0 17 11.5 28.5T480-600Zm0 520q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"
+                        />
+                    </svg>
+            }
+        ]
+    },
+    [MaterialSymbols.MORE_TIME]: {
+        rounded: [
+            {
+                opticalSize: "24px",
+                svg: (className, style) =>
+                    <svg className={className} style={style} xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px">
+                        <path
+                            d="m480-496 100 100q11 11 11 28t-11 28q-11 11-28 11t-28-11L412-452q-6-6-9-13.5t-3-15.5v-159q0-17 11.5-28.5T440-680q17 0 28.5 11.5T480-640v144Zm240-224h-80q-17 0-28.5-11.5T600-760q0-17 11.5-28.5T640-800h80v-80q0-17 11.5-28.5T760-920q17 0 28.5 11.5T800-880v80h80q17 0 28.5 11.5T920-760q0 17-11.5 28.5T880-720h-80v80q0 17-11.5 28.5T760-600q-17 0-28.5-11.5T720-640v-80ZM440-120q-75 0-140.5-28T185-225q-49-49-77-114.5T80-480q0-75 28-140.5T185-735q49-49 114.5-77T440-840q11 0 20.5.5T481-837q17 0 28.5 11.5T521-797q0 17-11.5 28.5T481-757q-11 0-20.5-1.5T440-760q-118 0-199 81t-81 199q0 118 81 199t199 81q118 0 199-81t81-199q0-17 11.5-28.5T760-520q17 0 28.5 11.5T800-480q0 75-28 140.5T695-225q-49 49-114.5 77T440-120Z"
+                        />
                     </svg>
             }
         ]
