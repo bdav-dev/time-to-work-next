@@ -10,7 +10,7 @@ export default function WorkingTimeSettings() {
     const [dailyWorkingTime, setDailyWorkingTime] = useMutatingConfigurationValue(config => config.workingTime.dailyWorkingTime);
     const [timeBalance, setTimeBalance] = useMutatingConfigurationValue(config => config.workingTime.timeBalance);
     const [minBreak, setMinBreak] = useMutatingConfigurationValue(config => config.workingTime.minBreak);
-    const [maxWorkTimeBlockDuration, setMaxWorkTimeBlockDuration] = useMutatingConfigurationValue(config => config.workingTime.maxWorkTimeBlockDuration);
+    //const [maxWorkTimeBlockDuration, setMaxWorkTimeBlockDuration] = useMutatingConfigurationValue(config => config.workingTime.maxWorkTimeBlockDuration);
     const [showOptimalBreakTime, setShowOptimalBreakTime] = useMutatingConfigurationValue(config => config.workingTime.showOptimalBreakTime);
 
     return (
@@ -40,18 +40,18 @@ export default function WorkingTimeSettings() {
                     {
                         title: "Einschränkungen",
                         settings: [
+                            /* {
+                                label: "Maximale Arbeitszeit am Stück",
+                                setting: <TimeSpanPicker
+                                    value={maxWorkTimeBlockDuration}
+                                    onValueChange={setMaxWorkTimeBlockDuration}
+                                />
+                            }, */
                             {
                                 label: "Mindestpause",
                                 setting: <TimeSpanPicker
                                     value={minBreak}
                                     onValueChange={setMinBreak}
-                                />
-                            },
-                            {
-                                label: "Maximale Arbeitszeit am Stück",
-                                setting: <TimeSpanPicker
-                                    value={maxWorkTimeBlockDuration}
-                                    onValueChange={setMaxWorkTimeBlockDuration}
                                 />
                             },
                             {
