@@ -1,4 +1,4 @@
-import { TimelineBlockColor, TimelineBlockColors } from "@/components/timeline/TimelineBlockColor";
+import { TimelineBlockColor, TimelineBlockColors } from "@/components/timeline/TimelineColors";
 
 export type ScheduleBlockTimeTypeIdentifier = 'workTime' | 'breakTime';
 
@@ -19,7 +19,7 @@ export class ScheduleBlockTimeTypes {
         identifier: 'workTime',
         timelineBlock: {
             title: 'Arbeit',
-            color: TimelineBlockColors.BLUE,
+            color: TimelineBlockColors.BLUE
         },
         segment: {
             displayAs: 'Arbeitszeit',
@@ -30,7 +30,7 @@ export class ScheduleBlockTimeTypes {
         identifier: 'breakTime',
         timelineBlock: {
             title: 'Pause',
-            color: TimelineBlockColors.GREEN,
+            color: TimelineBlockColors.GREEN
         },
         segment: {
             displayAs: 'Pausenzeit',

@@ -57,6 +57,10 @@ export default class Time {
         return this.timeSpan.add(timeSpan).asTime(true);
     }
 
+    proximity(other: Time): TimeSpan {
+        return this.asTimeSpan().subtract(other.asTimeSpan()).absolute();
+    }
+
     subtract(timeSpan: TimeSpan) {
         return this.timeSpan.subtract(timeSpan).asTime(true);
     }

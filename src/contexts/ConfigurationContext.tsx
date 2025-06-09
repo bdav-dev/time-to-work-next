@@ -6,7 +6,7 @@ import useTimelineConfiguration from "@/hooks/configuration/instances/UseTimelin
 import { ContextProviderProps } from "@/contexts/ContextTypes";
 import usePublicTransitConfiguration from "@/hooks/configuration/instances/UsePublicTransitConfiguration";
 import { ConfigurationContextType, EmptyConfiguration, ReadWriteConfiguration } from "@/configuration/Configuration";
-import useWorkingTimeConfiguration from "@/hooks/configuration/instances/UseWorkingTimeSettings";
+import useWorkingTimeConfiguration from "@/hooks/configuration/instances/UseWorkingTimeConfiguration";
 
 
 export const ConfigurationContext = createContext<ConfigurationContextType>(EmptyConfiguration);

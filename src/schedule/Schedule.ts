@@ -1,8 +1,9 @@
 import Time from "@/time/Time";
 import { ScheduleBlockTimeType, ScheduleBlockTimeTypeIdentifier, ScheduleBlockTimeTypes } from "@/schedule/ScheduleBlockTimeType";
-import { TimelineData } from "@/components/timeline/Timeline";
 import { createSerialization, Serialization } from "@/serialization/Serialization";
 import { DisplayableError } from "@/error/DisplayableError";
+import { TimelineBlock } from "@/components/timeline/module/TimelineTypes";
+import { ReactNode } from "react";
 
 export type ScheduleBlock = {
     startTime: Time,
@@ -44,13 +45,18 @@ export type ScheduleToTimelineDataMapOptions = {
     className?: (block: ScheduleBlock) => string
 }
 
-export function mapScheduleToTimelineData(schedule: Schedule, options?: ScheduleToTimelineDataMapOptions): TimelineData[] {
+export function mapScheduleToTimelineData(
+    schedule: Schedule,
+    now: Time,
+    contentComponent: (props: { scheduleBlock: ScheduleBlock, now: Time }) => ReactNode,
+    options?: ScheduleToTimelineDataMapOptions
+): TimelineBlock[] {
     return schedule.map(
         scheduleBlock => ({
             startTime: scheduleBlock.startTime,
             endTime: scheduleBlock.endTime,
-            color: scheduleBlock.timeType.timelineBlock.color,
-            title: scheduleBlock.timeType.timelineBlock.title,
+            backgroundColor: scheduleBlock.timeType.timelineBlock.color.background,
+            content: contentComponent({ scheduleBlock, now }),
             onClick: options?.onClick ? () => options?.onClick?.(scheduleBlock) : undefined,
             className: options?.className?.(scheduleBlock)
         })

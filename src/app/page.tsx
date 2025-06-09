@@ -14,14 +14,18 @@ import useMessaging from "@/hooks/UseMessaging";
 import Header from "@/components/layout/page/Header";
 import InformationTable from "@/components/misc/InformationTable";
 import UnclosedTimeStampWatcher from "@/unclosedTimeStamp/UnclosedTimeStampWatcher";
+import useOptimalBreakEndTimeMarker from "@/hooks/UseOptimalBreakEndTimeMarker";
+import AboutDialog from "@/components/dialog/AboutDialog";
 
 
 export default function TimeToWork() {
     const messaging = useMessaging();
     const { schedule } = useSchedule();
+    const optimalBreakEndTimeMarker = useOptimalBreakEndTimeMarker();
 
     const [selectedScheduleBlock, setSelectedScheduleBlock] = useState<ScheduleBlock>();
     const [isSettingsDialogOpen, setIsSettingsDialogOpen] = useState(false);
+    const [isAboutDialogOpen, setIsAboutDialogOpen] = useState(false);
 
     useEffectOnFirstTimeVisit(() => {
         messaging.set(
@@ -47,13 +51,17 @@ export default function TimeToWork() {
                     block={selectedScheduleBlock}
                 />
             }
+            <AboutDialog isOpen={isAboutDialogOpen} onRequestClose={() => setIsAboutDialogOpen(false)} />
             <SettingsDialog
                 isOpen={isSettingsDialogOpen}
                 onRequestClose={() => setIsSettingsDialogOpen(false)}
             />
             <UnclosedTimeStampWatcher/>
 
-            <Header onSettingsButtonClick={() => setIsSettingsDialogOpen(true)}/>
+            <Header
+                onSettingsButtonClick={() => setIsSettingsDialogOpen(true)}
+                onAboutButtonClick={() => setIsAboutDialogOpen(true)}
+            />
 
             <div className={'flex-1 flex flex-col justify-between'}>
                 <div className={'flex justify-center'}>
@@ -61,8 +69,9 @@ export default function TimeToWork() {
                 </div>
 
                 <ConfiguredTimeline
-                    height={12}
+                    overrideConfiguration={{ height: "12rem" }}
                     schedule={schedule}
+                    markers={optimalBreakEndTimeMarker ? [optimalBreakEndTimeMarker] : []}
                     scheduleMapOptions={{ onClick: setSelectedScheduleBlock }}
                 />
 
