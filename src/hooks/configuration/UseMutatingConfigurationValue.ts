@@ -1,6 +1,6 @@
 import { useContext } from "react";
-import { ConfigurationContextType, FlatReadWriteConfigurationValue, ReadWriteConfigurationValue } from "@/configuration/Configuration";
-import { ConfigurationContext } from "@/contexts/ConfigurationContext";
+import { FlatReadWriteConfigurationValue, ReadWriteConfigurationValue } from "@/configuration/Configuration";
+import { ConfigurationContext, ConfigurationContextType } from "@/contexts/ConfigurationContext";
 
 export default function useMutatingConfigurationValue<V>(
     configValueExtractor: (config: ConfigurationContextType) => ReadWriteConfigurationValue<V>

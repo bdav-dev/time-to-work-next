@@ -9,7 +9,7 @@ export const TimeContext = createContext<Time | undefined>(undefined);
 
 const SECONDS_ADDITION = 3;
 
-export function TimeProvider(props: ContextProviderProps) {
+export function TimeProvider({ children }: ContextProviderProps) {
     const [time, setTime] = useState<Time>();
 
     useEffect(() => {
@@ -28,7 +28,7 @@ export function TimeProvider(props: ContextProviderProps) {
 
     return (
         <TimeContext.Provider value={time}>
-            {props.children}
+            {children}
         </TimeContext.Provider>
     );
 }

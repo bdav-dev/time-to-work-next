@@ -11,17 +11,14 @@ import ScheduleBlockTimeTypeSelect from "@/components/select/ScheduleBlockTimeTy
 import ScheduleBlockTypeSelect from "@/components/select/ScheduleBlockTypeSelect";
 import useSchedule from "@/hooks/UseSchedule";
 import useTime from "@/hooks/UseTime";
-import useMessaging from "@/hooks/UseMessaging";
 import ScheduleCalculations from "@/schedule/ScheduleCalculations";
-import { ModifySchedule } from "@/schedule/ModifySchedule";
+import useModifySchedule from "@/hooks/UseModifySchedule";
 
 
 export default function ScheduleControlPanel() {
     const now = useTime();
-    const { schedule, setSchedule } = useSchedule();
-    const { set: setMessage } = useMessaging();
-
-    const modifySchedule = ModifySchedule.withContext({ now, schedule, setSchedule, setMessage });
+    const { schedule } = useSchedule();
+    const modifySchedule = useModifySchedule();
 
     const [selectedBlockType, setSelectedBlockType] = useState<ScheduleBlockType>(ScheduleBlockTypes.TIME_STAMP);
     const [selectedBlockTimeType, setSelectedBlockTimeType] = useState<ScheduleBlockTimeType>(ScheduleBlockTimeTypes.WORK);

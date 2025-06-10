@@ -15,7 +15,7 @@ export const ThemeContext = createContext<ThemeContextType>({
     setDarkTheme: () => { }
 });
 
-export default function ThemeProvider(props: ContextProviderProps) {
+export default function ThemeProvider({ children }: ContextProviderProps) {
     const [darkTheme, setDarkTheme] = useStateWithLocalStorage("ttw-n.useDarkTheme", true);
 
     useEffect(() => {
@@ -32,7 +32,7 @@ export default function ThemeProvider(props: ContextProviderProps) {
 
     return (
         <ThemeContext.Provider value={{ darkTheme, setDarkTheme }}>
-            {props.children}
+            {children}
         </ThemeContext.Provider>
     );
 }

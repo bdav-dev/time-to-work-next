@@ -37,7 +37,7 @@ const APPEAR_DISAPPEAR_ANIMATION_DURATION_IN_SECONDS = 0.25;
 const APPEAR_STYLES: CSSProperties = { animation: `message-appear ${APPEAR_DISAPPEAR_ANIMATION_DURATION_IN_SECONDS}s ease-out forwards` };
 const DISAPPEAR_STYLES: CSSProperties = { animation: `message-disappear ${APPEAR_DISAPPEAR_ANIMATION_DURATION_IN_SECONDS}s ease-in forwards` };
 
-export default function MessageProvider(props: ContextProviderProps) {
+export default function MessageProvider({ children }: ContextProviderProps) {
     const [message, setMessage] = useState<Message>();
     const [toAutoClear, setToAutoClear] = useState<Message>();
     const [toMount, setToMount] = useState<Message>();
@@ -77,7 +77,7 @@ export default function MessageProvider(props: ContextProviderProps) {
 
     return (
         <MessageContext.Provider value={{ message, set, clear, doAutoClear, setDoAutoClear, animationStyles }}>
-            {props.children}
+            {children}
         </MessageContext.Provider>
     );
 }

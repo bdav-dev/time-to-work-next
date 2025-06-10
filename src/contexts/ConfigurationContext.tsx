@@ -2,16 +2,27 @@
 
 import { createContext, Dispatch, SetStateAction } from "react";
 import { replaceValue } from "@/util/ObjectUtils";
-import useTimelineConfiguration from "@/hooks/configuration/instances/UseTimelineConfiguration";
+import useTimelineConfiguration, { DefaultTimelineConfiguration, TimelineConfiguration } from "@/hooks/configuration/instances/UseTimelineConfiguration";
 import { ContextProviderProps } from "@/contexts/ContextTypes";
-import usePublicTransitConfiguration from "@/hooks/configuration/instances/UsePublicTransitConfiguration";
-import { ConfigurationContextType, EmptyConfiguration, ReadWriteConfiguration } from "@/configuration/Configuration";
-import useWorkingTimeConfiguration from "@/hooks/configuration/instances/UseWorkingTimeConfiguration";
+import usePublicTransitConfiguration, { DefaultPublicTransitConfiguration, PublicTransitConfiguration } from "@/hooks/configuration/instances/UsePublicTransitConfiguration";
+import { createEmptyConfiguration, ReadWriteConfiguration } from "@/configuration/Configuration";
+import useWorkingTimeConfiguration, { DefaultWorkingTimeConfiguration, WorkingTimeConfiguration } from "@/hooks/configuration/instances/UseWorkingTimeConfiguration";
 
+export type ConfigurationContextType = {
+    timeline: ReadWriteConfiguration<TimelineConfiguration>,
+    publicTransit: ReadWriteConfiguration<PublicTransitConfiguration>,
+    workingTime: ReadWriteConfiguration<WorkingTimeConfiguration>,
+}
+
+export const EmptyConfiguration: ConfigurationContextType = {
+    timeline: createEmptyConfiguration(DefaultTimelineConfiguration),
+    publicTransit: createEmptyConfiguration(DefaultPublicTransitConfiguration),
+    workingTime: createEmptyConfiguration(DefaultWorkingTimeConfiguration),
+}
 
 export const ConfigurationContext = createContext<ConfigurationContextType>(EmptyConfiguration);
 
-export default function ConfigurationProvider(props: ContextProviderProps) {
+export default function ConfigurationProvider({ children }: ContextProviderProps) {
     const timelineConfiguration = useTimelineConfiguration();
     const publicTransitConfiguration = usePublicTransitConfiguration();
     const workingTimeConfiguration = useWorkingTimeConfiguration();
@@ -24,7 +35,7 @@ export default function ConfigurationProvider(props: ContextProviderProps) {
                 workingTime: workingTimeConfiguration
             }}
         >
-            {props.children}
+            {children}
         </ConfigurationContext.Provider>
     );
 }
