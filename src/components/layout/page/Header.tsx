@@ -13,7 +13,8 @@ import IconText from "@/components/misc/IconText";
 
 type HeaderProps = {
     onSettingsButtonClick: () => void,
-    onAboutButtonClick: () => void
+    onAboutButtonClick: () => void,
+    onKeyboardShortcutButtonClick: () => void,
 }
 
 export default function Header(props: HeaderProps) {
@@ -39,6 +40,13 @@ export default function Header(props: HeaderProps) {
                                 text={'Einstellungen'}
                             />,
                             action: props.onSettingsButtonClick
+                        },
+                        {
+                            label: <IconText
+                                icon={<MaterialSymbol symbol={MaterialSymbols.KEYBOARD}/>}
+                                text={'Tastenkürzel'}
+                            />,
+                            action: props.onKeyboardShortcutButtonClick
                         },
                         {
                             label: <IconText

@@ -15,11 +15,12 @@ type ConfiguredTimelineProps = {
     markers?: TimelineMarker[],
     scheduleMapOptions?: ScheduleToTimelineDataMapOptions,
     overrideConfiguration?: Partial<TimelineConfiguration>,
+    overrideMargin?: { top?: string, bottom?: string }
     showCurrentTimeMarker?: boolean
 }
 
 export default function ConfiguredTimeline({ showCurrentTimeMarker = true, ...props }: ConfiguredTimelineProps) {
-    const now = useTime();
+    const now = props.overrideConfiguration?.currentTime ?? useTime();
     const { darkTheme } = useTheme();
     const timelineConfig = useConfiguration(config => config.timeline);
 
@@ -39,7 +40,7 @@ export default function ConfiguredTimeline({ showCurrentTimeMarker = true, ...pr
         <NeumorphicDiv
             blueprint={NeumorphicBlueprintFactory.createLarge()}
             className={"rounded-3xl"}
-            style={{ marginBottom: '36px', marginTop: '33px' }}
+            style={{ marginBottom: props.overrideMargin?.bottom ?? '36px', marginTop: props.overrideMargin?.top ?? '33px' }}
         >
             <Timeline
                 style={{ margin: 0 }}
