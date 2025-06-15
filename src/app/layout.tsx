@@ -11,6 +11,7 @@ import MessageProvider from "@/contexts/MessageContext";
 import ConfigurationProvider from "@/contexts/ConfigurationContext";
 import Footer from "@/components/layout/page/Footer";
 import { CascadiaCode } from "@/font/CascadiaCode";
+import ModifyScheduleContextProvider from "@/contexts/ModifyScheduleContext";
 
 
 export const metadata: Metadata = {
@@ -55,7 +56,9 @@ function ContextProvider({ children }: { children: ReactNode }) {
                 <ScheduleProvider>
                     <MessageProvider>
                         <ConfigurationProvider>
-                            {children}
+                            <ModifyScheduleContextProvider>
+                                {children}
+                            </ModifyScheduleContextProvider>
                         </ConfigurationProvider>
                     </MessageProvider>
                 </ScheduleProvider>

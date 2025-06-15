@@ -16,6 +16,7 @@ import InformationTable from "@/components/misc/InformationTable";
 import UnclosedTimeStampWatcher from "@/unclosedTimeStamp/UnclosedTimeStampWatcher";
 import useOptimalBreakEndTimeMarker from "@/hooks/UseOptimalBreakEndTimeMarker";
 import AboutDialog from "@/components/dialog/AboutDialog";
+import KeyboardShortcutDialog from "@/components/dialog/KeyboardShortcutDialog";
 
 
 export default function TimeToWork() {
@@ -26,6 +27,7 @@ export default function TimeToWork() {
     const [selectedScheduleBlock, setSelectedScheduleBlock] = useState<ScheduleBlock>();
     const [isSettingsDialogOpen, setIsSettingsDialogOpen] = useState(false);
     const [isAboutDialogOpen, setIsAboutDialogOpen] = useState(false);
+    const [isKeyboardShortcutDialogOpen, setIsKeyboardShortcutDialogOpen] = useState(false);
 
     useEffectOnFirstTimeVisit(() => {
         messaging.set(
@@ -51,7 +53,8 @@ export default function TimeToWork() {
                     block={selectedScheduleBlock}
                 />
             }
-            <AboutDialog isOpen={isAboutDialogOpen} onRequestClose={() => setIsAboutDialogOpen(false)} />
+            <AboutDialog isOpen={isAboutDialogOpen} onRequestClose={() => setIsAboutDialogOpen(false)}/>
+            <KeyboardShortcutDialog isOpen={isKeyboardShortcutDialogOpen} onRequestClose={() => setIsKeyboardShortcutDialogOpen(false)}/>
             <SettingsDialog
                 isOpen={isSettingsDialogOpen}
                 onRequestClose={() => setIsSettingsDialogOpen(false)}
@@ -61,6 +64,7 @@ export default function TimeToWork() {
             <Header
                 onSettingsButtonClick={() => setIsSettingsDialogOpen(true)}
                 onAboutButtonClick={() => setIsAboutDialogOpen(true)}
+                onKeyboardShortcutButtonClick={() => setIsKeyboardShortcutDialogOpen(true)}
             />
 
             <div className={'flex-1 flex flex-col justify-between'}>

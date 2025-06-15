@@ -1,6 +1,6 @@
 import { useContext } from "react";
-import { ConfigurationContextType, ReadWriteConfiguration, ReadWriteConfigurationValue } from "@/configuration/Configuration";
-import { ConfigurationContext } from "@/contexts/ConfigurationContext";
+import { ReadWriteConfiguration, ReadWriteConfigurationValue } from "@/configuration/Configuration";
+import { ConfigurationContext, ConfigurationContextType } from "@/contexts/ConfigurationContext";
 
 
 export default function useConfiguration<R extends object>(configExtractor: (config: ConfigurationContextType) => ReadWriteConfiguration<R>): R {

@@ -1,40 +1,57 @@
 import { TimelineMarker as TimelineMarkerType } from "../TimelineTypes";
-import { RequireProperty } from "@/util/UtilTypes";
-
 
 export type TimelineMarkerProps = {
-    marker: RequireProperty<TimelineMarkerType, 'height'>
+    marker: TimelineMarkerType
     position: number
 }
 
 export default function TimelineMarker({ marker, position }: TimelineMarkerProps) {
-    const cssHeight = marker.height * 100;
+    const {
+        title, height, color, filled, className, style,
+        textColor = marker.filled ? "white" : marker.color,
+        labelPosition = "top",
+        labelDistance = '0.1rem'
+    } = marker;
+
+    const cssHeight = (height ?? 1.1) * 100;
+    const translateY = (
+        labelPosition == 'top'
+            ? `calc(-100% - ${labelDistance})`
+            : `calc(100% + ${labelDistance})`
+    );
+    const filledStyles = {
+        backgroundColor: marker.color,
+        borderRadius: "0.5rem",
+        padding: "1px 5px",
+    };
 
     return (
         <div
-            className={marker.className}
+            className={className}
             style={{
                 position: "absolute",
                 borderRadius: "999px",
                 translate: "-50% 0",
-                backgroundColor: marker.color,
+                backgroundColor: color,
                 height: `${cssHeight}%`,
                 top: `${(100 - cssHeight) / 2}%`,
                 width: '2px',
-                left: `${position}%`
+                left: `${position}%`,
+                ...style
             }}
         >
             <div
                 style={{
                     position: "absolute",
-                    color: marker.color,
-                    top: "0",
-                    translate: `-50% calc(-100% - 0.1rem)`,
+                    top: labelPosition == "top" ? "0" : undefined,
+                    bottom: labelPosition == "bottom" ? "0" : undefined,
+                    color: textColor,
+                    translate: `-50% ${translateY}`,
                     userSelect: "none",
-
+                    ...(filled ? filledStyles : {})
                 }}
             >
-                {marker.title}
+                {title}
             </div>
         </div>
     );

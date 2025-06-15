@@ -5,12 +5,13 @@ export type SettingProps = {
     label: ReactNode,
     setting: ((disabled: boolean) => ReactNode) | ReactNode,
     tooltip?: ReactNode,
-    disabled?: boolean
+    disabled?: boolean,
+    noPadding?: boolean
 }
 
 export default function Setting(props: SettingProps) {
     return (
-        <div className={'flex flex-row justify-between items-center py-3 px-4'}>
+        <div className={`flex flex-row justify-between items-center ${!props.noPadding && 'py-3 px-4'}`}>
             <div className={`${props.disabled && 'opacity-60'}`}>
                 {props.label}
             </div>
