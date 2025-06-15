@@ -32,7 +32,10 @@ export default function useOptimalBreakEndTimeMarker(): TimelineMarker | undefin
             time: optimalBreakEndTime,
             title: optimalBreakEndTime.toString(),
             color: TimelineMarkerColors.GREEN,
-            className: 'opacity-50'
+            labelDistance: "-6px",
+            labelPosition: 'bottom',
+            filled: true,
+            height: 1.11
         };
 
     }, [schedule, minBreak, showOptimalBreakTime]);

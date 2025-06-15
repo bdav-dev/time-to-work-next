@@ -33,6 +33,10 @@ export type TimelineMarker = {
     title?: ReactNode,
     height?: number,
     color?: string,
+    textColor?: string,
+    labelPosition?: ('top' | 'bottom'),
+    labelDistance?: string,
+    filled?: boolean,
     className?: string,
     style?: CSSProperties
 }
