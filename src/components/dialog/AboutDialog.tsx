@@ -32,6 +32,7 @@ export default function AboutDialog(props: AboutDialogProps) {
                 <div className={'flex flex-col items-center gap-1.5 mt-4'}>
                     <Image
                         src={darkTheme ? appIconDark : appIconLight}
+                        placeholder={"blur"}
                         alt={""}
                         className={'size-32 rounded-[2rem] border-neumorphic-300 dark:border-neumorphic-700'}
                         style={{

@@ -15,10 +15,13 @@ import ModifyScheduleContextProvider from "@/contexts/ModifyScheduleContext";
 import NotificationProvider from "@/contexts/NotificationContext";
 import BrowserNotificationProvider from "@/contexts/BrowserNotificationContext";
 
-
 export const metadata: Metadata = {
     title: "time-to-work",
     description: "Arbeitszeitdashboard",
+    icons: {
+        icon: '/app-icons/ttw-device-icon.png',
+        apple: '/app-icons/ttw-device-icon.png'
+    }
 };
 
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
