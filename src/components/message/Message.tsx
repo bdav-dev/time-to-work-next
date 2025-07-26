@@ -9,7 +9,8 @@ type MessageProps = {
     progressBarStyles?: CSSProperties,
     onClick?: () => void,
     onRequestClose?: () => void,
-    style?: CSSProperties
+    style?: CSSProperties,
+    className?: string
 }
 
 const MessageTypeToStatusIndicatorMap: { [key in MessageType]: Status } = {
@@ -27,6 +28,7 @@ export default function Message(props: MessageProps) {
                 bg-neumorphic-50 dark:bg-neumorphic-850
                 shadow-xl rounded-2xl overflow-hidden
                 shadow-white-neumorphic-accent-shadow dark:shadow-gray-neumorphic-accent-shadow
+                ${props.className}
             `}
             style={props.style}
             onClick={props.onClick}

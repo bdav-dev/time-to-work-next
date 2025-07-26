@@ -10,7 +10,8 @@ type CheckboxProps = {
     value: boolean,
     setValue: (value: boolean) => void,
     overrideMargin?: boolean,
-    checkboxClassName?: string
+    checkboxClassName?: string,
+    disabled?: boolean
 };
 
 export default function Checkbox(props: CheckboxProps) {
@@ -24,6 +25,7 @@ export default function Checkbox(props: CheckboxProps) {
     return (
         <div className={'flex flex-row items-center'}>
             <NeumorphicButton
+                disabled={props.disabled}
                 blueprint={blueprint}
                 className={`rounded-lg size-8 dark:border-zinc-600 border-zinc-400 border-2 text-center content-center text-xl select-none flex items-center justify-center ${props.checkboxClassName}`}
                 onClick={() => props.setValue(!props.value)}

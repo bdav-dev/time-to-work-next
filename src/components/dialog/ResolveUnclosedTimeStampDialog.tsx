@@ -7,7 +7,7 @@ import Time from "@/time/Time";
 import Frame from "@/components/layout/Frame";
 import ScheduleOperations from "@/schedule/ScheduleOperations";
 import ScheduleCalculations from "@/schedule/ScheduleCalculations";
-import Section from "@/components/layout/Section";
+import Section from "@/components/layout/section/Section";
 import useConfiguration from "@/hooks/configuration/UseConfiguration";
 import TimeComponent from "@/components/time/Time";
 import Settings from "@/components/settings/Settings";
@@ -50,8 +50,27 @@ export default function ResolveUnclosedTimeStampDialog(props: ResolveUnclosedTim
             onRequestClose={() => {}}
             showCloseButton={false}
             closableWithEscKey={false}
+            overrideSize
+            className={"max-w-[95rem]"}
+            footer={
+                <div className={"flex flex-row justify-between w-full"}>
+                    <Button onClick={submit} className={'text-red-500 dark:text-red-400'} overrideMargin>
+                        Zeitstempel verwerfen
+                    </Button>
+
+                    <Button
+                        onClick={submit}
+                        className={isResolved ? 'text-green-500 dark:text-green-400' : ''}
+                        overrideMargin
+                        disabled={!isResolved}
+                    >
+                        Konflikt lösen
+                    </Button>
+                </div>
+
+            }
         >
-            <Section className={'mt-5'}>
+            <Section>
                 Dein letzter Zeitplan enthält einen <span className={'font-bold'}>nicht geschlossenen Zeitstempel</span>.
                 Dadurch kann der neue Zeitsaldo nicht bestimmt werden.
                 <div className={'h-2'}/>
@@ -73,7 +92,7 @@ export default function ResolveUnclosedTimeStampDialog(props: ResolveUnclosedTim
                 }}
             />
 
-            <Frame className={'my-5 flex items-center justify-center gap-2.5'}>
+            <Frame className={'my-3.5 flex items-center justify-center gap-2.5'}>
                 Zeitstempel schließen:
                 <TimePicker
                     value={timeStampCloseTime}
@@ -81,8 +100,8 @@ export default function ResolveUnclosedTimeStampDialog(props: ResolveUnclosedTim
                 />
             </Frame>
 
-            <Section className={'py-3.5 mt-4'}>
-                <div className={'flex gap-2.5 items-center p-3.5'}>
+            <Section className={'py-3 mt-2'}>
+                <div className={'flex gap-2.5 items-center pt-2 px-2.5'}>
                     <StatusIndicator
                         status={isResolved ? 'green' : error ? 'red' : 'yellow'}
                         text={{
@@ -108,6 +127,13 @@ export default function ResolveUnclosedTimeStampDialog(props: ResolveUnclosedTim
                                     />
                                 },
                                 {
+                                    label: 'Zeitsaldo',
+                                    setting: <TimeComponent
+                                        showPositiveSign
+                                        time={workingTimeConfig.timeBalance}
+                                    />
+                                },
+                                {
                                     label: 'restliche Arbeitszeit',
                                     setting: <TimeComponent
                                         time={
@@ -117,13 +143,6 @@ export default function ResolveUnclosedTimeStampDialog(props: ResolveUnclosedTim
                                                 workingTimeConfig.dailyWorkingTime
                                             )
                                         }
-                                    />
-                                },
-                                {
-                                    label: 'Zeitsaldo',
-                                    setting: <TimeComponent
-                                        showPositiveSign
-                                        time={workingTimeConfig.timeBalance}
                                     />
                                 },
                                 {
@@ -145,21 +164,6 @@ export default function ResolveUnclosedTimeStampDialog(props: ResolveUnclosedTim
                     ]}
                 />
             </Section>
-
-            <div className={"flex justify-between gap-3 mt-7"}>
-                <Button onClick={submit} className={'text-red-500 dark:text-red-400'} overrideMargin>
-                    Zeitstempel verwerfen
-                </Button>
-
-                <Button
-                    onClick={submit}
-                    className={'text-green-500 dark:text-green-400'}
-                    overrideMargin
-                    disabled={!isResolved}
-                >
-                    Konflikt lösen
-                </Button>
-            </div>
         </Dialog>
     );
 }

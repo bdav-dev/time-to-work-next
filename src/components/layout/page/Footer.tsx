@@ -1,4 +1,4 @@
-import Hyperlink from "@/components/misc/Hyperlink";
+import Hyperlink from "@/components/misc/link/Hyperlink";
 
 export default function Footer() {
 

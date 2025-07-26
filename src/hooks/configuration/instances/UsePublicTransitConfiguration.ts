@@ -6,6 +6,7 @@ import useConfiguration from "@/hooks/configuration/UseConfiguration";
 import { createSerialization, Serialization } from "@/serialization/Serialization";
 import { PublicTransitType, PublicTransitTypes } from "@/publicTransit/PublicTransitType";
 import { ReadWriteConfiguration } from "@/configuration/Configuration";
+import { optional } from "@/util/OptionalUtils";
 
 
 export type PublicTransitConfiguration = {
@@ -62,7 +63,7 @@ const PublicTransitConfigurationSerialization: Serialization<PublicTransitConfig
         type: PublicTransitTypes.ofIdentifier(target.type),
         startTime: Time.ofString(target.startTime),
         period: TimeSpan.ofString(target.period),
-        travelTime: target.travelTime ? TimeSpan.ofString(target.travelTime) : undefined,
+        travelTime: optional(target.travelTime).map(TimeSpan.ofString).orUndefined(),
         gracePeriod: TimeSpan.ofString(target.gracePeriod)
     })
 });

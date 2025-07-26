@@ -10,7 +10,7 @@ import useSchedule from "@/hooks/UseSchedule";
 import Time from "@/time/Time";
 
 
-export default function UnclosedTimeStampWatcher() {
+export default function DayChangedWatcher() {
     const now = useTime();
     const { schedule, setSchedule, dateOfSchedule, setDateOfSchedule } = useSchedule();
 
@@ -19,27 +19,34 @@ export default function UnclosedTimeStampWatcher() {
 
     const [isResolveUnclosedTimestampDialogOpen, setIsResolveUnclosedTimestampDialogOpen] = useState(false);
 
-    useEffect(() => checkForDayChange(), [now]);
+    useEffect(() => {
+        if (didDayChange()) {
+            handleDayChange();
+        }
+    }, [now]);
 
-    function checkForDayChange() {
-        const currentDateAsString = getCurrentDateAsString();
+    function didDayChange() {
+        return getCurrentDateAsString() == dateOfSchedule;
+    }
 
-        if (currentDateAsString == dateOfSchedule || !timeBalance || !dailyWorkingTime) {
+    function handleDayChange() {
+        setDateOfSchedule(getCurrentDateAsString());
+
+        if (!timeBalance || !dailyWorkingTime) {
             return;
         }
 
         if (ScheduleCalculations.hasOpenTimeStamp(schedule)) {
             setIsResolveUnclosedTimestampDialogOpen(true);
         } else {
-            adjustTimeBalanceAndResetSchedule(schedule);
+            adjustTimeBalanceAndClearSchedule(schedule);
         }
     }
 
-    function adjustTimeBalanceAndResetSchedule(submittedSchedule: Schedule) {
+    function adjustTimeBalanceAndClearSchedule(submittedSchedule: Schedule) {
         if (!timeBalance || !dailyWorkingTime) {
-            return;
+            throw new Error("Time balance and daily working time required.");
         }
-
         if (ScheduleCalculations.hasOpenTimeStamp(submittedSchedule)) {
             throw new Error("Cannot adjust time balance since schedule has unclosed time stamp.");
         }
@@ -52,18 +59,18 @@ export default function UnclosedTimeStampWatcher() {
                 timeBalance
             )
         );
-
         setSchedule(() => []);
-        setDateOfSchedule(getCurrentDateAsString());
     }
 
     return (
         <ResolveUnclosedTimeStampDialog
             isOpen={isResolveUnclosedTimestampDialogOpen}
-            onSubmit={submittedSchedule => {
-                adjustTimeBalanceAndResetSchedule(submittedSchedule);
-                setIsResolveUnclosedTimestampDialogOpen(false);
-            }}
+            onSubmit={
+                submittedSchedule => {
+                    adjustTimeBalanceAndClearSchedule(submittedSchedule);
+                    setIsResolveUnclosedTimestampDialogOpen(false);
+                }
+            }
         />
     );
 

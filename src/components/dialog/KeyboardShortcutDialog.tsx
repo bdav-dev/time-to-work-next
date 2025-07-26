@@ -1,5 +1,5 @@
 import Dialog from "@/components/primitives/Dialog";
-import Section from "@/components/layout/Section";
+import Section from "@/components/layout/section/Section";
 import KeyboardShortcut, { ShortcutSteps } from "@/components/shortcuts/KeyboardShortcut";
 import Setting from "@/components/settings/Setting";
 import Underline from "@/components/misc/Underline";

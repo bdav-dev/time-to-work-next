@@ -6,6 +6,7 @@ import { MaterialSymbols } from "@/icon/MaterialSymbols";
 
 type DialogProps = {
     title?: ReactNode,
+    footer?: ReactNode,
     isOpen: boolean,
     onRequestClose: () => void,
     overrideSize?: boolean,
@@ -41,7 +42,7 @@ export default function Dialog({ closableWithEscKey = true, ...props }: DialogPr
     return (
         <dialog
             onClose={props.onRequestClose}
-            className={'w-full h-screen p-9 bg-transparent content-center z-40'}
+            className={'w-full h-screen p-4 bg-transparent content-center z-40'}
             ref={dialog}
             onCancel={closableWithEscKey ? undefined : event => event.preventDefault()}
         >
@@ -54,19 +55,20 @@ export default function Dialog({ closableWithEscKey = true, ...props }: DialogPr
                     text-neumorphic-700 dark:text-neumorphic-150 
                     stroke-neumorphic-700 dark:stroke-neumorphic-150
                     relative
+                    max-h-full
                     ${props.className}
                 `}
             >
-                <div className={'flex justify-start'}>
+                <div className={'flex justify-start items-center'}>
                     {
                         props.title &&
-                        <h1 className={'text-2xl font-bold px-7 pt-7'}>
+                        <h1 className={'text-2xl font-bold p-7'}>
                             {props.title}
                         </h1>
                     }
                     {
                         (props.showCloseButton ?? true) &&
-                        <div className={'px-3 pt-3 ml-auto'}>
+                        <div className={'p-3 ml-auto'}>
                             <Button
                                 className={'size-12 text-xl'}
                                 circular
@@ -81,9 +83,16 @@ export default function Dialog({ closableWithEscKey = true, ...props }: DialogPr
                     }
                 </div>
 
-                <div className={'flex flex-col px-7 pb-7 flex-1'}>
+                <div className={`flex flex-col px-7 flex-1 h-full overflow-y-auto ${!props.footer && 'pb-7'}`}>
                     {props.children}
                 </div>
+
+                {
+                    props.footer &&
+                    <div className={"flex flex-row px-9 pb-9 pt-6 w-full"}>
+                        {props.footer}
+                    </div>
+                }
             </div>
         </dialog>
     );

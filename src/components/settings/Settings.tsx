@@ -1,12 +1,13 @@
 import Setting, { SettingProps } from "@/components/settings/Setting";
 import HorizontalRuler from "@/components/layout/HorizontalRuler";
 import { ReactNode } from "react";
+import SettingSectionTitle from "@/components/settings/SettingSectionTitle";
 
 
 type SettingSection = {
     title?: ReactNode,
     hideHorizontalRuler?: boolean,
-    settings: SettingProps[]
+    settings: ReactNode | SettingProps[]
 }
 
 type SettingsProps = {
@@ -26,25 +27,19 @@ export default function Settings(props: SettingsProps) {
                             <div key={sectionIndex}>
                                 {
                                     (section?.title || !section?.hideHorizontalRuler) &&
-                                    <div className={'flex flex-row items-center gap-2.5 px-1 min-h-8'}>
-                                        {
-                                            section.title &&
-                                            <div className={'text-xl font-bold'}>
-                                                {section.title}
-                                            </div>
-                                        }
-                                        {
-                                            !section?.hideHorizontalRuler &&
-                                            <HorizontalRuler className={'flex-1'}/>
-                                        }
-                                    </div>
+                                    <SettingSectionTitle
+                                        title={section.title}
+                                        hideHorizontalRuler={section.hideHorizontalRuler}
+                                    />
                                 }
                                 {
-                                    section.settings.map(
-                                        (setting, settingIndex) => (
-                                            <Setting key={settingIndex} {...setting}/>
+                                    Array.isArray(section.settings)
+                                        ? section.settings.map(
+                                            (setting, settingIndex) => (
+                                                <Setting key={settingIndex} {...setting}/>
+                                            )
                                         )
-                                    )
+                                        : section.settings
                                 }
                             </div>
                         )

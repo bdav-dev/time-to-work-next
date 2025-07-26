@@ -19,36 +19,38 @@ export default function TimelineSettings() {
 
     const [startTime, setStartTime] = useMutatingConfigurationValue(config => config.timeline.startTime);
     const [endTime, setEndTime] = useMutatingConfigurationValue(config => config.timeline.endTime);
-    const [startTimeInput, setStartTimeInput, applyStartTimeFallback, isStartTimeInputInvalid] = useInputGuard<Time | undefined, Time>(
-        startTimeInput => {
-            const createFallback = () => (
-                compare(DefaultTimelineConfiguration.startTime, 'greaterOrEqualThan', endTime)
-                    ? endTime.subtract(TimeSpan.ofMinutes(1))
-                    : DefaultTimelineConfiguration.startTime
-            );
+    const [startTimeInput, setStartTimeInput, applyStartTimeFallback, isStartTimeInputInvalid] =
+        useInputGuard<Time | undefined, Time>({
+            guard: startTimeInput => {
+                const createFallback = () => (
+                    compare(DefaultTimelineConfiguration.startTime, 'greaterOrEqualThan', endTime)
+                        ? endTime.subtract(TimeSpan.ofMinutes(1))
+                        : DefaultTimelineConfiguration.startTime
+                );
 
-            return (!startTimeInput || compare(startTimeInput, 'greaterOrEqualThan', endTime))
-                ? { fallback: createFallback() }
-                : { value: startTimeInput };
-        },
-        startTime => startTime,
-        [startTime, setStartTime]
-    );
-    const [endTimeInput, setEndTimeInput, applyEndTimeFallback, isEndTimeInputInvalid] = useInputGuard<Time | undefined, Time>(
-        endTimeInput => {
-            const createFallback = () => (
-                compare(DefaultTimelineConfiguration.endTime, 'lessOrEqualThan', startTime)
-                    ? startTime.add(TimeSpan.ofMinutes(1))
-                    : DefaultTimelineConfiguration.endTime
-            );
+                return (!startTimeInput || compare(startTimeInput, 'greaterOrEqualThan', endTime))
+                    ? { fallback: createFallback() }
+                    : { value: startTimeInput };
+            },
+            encode: startTime => startTime,
+            state: [startTime, setStartTime]
+        });
+    const [endTimeInput, setEndTimeInput, applyEndTimeFallback, isEndTimeInputInvalid] =
+        useInputGuard<Time | undefined, Time>({
+            guard: endTimeInput => {
+                const createFallback = () => (
+                    compare(DefaultTimelineConfiguration.endTime, 'lessOrEqualThan', startTime)
+                        ? startTime.add(TimeSpan.ofMinutes(1))
+                        : DefaultTimelineConfiguration.endTime
+                );
 
-            return (!endTimeInput || compare(endTimeInput, 'lessOrEqualThan', startTime))
-                ? { fallback: createFallback() }
-                : { value: endTimeInput };
-        },
-        endTime => endTime,
-        [endTime, setEndTime]
-    );
+                return (!endTimeInput || compare(endTimeInput, 'lessOrEqualThan', startTime))
+                    ? { fallback: createFallback() }
+                    : { value: endTimeInput };
+            },
+            encode: endTime => endTime,
+            state: [endTime, setEndTime]
+        });
     const [amountOfTimesteps, setAmountOfTimesteps] = useMutatingConfigurationValue(config => config.timeline.amountOfTimeSteps);
     const [amountOfSubTimesteps, setAmountOfSubTimesteps] = useMutatingConfigurationValue(config => config.timeline.amountOfSubTimeSteps);
 
@@ -59,7 +61,9 @@ export default function TimelineSettings() {
 
     return (
         <>
-            <ConfiguredTimeline schedule={schedule}/>
+            <div className={"mx-1.5"}>
+                <ConfiguredTimeline schedule={schedule}/>
+            </div>
 
             <Settings
                 className={'mt-2'}

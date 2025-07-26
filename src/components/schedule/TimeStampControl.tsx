@@ -1,4 +1,4 @@
-import Section from "@/components/layout/Section";
+import Section from "@/components/layout/section/Section";
 import TimeComponent from "@/components/time/Time";
 import Time from "@/time/Time";
 import KeyValueSection from "@/components/layout/KeyValueSection";
