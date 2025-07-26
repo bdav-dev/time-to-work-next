@@ -1,10 +1,15 @@
 import Dialog from "@/components/primitives/Dialog";
-import Elevation from "@/components/layout/Elevation";
-import Hyperlink from "@/components/misc/Hyperlink";
-import Section from "@/components/layout/Section";
+import Hyperlink from "@/components/misc/link/Hyperlink";
 import MaterialSymbol from "@/components/icon/MaterialSymbol";
 import { MaterialSymbols } from "@/icon/MaterialSymbols";
-import VerticalRuler from "@/components/layout/VerticalRuler";
+import Image from "next/image";
+import appIconDark from '@/../public/app-icons/ttw-app-icon-dark.png';
+import appIconLight from '@/../public/app-icons/ttw-app-icon-light.png';
+import { useTheme } from "@/hooks/UseTheme";
+import SocialLink from "@/components/misc/link/SocialLink";
+import GitHubIcon from "@/icon/GitHubIcon";
+import IconSection from "@/components/layout/section/IconSection";
+
 
 type AboutDialogProps = {
     isOpen: boolean,
@@ -12,52 +17,64 @@ type AboutDialogProps = {
 }
 
 export default function AboutDialog(props: AboutDialogProps) {
+    const { darkTheme } = useTheme();
+
     return (
         <Dialog
             isOpen={props.isOpen}
             onRequestClose={props.onRequestClose}
             title={'Über'}
             overrideSize
-            className={'max-w-[50rem] min-h-[35rem]'}
+            className={"w-fit"}
         >
-            <div className={'flex flex-col items-center justify-center gap-6 flex-1'}>
-                <div className={'flex flex-col items-center gap-1'}>
-                    <Elevation className={'text-5xl'}>
-                        ttw
-                    </Elevation>
+            <div className={'flex flex-col items-center justify-center gap-7 flex-1'}>
+
+                <div className={'flex flex-col items-center gap-1.5 mt-4'}>
+                    <Image
+                        src={darkTheme ? appIconDark : appIconLight}
+                        alt={""}
+                        className={'size-32 rounded-[2rem] border-neumorphic-300 dark:border-neumorphic-700'}
+                        style={{
+                            filter: darkTheme
+                                ? 'drop-shadow(0 -3px 9px rgb(0 0 0 / 0.3))'
+                                : 'drop-shadow(0 3px 6px rgb(0 0 0 / 0.175))'
+                        }}
+                    />
                     <div className={'font-bold text-4xl'}>time-to-work</div>
                     <div className={'text-xl'}>Arbeitszeitdashboard</div>
-                </div>
-
-                <div className={'flex flex-col items-center gap-1'}>
-                    <div>Besuche dieses Projekt</div>
-
-                    <div className={'flex flex-row gap-6'}>
-                        <Hyperlink href={'https://www.bdav.dev/code/time-to-work-next'} openInNewTab>
-                            Website
-                        </Hyperlink>
-                        <Hyperlink href={'https://github.com/bdav-dev/time-to-work-next'} openInNewTab>
-                            GitHub
-                        </Hyperlink>
-                    </div>
-                </div>
-
-                <div>
                     Version 0.0.1-SNAPSHOT
                 </div>
 
-                {
-                    // TODO: Explain that data is only stored in the browser
-                }
-                <Section className={'flex items-center gap-3'}>
-                    <div className={'flex gap-1'}>
-                        <MaterialSymbol symbol={MaterialSymbols.DARK_MODE}/>
-                        <MaterialSymbol symbol={MaterialSymbols.SETTINGS}/>
-                        <MaterialSymbol symbol={MaterialSymbols.TIMER}/>
-                    </div>
-                    <VerticalRuler className={'h-7'}/>
-                    Dieses Projekt nutzt <Hyperlink href={'https://fonts.google.com/icons'} openInNewTab>Google Material Symbole</Hyperlink>
-                </Section>
+                <div className={'flex flex-row gap-5'}>
+                    <SocialLink
+                        href={'https://www.bdav.dev/code/time-to-work'}
+                        icon={({ className }) => <MaterialSymbol symbol={MaterialSymbols.CAPTIVE_PORTAL} className={className}/>}
+                        text={"bdav.dev"}
+                    />
+                    <SocialLink
+                        href={'https://github.com/bdav-dev/time-to-work-next'}
+                        icon={GitHubIcon}
+                        text={"GitHub"}
+                    />
+                </div>
+
+                <div className={"flex flex-col gap-2.5"}>
+                    <IconSection icon={<MaterialSymbol symbol={MaterialSymbols.LOCK}/>}>
+                        Daten werden ausschließlich in deinem Browser gespeichert.
+                    </IconSection>
+
+                    <IconSection
+                        icon={
+                            <>
+                                <MaterialSymbol symbol={MaterialSymbols.DARK_MODE}/>
+                                <MaterialSymbol symbol={MaterialSymbols.SETTINGS}/>
+                                <MaterialSymbol symbol={MaterialSymbols.TIMER}/>
+                            </>
+                        }
+                    >
+                        Dieses Projekt nutzt <Hyperlink href={'https://fonts.google.com/icons'} openInNewTab>Material Symbole von Google</Hyperlink>.
+                    </IconSection>
+                </div>
             </div>
         </Dialog>
     );

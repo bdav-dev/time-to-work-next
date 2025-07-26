@@ -9,7 +9,7 @@ import { ScheduleBlockTimeType } from "@/schedule/ScheduleBlockTimeType";
 import TimeInterval from "@/time/TimeInterval";
 import { DisplayableError } from "@/error/DisplayableError";
 import ScheduleBlockTimeTypeSelect from "@/components/select/ScheduleBlockTimeTypeSelect";
-import Section from "@/components/layout/Section";
+import Section from "@/components/layout/section/Section";
 import StatusIndicator from "@/components/misc/StatusIndicator";
 import Frame from "@/components/layout/Frame";
 import ConfiguredTimeline from "@/components/timeline/ConfiguredTimeline";
@@ -100,6 +100,21 @@ export default function EditScheduleBlockDialog(props: EditScheduleBlockDialogPr
             isOpen={props.isOpen}
             onRequestClose={props.onRequestClose}
             title={`${props.block.endTime ? 'Zeitintervall' : 'Zeitstempel'} bearbeiten`}
+            footer={
+                <div className={'flex justify-between gap-3 w-full'}>
+                    <Button onClick={closeAndRemoveBlock} overrideMargin className={'text-red-500 dark:text-red-400'}>
+                        Löschen
+                    </Button>
+
+                    <Button
+                        overrideMargin
+                        disabled={!isReadyToSubmit}
+                        onClick={closeAndSaveBlock}
+                    >
+                        Speichern
+                    </Button>
+                </div>
+            }
         >
             <ConfiguredTimeline
                 schedule={timeline.previewSchedule}
@@ -109,7 +124,7 @@ export default function EditScheduleBlockDialog(props: EditScheduleBlockDialogPr
                 overrideConfiguration={{ height: "7rem" }}
             />
 
-            <div className={'mt-5 flex gap-2.5 flex-col md:flex-row'}>
+            <div className={'mt-5 flex gap-2.5 flex-col md:flex-row mb-1'}>
                 <Frame overridePadding className={'flex-1 p-4 flex flex-col items-center justify-center gap-1.5 flex-wrap'}>
                     <div className={'flex flex-row gap-2.5 items-center'}>
                         <TimePicker
@@ -157,21 +172,7 @@ export default function EditScheduleBlockDialog(props: EditScheduleBlockDialogPr
                     }
                 </Section>
             </div>
-
-
-            <div className={'flex justify-between gap-3 mt-8'}>
-                <Button onClick={closeAndRemoveBlock} overrideMargin className={'text-red-500 dark:text-red-400'}>
-                    Löschen
-                </Button>
-
-                <Button
-                    overrideMargin
-                    disabled={!isReadyToSubmit}
-                    onClick={closeAndSaveBlock}
-                >
-                    Speichern
-                </Button>
-            </div>
         </Dialog>
-    );
+    )
+        ;
 }

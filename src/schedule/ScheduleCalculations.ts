@@ -1,6 +1,7 @@
 import TimeSpan from "@/time/TimeSpan";
 import { Schedule, ScheduleBlock, scheduleBlockEquals } from "@/schedule/Schedule";
 import Time from "@/time/Time";
+import { compare } from "@/util/CompareUtils";
 
 
 export default class ScheduleCalculations {
@@ -36,14 +37,27 @@ export default class ScheduleCalculations {
         return dailyWorkingTime.subtract(this.getSumOfWorkTime(schedule, now));
     }
 
-    static getEndOfWork(schedule: Schedule, now: Time, dailyWorkingTime: TimeSpan): Time | undefined {
+    static getEndOfWork(schedule: Schedule, now: Time, dailyWorkingTime: TimeSpan, minBreak?: TimeSpan): Time | undefined {
         const remainingTimeToWork = this.getRemainingTimeToWork(schedule, now, dailyWorkingTime);
+
+        const calculateMinBreakOverhead = () => {
+            if (!minBreak) {
+                return;
+            }
+
+            const breakTime = this.getSumOfBreakTime(schedule, now);
+            if (compare(breakTime, "lessThan", minBreak)) {
+                return minBreak.subtract(breakTime);
+            }
+        }
 
         if (remainingTimeToWork.isNegative()) {
             return undefined;
         }
 
-        return now.add(remainingTimeToWork);
+        return now
+            .add(remainingTimeToWork)
+            .add(calculateMinBreakOverhead() ?? TimeSpan.empty());
     }
 
     static getNewTimeBalance(schedule: Schedule, now: Time, dailyWorkingTime: TimeSpan, timeBalance: TimeSpan) {

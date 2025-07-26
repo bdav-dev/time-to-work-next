@@ -13,10 +13,11 @@ import useEffectOnFirstTimeVisit from "@/hooks/UseEffectOnFirstTimeVisit";
 import useMessaging from "@/hooks/UseMessaging";
 import Header from "@/components/layout/page/Header";
 import InformationTable from "@/components/misc/InformationTable";
-import UnclosedTimeStampWatcher from "@/unclosedTimeStamp/UnclosedTimeStampWatcher";
+import DayChangedWatcher from "@/watchers/DayChangedWatcher";
 import useOptimalBreakEndTimeMarker from "@/hooks/UseOptimalBreakEndTimeMarker";
 import AboutDialog from "@/components/dialog/AboutDialog";
 import KeyboardShortcutDialog from "@/components/dialog/KeyboardShortcutDialog";
+import Notifications from "@/components/notification/Notifications";
 
 
 export default function TimeToWork() {
@@ -42,8 +43,8 @@ export default function TimeToWork() {
 
     return (
         <div className={'relative flex-1 flex flex-col'}>
-
             <Messaging/>
+            <Notifications/>
 
             {
                 selectedScheduleBlock &&
@@ -59,7 +60,7 @@ export default function TimeToWork() {
                 isOpen={isSettingsDialogOpen}
                 onRequestClose={() => setIsSettingsDialogOpen(false)}
             />
-            <UnclosedTimeStampWatcher/>
+            <DayChangedWatcher/>
 
             <Header
                 onSettingsButtonClick={() => setIsSettingsDialogOpen(true)}

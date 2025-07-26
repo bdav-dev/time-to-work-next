@@ -28,6 +28,9 @@ export default function ThemeProvider({ children }: ContextProviderProps) {
         document.documentElement.style.setProperty(
             '--neumorphic-dark-shadow-color', (darkTheme ? "var(--gray-neumorphic-dark-shadow-color)" : "var(--white-neumorphic-dark-shadow-color)")
         );
+        document.documentElement.style.setProperty(
+            '--neumorphic-scrollbar-color', (darkTheme ? "var(--gray-neumorphic-scrollbar-color)" : "var(--white-neumorphic-scrollbar-color)")
+        );
     }, [darkTheme]);
 
     return (

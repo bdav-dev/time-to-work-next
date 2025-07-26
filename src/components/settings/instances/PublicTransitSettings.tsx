@@ -6,7 +6,7 @@ import useMutatingConfigurationValueWithFallback from "@/hooks/configuration/Use
 import { DefaultPublicTransitConfiguration, useVerifiedPublicTransitConfiguration } from "@/hooks/configuration/instances/UsePublicTransitConfiguration";
 import PublicTransitInformationBoard from "@/components/publicTransit/PublicTransitInformationBoard";
 import useTime from "@/hooks/UseTime";
-import Section from "@/components/layout/Section";
+import Section from "@/components/layout/section/Section";
 import TimeSpan from "@/time/TimeSpan";
 import PublicTransitTypeSelect from "@/components/select/PublicTransitTypeSelect";
 import { compare } from "@/util/CompareUtils";

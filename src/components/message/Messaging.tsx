@@ -7,7 +7,7 @@ export default function Messaging() {
 
     return (
         message &&
-        <div className={'absolute top-0 left-1/2 -translate-x-1/2 mt-3 z-50'}>
+        <div className={'absolute top-0 left-1/2 -translate-x-1/2 pt-3 z-50 px-20 pb-20 overflow-hidden pointer-events-none'}>
             {
                 <Message
                     message={message}
@@ -19,6 +19,7 @@ export default function Messaging() {
                     onRequestClose={clear}
                     onClick={() => setDoAutoClear(false)}
                     style={animationStyles}
+                    className={"pointer-events-auto"}
                 />
             }
         </div>

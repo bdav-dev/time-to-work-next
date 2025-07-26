@@ -57,10 +57,12 @@ export function convertConfigurationToReadWriteConfiguration<T extends object>(
             .reduce(
                 (readWriteConfiguration, [key, value]) => ({
                     ...readWriteConfiguration,
-                    [key]: {
-                        value,
-                        set: (value: any) => setConfigurationValue(setConfiguration, key as keyof T, value)
-                    }
+                    [key]: key.startsWith("_")
+                        ? convertConfigurationToReadWriteConfiguration(value, setConfiguration)
+                        : {
+                            value,
+                            set: (value: any) => setConfigurationValue(setConfiguration, key as keyof T, value)
+                        }
                 }),
                 {}
             ) as ReadWriteConfiguration<T>

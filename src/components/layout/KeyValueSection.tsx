@@ -1,4 +1,4 @@
-import Section from "@/components/layout/Section";
+import Section from "@/components/layout/section/Section";
 import { ReactNode } from "react";
 
 type KeyValueSectionProps = {

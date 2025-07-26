@@ -1,11 +1,4 @@
-import {
-    applyMaterialSymbolDefaults,
-    MaterialSymbolInstance,
-    MaterialSymbolInstanceDefaults,
-    MaterialSymbolInstances,
-    MaterialSymbols,
-    MaterialSymbolStyle
-} from "@/icon/MaterialSymbols";
+import { applyMaterialSymbolDefaults, MaterialSymbolInstance, MaterialSymbolInstanceDefaults, MaterialSymbolInstances, MaterialSymbols, MaterialSymbolStyle } from "@/icon/MaterialSymbols";
 import { CSSProperties } from "react";
 
 
@@ -51,5 +44,5 @@ export default function MaterialSymbol(
         return undefined;
     }
 
-    return symbolInstance.svg(className, style);
+    return symbolInstance.svg({ className, style });
 }

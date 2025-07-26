@@ -1,4 +1,4 @@
-import Section from "@/components/layout/Section";
+import Section from "@/components/layout/section/Section";
 import TimeComponent from "@/components/time/Time";
 import ScheduleCalculations from "@/schedule/ScheduleCalculations";
 import PublicTransitInformationBoard from "@/components/publicTransit/PublicTransitInformationBoard";
@@ -8,9 +8,11 @@ import { useVerifiedPublicTransitConfiguration } from "@/hooks/configuration/ins
 import useSchedule from "@/hooks/UseSchedule";
 import useTime from "@/hooks/UseTime";
 import TimeBalanceInformationBoard from "@/components/timeBalance/TimeBalanceInformationBoard";
+import useConfigurationValue from "@/hooks/configuration/UseConfigurationValue";
 
 export default function InformationTable() {
     const workingTimeConfig = useConfiguration(config => config.workingTime);
+    const minBreak = useConfigurationValue(config => config.workingTime.minBreak);
     const publicTransitConfig = useVerifiedPublicTransitConfiguration();
     const { schedule } = useSchedule();
     const now = useTime();
@@ -36,7 +38,16 @@ export default function InformationTable() {
                     </Section>,
                     workingTimeConfig.dailyWorkingTime &&
                     <Section>
-                        <TimeComponent time={ScheduleCalculations.getEndOfWork(schedule, now, workingTimeConfig.dailyWorkingTime)}/>
+                        <TimeComponent
+                            time={
+                                ScheduleCalculations.getEndOfWork(
+                                    schedule,
+                                    now,
+                                    workingTimeConfig.dailyWorkingTime,
+                                    minBreak
+                                )
+                            }
+                        />
                     </Section>,
                     workingTimeConfig.timeBalance &&
                     <Section className={'flex justify-center'}>

@@ -9,6 +9,7 @@ import { TimelineBlockContent } from "@/components/timeline/TimelineBlockContent
 import NeumorphicDiv from "@/components/primitives/neumorphic/NeumorphicDiv";
 import { NeumorphicBlueprintFactory } from "@/neumorphic/NeumorphicStyle";
 import { TimelineMarkerColors } from "@/components/timeline/TimelineColors";
+import Time from "@/components/time/Time";
 
 type ConfiguredTimelineProps = {
     schedule: Schedule,
@@ -39,7 +40,7 @@ export default function ConfiguredTimeline({ showCurrentTimeMarker = true, ...pr
     return (
         <NeumorphicDiv
             blueprint={NeumorphicBlueprintFactory.createLarge()}
-            className={"rounded-3xl"}
+            className={`rounded-3xl`}
             style={{ marginBottom: props.overrideMargin?.bottom ?? '36px', marginTop: props.overrideMargin?.top ?? '33px' }}
         >
             <Timeline
@@ -48,7 +49,13 @@ export default function ConfiguredTimeline({ showCurrentTimeMarker = true, ...pr
                 markers={
                     [
                         ...props.markers ?? [],
-                        ...showCurrentTimeMarker ? [{ title: "Jetzt", time: now, color: TimelineMarkerColors.RED }] : [],
+                        ...!showCurrentTimeMarker ? [] : [
+                            {
+                                title: <Time time={now}/>,
+                                time: now,
+                                color: TimelineMarkerColors.RED
+                            }
+                        ],
                     ]
                 }
                 configuration={{

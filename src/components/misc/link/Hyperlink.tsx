@@ -15,7 +15,7 @@ export default function Hyperlink(props: HyperlinkProps) {
     return (
         <Link
             href={props.href}
-            className={`${props.className} underline`}
+            className={`${props.className} hover:underline`}
             target={props.openInNewTab ? "_blank" : "_self"}
             rel="noopener noreferrer"
         >

@@ -12,6 +12,8 @@ import ConfigurationProvider from "@/contexts/ConfigurationContext";
 import Footer from "@/components/layout/page/Footer";
 import { CascadiaCode } from "@/font/CascadiaCode";
 import ModifyScheduleContextProvider from "@/contexts/ModifyScheduleContext";
+import NotificationProvider from "@/contexts/NotificationContext";
+import BrowserNotificationProvider from "@/contexts/BrowserNotificationContext";
 
 
 export const metadata: Metadata = {
@@ -33,7 +35,7 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
                             bg-neumorphic-100 dark:bg-neumorphic-750 
                             text-neumorphic-700 dark:text-neumorphic-150 
                             stroke-neumorphic-700 dark:stroke-neumorphic-150
-                            fill-neumorphic-700 dark:fill-neumorphic-150 
+                            fill-neumorphic-700 dark:fill-neumorphic-150
                         `}
                     >
                         <div className={'flex-1 flex flex-col'}>
@@ -55,11 +57,15 @@ function ContextProvider({ children }: { children: ReactNode }) {
             <TimeProvider>
                 <ScheduleProvider>
                     <MessageProvider>
-                        <ConfigurationProvider>
-                            <ModifyScheduleContextProvider>
-                                {children}
-                            </ModifyScheduleContextProvider>
-                        </ConfigurationProvider>
+                        <BrowserNotificationProvider>
+                            <NotificationProvider>
+                                <ConfigurationProvider>
+                                    <ModifyScheduleContextProvider>
+                                        {children}
+                                    </ModifyScheduleContextProvider>
+                                </ConfigurationProvider>
+                            </NotificationProvider>
+                        </BrowserNotificationProvider>
                     </MessageProvider>
                 </ScheduleProvider>
             </TimeProvider>

@@ -2,6 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+    background-color: var(--neumorphic-background-color);
+}
+
+body {
+    scrollbar-color: var(--neumorphic-scrollbar-color) transparent;
+    scrollbar-width: thin;
+}
+
 @keyframes grow-relative-width {
     0% {
         width: 0;
@@ -26,6 +35,24 @@
     }
     100% {
         translate: 0 -125%;
+    }
+}
+
+@keyframes notification-appear {
+    0% {
+        translate: 125% 0;
+    }
+    100% {
+        translate: 0 0;
+    }
+}
+
+@keyframes notification-disappear {
+    0% {
+        translate: 0 0;
+    }
+    100% {
+        translate: 125% 0;
     }
 }
 

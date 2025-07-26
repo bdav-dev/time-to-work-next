@@ -21,8 +21,8 @@ export default function TimelineMarker({ marker, position }: TimelineMarkerProps
     );
     const filledStyles = {
         backgroundColor: marker.color,
-        borderRadius: "0.5rem",
-        padding: "1px 5px",
+        borderRadius: "0.4rem",
+        padding: "0 4px",
     };
 
     return (

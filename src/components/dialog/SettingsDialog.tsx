@@ -6,6 +6,7 @@ import TimelineSettings from "@/components/settings/instances/TimelineSettings";
 import PublicTransitSettings from "@/components/settings/instances/PublicTransitSettings";
 import ThemeToggle from "@/components/theme/ThemeToggle";
 import WorkingTimeSettings from "@/components/settings/instances/WorkingTimeSettings";
+import NotificationSettings from "@/components/settings/instances/NotificationSettings";
 
 type SettingsDialogProps = {
     isOpen: boolean,
@@ -21,10 +22,10 @@ export default function SettingsDialog(props: SettingsDialogProps) {
             onRequestClose={props.onRequestClose}
             title={'Einstellungen'}
             overrideSize
-            className={'max-w-[95rem] min-h-[51rem]'}
+            className={'max-w-[95rem] h-[51rem]'}
         >
-            <div className={'flex flex-row gap-2 flex-1'}>
-                <div className={'flex flex-col justify-between'}>
+            <div className={'flex flex-row gap-2 flex-1 max-h-full'}>
+                <div className={'flex flex-col justify-between mt-1.5'}>
                     <SegmentedControls
                         segments={Object.values(SettingsSegments)}
                         selection={selectedSettings}
@@ -36,47 +37,47 @@ export default function SettingsDialog(props: SettingsDialogProps) {
                     <ThemeToggle/>
                 </div>
 
-                <Frame className={'flex flex-col flex-1'}>
+                <Frame className={'flex flex-col flex-1 '}>
                     <div className={'text-2xl font-bold'}>
                         {selectedSettings.displayAs}
                     </div>
-                    {SettingViewMap[selectedSettings.value]}
+                    <div className={'overflow-y-auto'}>
+                        {SettingViewMap[selectedSettings.value]}
+                    </div>
                 </Frame>
             </div>
         </Dialog>
     );
 }
 
-type Settings = 'workingTime' | 'timeline' | 'publicTransit';
+type Settings = 'workingTime' | 'timeline' | 'publicTransit' | 'notifications';
 
 const SettingsSegments: { [key in Settings]: Segment<Settings> } = {
-    /* TODO
-    general: {
-        id: 0,
-        value: "general",
-        displayAs: "Allgemein"
-    },
-    */
     workingTime: {
         id: 1,
         value: "workingTime",
         displayAs: "Arbeitszeit"
     },
     timeline: {
-        id: 3,
+        id: 2,
         value: "timeline",
         displayAs: "Timeline"
     },
     publicTransit: {
-        id: 5,
+        id: 3,
         value: "publicTransit",
         displayAs: "Rückfahrt mit ÖPNV"
+    },
+    notifications: {
+        id: 4,
+        value: "notifications",
+        displayAs: "Benachrichtigungen"
     }
 };
 
 const SettingViewMap: { [key in Settings]: ReactNode } = {
     timeline: <TimelineSettings/>,
     publicTransit: <PublicTransitSettings/>,
-    //general: <></>,
-    workingTime: <WorkingTimeSettings/>
+    workingTime: <WorkingTimeSettings/>,
+    notifications: <NotificationSettings/>
 }
