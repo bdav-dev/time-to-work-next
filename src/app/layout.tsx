@@ -15,10 +15,9 @@ import ModifyScheduleContextProvider from "@/contexts/ModifyScheduleContext";
 import NotificationProvider from "@/contexts/NotificationContext";
 import BrowserNotificationProvider from "@/contexts/BrowserNotificationContext";
 
-
 export const metadata: Metadata = {
     title: "time-to-work",
-    description: "Arbeitszeitdashboard",
+    description: "Arbeitszeitdashboard"
 };
 
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
