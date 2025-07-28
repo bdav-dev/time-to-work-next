@@ -26,7 +26,7 @@ export default function DayChangedWatcher() {
     }, [now]);
 
     function didDayChange() {
-        return getCurrentDateAsString() == dateOfSchedule;
+        return getCurrentDateAsString() != dateOfSchedule;
     }
 
     function handleDayChange() {

@@ -17,11 +17,7 @@ import BrowserNotificationProvider from "@/contexts/BrowserNotificationContext";
 
 export const metadata: Metadata = {
     title: "time-to-work",
-    description: "Arbeitszeitdashboard",
-    icons: {
-        icon: '/app-icons/ttw-device-icon.png',
-        apple: '/app-icons/ttw-device-icon.png'
-    }
+    description: "Arbeitszeitdashboard"
 };
 
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
