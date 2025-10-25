@@ -43,3 +43,8 @@ next-env.d.ts
 # IntelliJ
 .idea
 .run
+
+# Docker
+.dockerignore
+docker-compose.yml
+Dockerfile
