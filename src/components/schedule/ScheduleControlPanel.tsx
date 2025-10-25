@@ -67,6 +67,7 @@ export default function ScheduleControlPanel() {
         if (success) {
             if (!timeStamp.useCurrentTimeAsOpenOrCloseTime) {
                 timeStamp.setOpenOrCloseTime(undefined);
+                timeStamp.setUseCurrentTimeAsOpenOrCloseTime(true);
             }
             setSelectedBlockTimeType(toggledTimeType);
         }
@@ -81,6 +82,7 @@ export default function ScheduleControlPanel() {
 
         if (success && !timeStamp.useCurrentTimeAsOpenOrCloseTime) {
             timeStamp.setOpenOrCloseTime(undefined);
+            timeStamp.setUseCurrentTimeAsOpenOrCloseTime(true);
         }
     }
 
