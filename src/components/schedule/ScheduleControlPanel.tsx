@@ -5,8 +5,8 @@ import { useState } from "react";
 import Time from "@/time/Time";
 import TimeIntervalControl from "@/components/schedule/TimeIntervalControl";
 import TimeStampControl from "@/components/schedule/TimeStampControl";
-import { ScheduleBlockTimeType, ScheduleBlockTimeTypes } from "@/schedule/ScheduleBlockTimeType";
-import { ScheduleBlockType, ScheduleBlockTypes } from "@/schedule/ScheduleBlockType";
+import { ScheduleBlockTimeTypes } from "@/schedule/ScheduleBlockTimeType";
+import { ScheduleBlockTypes } from "@/schedule/ScheduleBlockType";
 import ScheduleBlockTimeTypeSelect from "@/components/select/ScheduleBlockTimeTypeSelect";
 import ScheduleBlockTypeSelect from "@/components/select/ScheduleBlockTypeSelect";
 import useSchedule from "@/hooks/UseSchedule";
@@ -15,31 +15,38 @@ import ScheduleCalculations from "@/schedule/ScheduleCalculations";
 import useModifySchedule from "@/hooks/UseModifySchedule";
 
 
+function createTimeStampStateHolder() {
+    const [openOrCloseTime, setOpenOrCloseTime] = useState<Time>();
+    const [useCurrentTimeAsOpenOrCloseTime, setUseCurrentTimeAsOpenOrCloseTime] = useState(true);
+    return { openOrCloseTime, setOpenOrCloseTime, useCurrentTimeAsOpenOrCloseTime, setUseCurrentTimeAsOpenOrCloseTime };
+}
+
+function createTimeIntervalStateHolder() {
+    const [startTime, setStartTime] = useState<Time>();
+    const [endTime, setEndTime] = useState<Time>();
+    return { startTime, setStartTime, endTime, setEndTime };
+}
+
 export default function ScheduleControlPanel() {
     const now = useTime();
     const { schedule } = useSchedule();
     const modifySchedule = useModifySchedule();
 
-    const [selectedBlockType, setSelectedBlockType] = useState<ScheduleBlockType>(ScheduleBlockTypes.TIME_STAMP);
-    const [selectedBlockTimeType, setSelectedBlockTimeType] = useState<ScheduleBlockTimeType>(ScheduleBlockTimeTypes.WORK);
+    const [selectedBlockType, setSelectedBlockType] = useState(ScheduleBlockTypes.TIME_STAMP);
+    const [selectedBlockTimeType, setSelectedBlockTimeType] = useState(ScheduleBlockTimeTypes.WORK);
 
-    const timeInterval = (() => {
-        const [startTime, setStartTime] = useState<Time>();
-        const [endTime, setEndTime] = useState<Time>();
-        return { startTime, setStartTime, endTime, setEndTime };
-    })();
-    const timeStamp = (() => {
-        const [openOrCloseTime, setOpenOrCloseTime] = useState<Time>();
-        const [useCurrentTimeAsOpenOrCloseTime, setUseCurrentTimeAsOpenOrCloseTime] = useState<boolean>(true);
-        return { openOrCloseTime, setOpenOrCloseTime, useCurrentTimeAsOpenOrCloseTime, setUseCurrentTimeAsOpenOrCloseTime };
-    })();
+    const timeStamp = createTimeStampStateHolder();
+    const timeInterval = createTimeIntervalStateHolder();
 
     const openTimeStampBlock = ScheduleCalculations.getOpenTimestamp(schedule);
 
     const isScheduleBlockTypeSegmentedControlDisabled = (
         !!openTimeStampBlock && selectedBlockType.identifier == 'timeStamp'
     );
-    const isButtonDisabled = selectedBlockType.identifier == 'timeInterval' && (!timeInterval.startTime || !timeInterval.endTime);
+
+    const isButtonDisabled =
+        (selectedBlockType.identifier == 'timeStamp' && timeStamp.openOrCloseTime == undefined && !timeStamp.useCurrentTimeAsOpenOrCloseTime) ||
+        (selectedBlockType.identifier == 'timeInterval' && (!timeInterval.startTime || !timeInterval.endTime));
 
     const maskingScheduleBlockTimeType = (
         (!!openTimeStampBlock && selectedBlockType.identifier == 'timeStamp')
