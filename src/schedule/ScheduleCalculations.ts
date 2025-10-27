@@ -73,4 +73,10 @@ export default class ScheduleCalculations {
             .find(() => true);
     }
 
+    static getAmountOfBreakTimeBlocks(schedule: Schedule) {
+        return schedule
+            .filter(block => block.timeType.identifier === 'breakTime')
+            .length;
+    }
+
 }
