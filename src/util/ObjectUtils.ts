@@ -11,6 +11,11 @@ export function extractValue(any: any, ...keys: string[]) {
     return undefined;
 }
 
-export function replaceValue<T extends object, K extends keyof T>(object: T, key: K, newValue: T[K]) {
-    return { ...object, [key]: newValue };
+export function toReplacedDeepValue<T extends Record<string, any>>(object: T, [pathKey, ...restOfPath]: string[], key: string, value: any): T {
+    return pathKey
+        ? {
+            ...object,
+            [pathKey]: toReplacedDeepValue(object[pathKey], restOfPath, key, value)
+        }
+        : { ...object, [key]: value };
 }

@@ -1,7 +1,7 @@
 'use client';
 
 import { createContext, Dispatch, SetStateAction } from "react";
-import { replaceValue } from "@/util/ObjectUtils";
+import { toReplacedDeepValue } from "@/util/ObjectUtils";
 import useTimelineConfiguration, { DefaultTimelineConfiguration, TimelineConfiguration } from "@/hooks/configuration/instances/UseTimelineConfiguration";
 import { ContextProviderProps } from "@/contexts/ContextTypes";
 import usePublicTransitConfiguration, { DefaultPublicTransitConfiguration, PublicTransitConfiguration } from "@/hooks/configuration/instances/UsePublicTransitConfiguration";
@@ -40,31 +40,32 @@ export default function ConfigurationProvider({ children }: ContextProviderProps
     );
 }
 
-export function setConfigurationValue<T extends object>(
+
+function setConfigurationValue<T extends object>(
     setStateAction: Dispatch<SetStateAction<T>>,
-    key: keyof T,
-    value: T[keyof T]
+    key: string,
+    value: any,
+    subConfigs: string[]
 ) {
-    setStateAction(config => replaceValue(config, key, value));
+    setStateAction(config => toReplacedDeepValue(config, subConfigs, key, value) as T);
 }
 
 export function convertConfigurationToReadWriteConfiguration<T extends object>(
     configuration: T,
-    setConfiguration: Dispatch<SetStateAction<T>>
+    setConfiguration: Dispatch<SetStateAction<T>>,
+    subConfigs: string[] = []
 ): ReadWriteConfiguration<T> {
-    return (
-        Object.entries(configuration)
-            .reduce(
-                (readWriteConfiguration, [key, value]) => ({
-                    ...readWriteConfiguration,
-                    [key]: key.startsWith("_")
-                        ? convertConfigurationToReadWriteConfiguration(value, setConfiguration)
-                        : {
-                            value,
-                            set: (value: any) => setConfigurationValue(setConfiguration, key as keyof T, value)
-                        }
-                }),
-                {}
-            ) as ReadWriteConfiguration<T>
-    );
+    return Object.entries(configuration)
+        .reduce(
+            (readWriteConfiguration, [key, value]) => ({
+                ...readWriteConfiguration,
+                [key]: key.startsWith("_")
+                    ? convertConfigurationToReadWriteConfiguration(value, setConfiguration, [...subConfigs, key])
+                    : {
+                        value,
+                        set: (value: any) => setConfigurationValue(setConfiguration, key, value, subConfigs)
+                    }
+            }),
+            {}
+        ) as ReadWriteConfiguration<T>;
 }
