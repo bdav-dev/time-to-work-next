@@ -35,8 +35,8 @@ export default function ScheduleControlPanel() {
     const [selectedBlockType, setSelectedBlockType] = useState(ScheduleBlockTypes.TIME_STAMP);
     const [selectedBlockTimeType, setSelectedBlockTimeType] = useState(ScheduleBlockTimeTypes.WORK);
 
-    const timeStamp = createTimeStampStateHolder();
-    const timeInterval = createTimeIntervalStateHolder();
+    const timeStampInput = createTimeStampStateHolder();
+    const timeIntervalInput = createTimeIntervalStateHolder();
 
     const openTimeStampBlock = ScheduleCalculations.getOpenTimestamp(schedule);
 
@@ -44,9 +44,11 @@ export default function ScheduleControlPanel() {
         !!openTimeStampBlock && selectedBlockType.identifier == 'timeStamp'
     );
 
+    const timeStamp = timeStampInput.useCurrentTimeAsOpenOrCloseTime ? now : timeStampInput.openOrCloseTime;
+
     const isButtonDisabled =
-        (selectedBlockType.identifier == 'timeStamp' && timeStamp.openOrCloseTime == undefined && !timeStamp.useCurrentTimeAsOpenOrCloseTime) ||
-        (selectedBlockType.identifier == 'timeInterval' && (!timeInterval.startTime || !timeInterval.endTime));
+        (selectedBlockType.identifier == 'timeStamp' && timeStampInput.openOrCloseTime == undefined && !timeStampInput.useCurrentTimeAsOpenOrCloseTime) ||
+        (selectedBlockType.identifier == 'timeInterval' && (!timeIntervalInput.startTime || !timeIntervalInput.endTime));
 
     const maskingScheduleBlockTimeType = (
         (!!openTimeStampBlock && selectedBlockType.identifier == 'timeStamp')
@@ -55,10 +57,10 @@ export default function ScheduleControlPanel() {
     );
 
     function addTimeInterval() {
-        const success = modifySchedule.addTimeInterval(timeInterval.startTime, timeInterval.endTime, selectedBlockTimeType);
+        const success = modifySchedule.addTimeInterval(timeIntervalInput.startTime, timeIntervalInput.endTime, selectedBlockTimeType);
         if (success) {
-            timeInterval.setStartTime(undefined);
-            timeInterval.setEndTime(undefined);
+            timeIntervalInput.setStartTime(undefined);
+            timeIntervalInput.setEndTime(undefined);
         }
     }
 
@@ -69,12 +71,12 @@ export default function ScheduleControlPanel() {
         }
 
         const toggledTimeType = ScheduleBlockTimeTypes.toggle(timeType);
-        const success = modifySchedule.closeAndOpenTimeStamp(timeStamp.openOrCloseTime ?? now, toggledTimeType);
+        const success = modifySchedule.closeAndOpenTimeStamp(timeStamp ?? now, toggledTimeType);
 
         if (success) {
-            if (!timeStamp.useCurrentTimeAsOpenOrCloseTime) {
-                timeStamp.setOpenOrCloseTime(undefined);
-                timeStamp.setUseCurrentTimeAsOpenOrCloseTime(true);
+            if (!timeStampInput.useCurrentTimeAsOpenOrCloseTime) {
+                timeStampInput.setOpenOrCloseTime(undefined);
+                timeStampInput.setUseCurrentTimeAsOpenOrCloseTime(true);
             }
             setSelectedBlockTimeType(toggledTimeType);
         }
@@ -83,13 +85,13 @@ export default function ScheduleControlPanel() {
     function openOrCloseTimeStamp() {
         const success = (
             openTimeStampBlock
-                ? modifySchedule.closeTimeStamp(timeStamp.openOrCloseTime ?? now)
-                : modifySchedule.openTimeStamp(timeStamp.openOrCloseTime ?? now, selectedBlockTimeType)
+                ? modifySchedule.closeTimeStamp(timeStamp ?? now)
+                : modifySchedule.openTimeStamp(timeStamp ?? now, selectedBlockTimeType)
         );
 
-        if (success && !timeStamp.useCurrentTimeAsOpenOrCloseTime) {
-            timeStamp.setOpenOrCloseTime(undefined);
-            timeStamp.setUseCurrentTimeAsOpenOrCloseTime(true);
+        if (success && !timeStampInput.useCurrentTimeAsOpenOrCloseTime) {
+            timeStampInput.setOpenOrCloseTime(undefined);
+            timeStampInput.setUseCurrentTimeAsOpenOrCloseTime(true);
         }
     }
 
@@ -123,20 +125,20 @@ export default function ScheduleControlPanel() {
                         ? <TimeStampControl
                             currentTime={now}
                             openTimeStamp={openTimeStampBlock?.startTime}
-                            openOrCloseTime={timeStamp.useCurrentTimeAsOpenOrCloseTime ? now : timeStamp.openOrCloseTime}
-                            onOpenOrCloseTimeChange={timeStamp.setOpenOrCloseTime}
-                            useCurrentTimeAsOpenOrCloseTime={timeStamp.useCurrentTimeAsOpenOrCloseTime}
-                            onUseCurrentTimeAsOpenOrCloseTimeChange={timeStamp.setUseCurrentTimeAsOpenOrCloseTime}
-                            isTimePickerDisabled={timeStamp.useCurrentTimeAsOpenOrCloseTime}
+                            openOrCloseTime={timeStampInput.useCurrentTimeAsOpenOrCloseTime ? now : timeStampInput.openOrCloseTime}
+                            onOpenOrCloseTimeChange={timeStampInput.setOpenOrCloseTime}
+                            useCurrentTimeAsOpenOrCloseTime={timeStampInput.useCurrentTimeAsOpenOrCloseTime}
+                            onUseCurrentTimeAsOpenOrCloseTimeChange={timeStampInput.setUseCurrentTimeAsOpenOrCloseTime}
+                            isTimePickerDisabled={timeStampInput.useCurrentTimeAsOpenOrCloseTime}
                             onRequestStamp={() => !isButtonDisabled && onButtonClick(false)}
                             className={'flex-1'}
                             getLatestEndTimeOfSchedule={() => ScheduleCalculations.getLatestEndTime(schedule)}
                         />
                         : <TimeIntervalControl
-                            startTime={timeInterval.startTime}
-                            setStartTime={timeInterval.setStartTime}
-                            endTime={timeInterval.endTime}
-                            setEndTime={timeInterval.setEndTime}
+                            startTime={timeIntervalInput.startTime}
+                            setStartTime={timeIntervalInput.setStartTime}
+                            endTime={timeIntervalInput.endTime}
+                            setEndTime={timeIntervalInput.setEndTime}
                             onRequestAdd={() => !isButtonDisabled && onButtonClick(false)}
                             className={'flex-1'}
                             getLatestEndTimeOfSchedule={() => ScheduleCalculations.getLatestEndTime(schedule)}

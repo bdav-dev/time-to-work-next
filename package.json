@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "test": "tsx src/__tests__/*",
+    "test": "for file in src/__tests__/*; do tsx \"$file\"; done",
     "lint": "next lint"
   },
   "dependencies": {
