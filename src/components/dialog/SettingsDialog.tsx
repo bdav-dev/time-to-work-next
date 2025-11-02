@@ -22,7 +22,7 @@ export default function SettingsDialog(props: SettingsDialogProps) {
             onRequestClose={props.onRequestClose}
             title={'Einstellungen'}
             overrideSize
-            className={'max-w-[95rem] h-[51rem]'}
+            className={'max-w-[75rem] h-[51rem]'}
         >
             <div className={'flex flex-row gap-2 flex-1 max-h-full'}>
                 <div className={'flex flex-col justify-between mt-1.5'}>
