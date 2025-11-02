@@ -3,20 +3,27 @@
 import { createContext, CSSProperties, useState } from "react";
 import { ContextProviderProps } from "@/contexts/ContextTypes";
 import { delay } from "@/util/PromiseUtils";
+import { MessageType } from "@/contexts/MessageContext";
 
 
 export type Notification = {
     id: string,
+    type?: MessageType
     title: string,
     body: string,
-    onClear?: () => void
+    onClear?: (fromUser: boolean) => void
 }
+
+type ClearNotificationContext = {
+    ifCurrentIs?: Notification,
+    fromUser?: boolean
+};
 
 type NotificationContextType = {
     notification: Notification | undefined,
     push: (newNotification: Notification) => void,
     update: (notification: Notification) => void,
-    clear: (notificationToClear?: Notification) => void,
+    clear: (context?: ClearNotificationContext) => void,
     animationStyles: CSSProperties
 }
 const EmptyNotificationContext: NotificationContextType = {
@@ -46,17 +53,17 @@ export default function NotificationProvider({ children }: ContextProviderProps)
 
     function update(updatedNotification: Notification) {
         if (notification && notification.id === updatedNotification.id) {
-            setNotification(updatedNotification);
+            setNotification({ ...updatedNotification });
         }
     }
 
-    async function clear(notificationToClear?: Notification) {
-        if (notificationToClear?.id !== notification?.id) {
+    async function clear(context?: ClearNotificationContext) {
+        if (!notification || context?.ifCurrentIs && context.ifCurrentIs.id !== notification.id) {
             return;
         }
         setAnimationStyles(DISAPPEAR_STYLES);
         await delay(APPEAR_DISAPPEAR_ANIMATION_DURATION_IN_SECONDS * 1000);
-        notification?.onClear?.();
+        notification.onClear?.(context?.fromUser ?? false);
         setNotification(undefined);
     }
 

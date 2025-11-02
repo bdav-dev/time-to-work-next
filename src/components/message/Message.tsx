@@ -1,6 +1,6 @@
-import { Message as Msg, MessageType } from "@/contexts/MessageContext";
+import { Message as Msg, MessageTypeToStatusIndicator } from "@/contexts/MessageContext";
 import { CSSProperties } from "react";
-import StatusIndicator, { Status } from "@/components/misc/StatusIndicator";
+import StatusIndicator from "@/components/misc/StatusIndicator";
 import MaterialSymbol from "@/components/icon/MaterialSymbol";
 import { MaterialSymbols } from "@/icon/MaterialSymbols";
 
@@ -11,12 +11,6 @@ type MessageProps = {
     onRequestClose?: () => void,
     style?: CSSProperties,
     className?: string
-}
-
-const MessageTypeToStatusIndicatorMap: { [key in MessageType]: Status } = {
-    error: 'red',
-    success: 'green',
-    warning: 'yellow',
 }
 
 export default function Message(props: MessageProps) {
@@ -36,7 +30,7 @@ export default function Message(props: MessageProps) {
             <div className={'flex flex-row items-center gap-2'}>
                 {
                     props.message.type &&
-                    <StatusIndicator status={MessageTypeToStatusIndicatorMap[props.message.type]}/>
+                    <StatusIndicator status={MessageTypeToStatusIndicator[props.message.type]}/>
                 }
 
                 <div className={'font-bold overflow-ellipsis whitespace-nowrap overflow-hidden'}>

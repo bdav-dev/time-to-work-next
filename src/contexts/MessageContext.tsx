@@ -3,8 +3,15 @@
 import { createContext, CSSProperties, ReactNode, useEffect, useState } from "react";
 import { ContextProviderProps } from "@/contexts/ContextTypes";
 import { delay } from "@/util/PromiseUtils";
+import { Status } from "@/components/misc/StatusIndicator";
 
 export type MessageType = 'success' | 'warning' | 'error';
+
+export const MessageTypeToStatusIndicator: { [key in MessageType]: Status } = {
+    error: 'red',
+    success: 'green',
+    warning: 'yellow',
+} as const;
 
 export type Message = {
     title: ReactNode,
@@ -41,7 +48,7 @@ export default function MessageProvider({ children }: ContextProviderProps) {
     const [message, setMessage] = useState<Message>();
     const [toAutoClear, setToAutoClear] = useState<Message>();
     const [toMount, setToMount] = useState<Message>();
-    const [doAutoClear, setDoAutoClear] = useState<boolean>(true);
+    const [doAutoClear, setDoAutoClear] = useState(true);
     const [animationStyles, setAnimationStyles] = useState<CSSProperties>({});
 
     useEffect(() => {

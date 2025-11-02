@@ -12,7 +12,7 @@ export default function Notifications() {
                 <Notification
                     notification={notification}
                     style={animationStyles}
-                    onRequestClose={clear}
+                    onRequestClose={() => clear({ fromUser: true })}
                     className={'pointer-events-auto'}
                 />
             }
