@@ -15,6 +15,14 @@ export default class ScheduleCalculations {
         return schedule.find(block => block.endTime == undefined);
     }
 
+    static hasOpenWorkTimeStamp(schedule: Schedule) {
+        return schedule.some(block => block.endTime == undefined && block.timeType.identifier === 'workTime');
+    }
+
+    static getOpenWorkTimeStamp(schedule: Schedule) {
+        return schedule.find(block => block.endTime == undefined && block.timeType.identifier === 'workTime');
+    }
+
     static getSumOfWorkTime(schedule: Schedule, now: Time) {
         return schedule
             .filter(block => block.timeType.identifier === 'workTime')
