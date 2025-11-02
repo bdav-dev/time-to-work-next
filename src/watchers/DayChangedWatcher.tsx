@@ -29,17 +29,19 @@ export default function DayChangedWatcher() {
         return getCurrentDateAsString() != dateOfSchedule;
     }
 
+    function clearSchedule() {
+        setSchedule(() => []);
+    }
+
     function handleDayChange() {
-        setDateOfSchedule(getCurrentDateAsString());
-
         if (!timeBalance || !dailyWorkingTime) {
-            return;
-        }
-
-        if (ScheduleCalculations.hasOpenTimeStamp(schedule)) {
+            clearSchedule();
+            setDateOfSchedule(getCurrentDateAsString());
+        } else if (ScheduleCalculations.hasOpenTimeStamp(schedule)) {
             setIsResolveUnclosedTimestampDialogOpen(true);
         } else {
             adjustTimeBalanceAndClearSchedule(schedule);
+            setDateOfSchedule(getCurrentDateAsString());
         }
     }
 
@@ -59,7 +61,7 @@ export default function DayChangedWatcher() {
                 timeBalance
             )
         );
-        setSchedule(() => []);
+        clearSchedule();
     }
 
     return (
@@ -68,6 +70,7 @@ export default function DayChangedWatcher() {
             onSubmit={
                 submittedSchedule => {
                     adjustTimeBalanceAndClearSchedule(submittedSchedule);
+                    setDateOfSchedule(getCurrentDateAsString());
                     setIsResolveUnclosedTimestampDialogOpen(false);
                 }
             }
