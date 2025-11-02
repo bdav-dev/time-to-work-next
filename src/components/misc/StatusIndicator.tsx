@@ -10,7 +10,7 @@ type StatusIndicatorProps = {
 export default function StatusIndicator({ status, text }: StatusIndicatorProps) {
     return (
         <div className={'w-fit flex gap-2 items-center font-bold'}>
-            <div className={`min-w-5 min-h-5 size-5 rounded-full ${MessageTypeClassNames[status]}`}/>
+            <div className={`min-w-[1.375rem] min-h-3 size-3 rounded-full ${MessageTypeClassNames[status]}`}/>
             {text && (typeof text === "string" ? text : text[status])}
         </div>
     );
