@@ -33,11 +33,11 @@ export default function PublicTransitSettings() {
     );
     const [gracePeriod, setGracePeriod] = useMutatingConfigurationValueWithFallback(
         config => config.publicTransit.gracePeriod,
-        TimeSpan.empty()
+        TimeSpan.zero()
     );
     const [type, setType] = useMutatingConfigurationValue(config => config.publicTransit.type);
 
-    const isPeriodInvalid = period.equals(TimeSpan.empty());
+    const isPeriodInvalid = period.equals(TimeSpan.zero());
 
     function rectifyGracePeriod(gracePeriodInput?: TimeSpan) {
         if (!gracePeriodInput) {

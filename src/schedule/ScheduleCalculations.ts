@@ -15,12 +15,20 @@ export default class ScheduleCalculations {
         return schedule.find(block => block.endTime == undefined);
     }
 
+    static hasOpenWorkTimeStamp(schedule: Schedule) {
+        return schedule.some(block => block.endTime == undefined && block.timeType.identifier === 'workTime');
+    }
+
+    static getOpenWorkTimeStamp(schedule: Schedule) {
+        return schedule.find(block => block.endTime == undefined && block.timeType.identifier === 'workTime');
+    }
+
     static getSumOfWorkTime(schedule: Schedule, now: Time) {
         return schedule
             .filter(block => block.timeType.identifier === 'workTime')
             .reduce(
                 (sumOfWorkTime, block) => sumOfWorkTime.add(TimeSpan.ofTimeDifference(block.startTime, block.endTime ?? now)),
-                TimeSpan.empty()
+                TimeSpan.zero()
             );
     }
 
@@ -29,7 +37,7 @@ export default class ScheduleCalculations {
             .filter(block => block.timeType.identifier === 'breakTime')
             .reduce(
                 (sumOfBreakTime, block) => sumOfBreakTime.add(TimeSpan.ofTimeDifference(block.startTime, block.endTime ?? now)),
-                TimeSpan.empty()
+                TimeSpan.zero()
             );
     }
 
@@ -57,7 +65,7 @@ export default class ScheduleCalculations {
 
         return now
             .add(remainingTimeToWork)
-            .add(calculateMinBreakOverhead() ?? TimeSpan.empty());
+            .add(calculateMinBreakOverhead() ?? TimeSpan.zero());
     }
 
     static getNewTimeBalance(schedule: Schedule, now: Time, dailyWorkingTime: TimeSpan, timeBalance: TimeSpan) {
@@ -71,6 +79,12 @@ export default class ScheduleCalculations {
             .filter(endTime => !!endTime)
             .toSorted((a, b) => b.compareTo(a))
             .find(() => true);
+    }
+
+    static getAmountOfBreakTimeBlocks(schedule: Schedule) {
+        return schedule
+            .filter(block => block.timeType.identifier === 'breakTime')
+            .length;
     }
 
 }

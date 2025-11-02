@@ -18,6 +18,7 @@ import useOptimalBreakEndTimeMarker from "@/hooks/UseOptimalBreakEndTimeMarker";
 import AboutDialog from "@/components/dialog/AboutDialog";
 import KeyboardShortcutDialog from "@/components/dialog/KeyboardShortcutDialog";
 import Notifications from "@/components/notification/Notifications";
+import ImpendingWorkTimeViolationWatcher from "@/watchers/ImpendingWorkTimeViolationWatcher";
 
 
 export default function TimeToWork() {
@@ -40,6 +41,8 @@ export default function TimeToWork() {
             )
         );
     });
+
+    ImpendingWorkTimeViolationWatcher();
 
     return (
         <div className={'relative flex-1 flex flex-col'}>

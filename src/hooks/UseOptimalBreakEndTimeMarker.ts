@@ -22,7 +22,7 @@ export default function useOptimalBreakEndTimeMarker(): TimelineMarker | undefin
 
         const sumOfBreakTime = ScheduleCalculations.getSumOfBreakTime(schedule, now);
         const remainingBreakTime = minBreak.subtract(sumOfBreakTime);
-        if (remainingBreakTime.isNegative()) {
+        if (remainingBreakTime.isNegative() && ScheduleCalculations.getAmountOfBreakTimeBlocks(schedule) > 1) {
             return undefined;
         }
 

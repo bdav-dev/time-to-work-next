@@ -11,7 +11,7 @@ export type WorkingTimeConfiguration = {
     timeBalance: TimeSpan | undefined,
     minBreak: TimeSpan | undefined,
     maxWorkTimeBlockDuration: TimeSpan | undefined,
-    _impendingMaxWorkTimeBlockViolation: {
+    _impendingWorkTimeViolation: {
         notify: boolean,
         threshold: TimeSpan | undefined
     }
@@ -23,11 +23,11 @@ export const DefaultWorkingTimeConfiguration: WorkingTimeConfiguration = {
     timeBalance: undefined,
     minBreak: undefined,
     maxWorkTimeBlockDuration: undefined,
-    _impendingMaxWorkTimeBlockViolation: {
+    _impendingWorkTimeViolation: {
         notify: true,
         threshold: TimeSpan.ofString("00:15")
     },
-    showOptimalBreakTime: false
+    showOptimalBreakTime: true
 }
 
 export default function useWorkingTimeConfiguration(): ReadWriteConfiguration<WorkingTimeConfiguration> {
@@ -46,9 +46,9 @@ const WorkingTimeConfigurationSerialization: Serialization<WorkingTimeConfigurat
         minBreak: source.minBreak?.toString(),
         maxWorkTimeBlockDuration: source.maxWorkTimeBlockDuration?.toString(),
         showOptimalBreakTime: source.showOptimalBreakTime,
-        impendingMaxWorkTimeBlockViolation: {
-            notify: source._impendingMaxWorkTimeBlockViolation.notify,
-            threshold: source._impendingMaxWorkTimeBlockViolation.threshold?.toString()
+        impendingWorkTimeViolation: {
+            notify: source._impendingWorkTimeViolation.notify,
+            threshold: source._impendingWorkTimeViolation.threshold?.toString()
         }
     }),
     decode: target => ({
@@ -57,9 +57,9 @@ const WorkingTimeConfigurationSerialization: Serialization<WorkingTimeConfigurat
         minBreak: optional(target.minBreak).map(TimeSpan.ofString).orUndefined(),
         maxWorkTimeBlockDuration: optional(target.maxWorkTimeBlockDuration).map(TimeSpan.ofString).orUndefined(),
         showOptimalBreakTime: target.showOptimalBreakTime,
-        _impendingMaxWorkTimeBlockViolation: {
-            notify: target.impendingMaxWorkTimeBlockViolation.notify,
-            threshold: optional(target.impendingMaxWorkTimeBlockViolation.threshold).map(TimeSpan.ofString).orUndefined()
+        _impendingWorkTimeViolation: {
+            notify: target.impendingWorkTimeViolation.notify,
+            threshold: optional(target.impendingWorkTimeViolation.threshold).map(TimeSpan.ofString).orUndefined()
         }
     })
 });

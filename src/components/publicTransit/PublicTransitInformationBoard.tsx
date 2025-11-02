@@ -25,7 +25,7 @@ export default function PublicTransitInformationBoard(props: PublicTransitInform
     } = PublicTransitCalculations.calculatePublicTransitInformation(props.config, props.now);
 
     const humanSymbol = (
-        timeUntilLeave && compare(timeUntilLeave, 'lessThan', TimeSpan.empty())
+        timeUntilLeave && compare(timeUntilLeave, 'lessThan', TimeSpan.zero())
             ? MaterialSymbols.DIRECTIONS_RUN
             : MaterialSymbols.DIRECTIONS_WALK
     );
@@ -73,14 +73,14 @@ function TimeRemaining({ timeRemaining }: { timeRemaining: TimeSpan | undefined 
         return <TimeComponent time={undefined}/>;
     }
 
-    if (compare(timeRemaining, 'lessThan', TimeSpan.empty())) {
+    if (compare(timeRemaining, 'lessThan', TimeSpan.zero())) {
         return (
             <span className={'text-red-700 dark:text-red-300'}>
                 seit <TimeComponent time={timeRemaining.absolute()}/>
             </span>
         );
     }
-    if (compare(timeRemaining, 'equal', TimeSpan.empty())) {
+    if (compare(timeRemaining, 'equal', TimeSpan.zero())) {
         return (
             <span className={'text-red-700 dark:text-red-300'}>
                 Jetzt

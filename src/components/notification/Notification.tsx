@@ -2,6 +2,8 @@ import MaterialSymbol from "@/components/icon/MaterialSymbol";
 import { MaterialSymbols } from "@/icon/MaterialSymbols";
 import { CSSProperties } from "react";
 import { Notification as NotificationType } from "@/contexts/NotificationContext";
+import StatusIndicator from "@/components/misc/StatusIndicator";
+import { MessageTypeToStatusIndicator } from "@/contexts/MessageContext";
 
 
 type NotificationProps = {
@@ -25,12 +27,16 @@ export default function Notification(props: NotificationProps) {
             style={props.style}
         >
             <div className={'flex flex-row items-center gap-2'}>
+                {
+                    props.notification.type &&
+                    <StatusIndicator status={MessageTypeToStatusIndicator[props.notification.type]}/>
+                }
 
                 <div className={'font-bold overflow-ellipsis whitespace-nowrap overflow-hidden'}>
                     {props.notification.title}
                 </div>
 
-                <button onClick={props.onRequestClose} className={'ml-auto'}>
+                <button onClick={() => props.onRequestClose?.()} className={'ml-auto'}>
                     <MaterialSymbol symbol={MaterialSymbols.CLOSE}/>
                 </button>
             </div>
