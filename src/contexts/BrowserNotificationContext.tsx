@@ -15,7 +15,7 @@ export type BrowserNotificationContextType = {
     },
     requestPermission: () => void,
     isPotentiallyAvailable: boolean,
-    push: (title: string, options?: NotificationOptions) => Notification
+    push: (title: string, options?: NotificationOptions) => Notification | null
 }
 
 const availabilityInfo: { [key in NotificationAvailability]: { status: Status, text: string } } = {
@@ -75,6 +75,10 @@ export default function BrowserNotificationProvider({ children }: ContextProvide
     }
 
     function push(title: string, options?: NotificationOptions) {
+        if (availability !== 'granted') {
+            return null;
+        }
+
         return new Notification(title, options);
     }
 
