@@ -33,7 +33,7 @@ function rectifyTimeSpan(timeSpan: TimeSpan | undefined) {
     let timeSpanToRectify = timeSpan;
 
     if (timeSpanToRectify.isNegative()) {
-        timeSpanToRectify = TimeSpan.empty();
+        timeSpanToRectify = TimeSpan.zero();
 
     } else if (compare(timeSpanToRectify, 'greaterThan', latestTime)) {
         timeSpanToRectify = latestTime;

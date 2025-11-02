@@ -14,7 +14,7 @@ export default function SignedTimeSpanPicker(props: SignedTimeSpanPickerProps) {
             <SignSelect
                 value={props.value?.isNegative() ? -1 : 1}
                 onValueChange={sign => props.setValue(props.value?.absolute().multiply(sign))}
-                disabled={!props.value || props.value.equals(TimeSpan.empty())}
+                disabled={!props.value || props.value.equals(TimeSpan.zero())}
             />
             <TimePicker
                 value={props.value?.absolute().asTime()}

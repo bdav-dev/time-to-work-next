@@ -36,7 +36,7 @@ export default class TimeSpan {
         return endTime.asTimeSpan().subtract(startTime.asTimeSpan());
     }
 
-    static empty() {
+    static zero() {
         return new TimeSpan(0);
     }
 
@@ -71,9 +71,7 @@ export default class TimeSpan {
     }
 
     divide(divisor: number) {
-        return TimeSpan.ofMinutes(
-            this.reducedMinutes / divisor
-        );
+        return TimeSpan.ofMinutes(this.reducedMinutes / divisor);
     }
 
     static divide(numerator: TimeSpan, denominator: TimeSpan) {
