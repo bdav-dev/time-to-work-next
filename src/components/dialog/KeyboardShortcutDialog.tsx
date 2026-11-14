@@ -19,7 +19,7 @@ export default function KeyboardShortcutDialog(props: KeyboardShortcutDialogProp
             onRequestClose={props.onRequestClose}
             title={'Tastenkürzel'}
             overrideSize
-            className={'max-w-[65rem]'}
+            className={'max-w-260'}
         >
             <div className={"flex flex-col lg:flex-row gap-2"}>
                 {

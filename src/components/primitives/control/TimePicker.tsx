@@ -70,8 +70,8 @@ export default function TimePicker(props: TimePickerProps) {
             onBlur={props.onBlur}
             className={`
                 px-2 py-1.5 rounded-full ${props.className}
-                ${(!props.invalid || !props.showInvalidEvenWhenFocused) && "focus:outline-none"}
-                ${props.invalid && 'outline-red-400 outline outline-1'}
+                ${(!props.invalid || !props.showInvalidEvenWhenFocused) && "focus:outline-hidden"}
+                ${props.invalid && 'outline-red-400 outline'}
             `}
             onKeyUp={e => onKeyUp(e.key)}
         />

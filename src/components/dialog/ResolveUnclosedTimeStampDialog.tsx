@@ -51,7 +51,7 @@ export default function ResolveUnclosedTimeStampDialog(props: ResolveUnclosedTim
             showCloseButton={false}
             closableWithEscKey={false}
             overrideSize
-            className={"max-w-[95rem]"}
+            className={"max-w-380"}
             footer={
                 <div className={"flex flex-row justify-between w-full"}>
                     <Button onClick={submit} className={'text-red-500 dark:text-red-400'} overrideMargin>

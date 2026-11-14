@@ -100,7 +100,7 @@ function MenuItemComponent({ menuItem, closeMenu }: { menuItem: MenuItem, closeM
     return (
         <button
             className={`
-                flex flex-row items-center w-full max-w-[30rem]
+                flex flex-row items-center w-full max-w-120
                 py-1 px-2 rounded-lg
                 hover:bg-neumorphic-200 hover:dark:bg-neumorphic-700
                 transition-colors duration-75

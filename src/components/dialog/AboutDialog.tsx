@@ -34,7 +34,7 @@ export default function AboutDialog(props: AboutDialogProps) {
                         src={darkTheme ? appIconDark : appIconLight}
                         placeholder={"blur"}
                         alt={""}
-                        className={'size-32 rounded-[2rem] border-neumorphic-300 dark:border-neumorphic-700'}
+                        className={'size-32 rounded-4xl border-neumorphic-300 dark:border-neumorphic-700'}
                         style={{
                             filter: darkTheme
                                 ? 'drop-shadow(0 -3px 9px rgb(0 0 0 / 0.3))'

@@ -25,7 +25,7 @@ export function TimelineBlockContent(props: { scheduleBlock: ScheduleBlock, now:
                     {props.scheduleBlock.endTime?.toString() ?? '...'}
                 </div>
 
-                <div className={'flex flex-row gap-[1px] justify-center items-center'}>
+                <div className={'flex flex-row gap-px justify-center items-center'}>
                     <MaterialSymbol
                         symbol={MaterialSymbols.TIMER}
                         opticalSize={"20px"}
