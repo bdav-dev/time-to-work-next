@@ -17,7 +17,7 @@ export default function Message(props: MessageProps) {
     return (
         <div
             className={`
-                relative min-w-60 max-w-[30rem]
+                relative min-w-60 max-w-120
                 p-3.5
                 bg-neumorphic-50 dark:bg-neumorphic-850
                 shadow-xl rounded-2xl overflow-hidden
@@ -33,7 +33,7 @@ export default function Message(props: MessageProps) {
                     <StatusIndicator status={MessageTypeToStatusIndicator[props.message.type]}/>
                 }
 
-                <div className={'font-bold overflow-ellipsis whitespace-nowrap overflow-hidden'}>
+                <div className={'font-bold text-ellipsis whitespace-nowrap overflow-hidden'}>
                     {props.message.title}
                 </div>
 

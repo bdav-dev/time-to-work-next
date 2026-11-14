@@ -48,7 +48,7 @@ export default function Dialog({ closableWithEscKey = true, ...props }: DialogPr
         >
             <div
                 className={`
-                    ${!props.overrideSize && 'max-w-[90rem] w-full min-h-52'}
+                    ${!props.overrideSize && 'max-w-360 w-full min-h-52'}
                     rounded-3xl
                     flex flex-col mx-auto
                     bg-neumorphic-100 dark:bg-neumorphic-750 

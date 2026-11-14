@@ -1,6 +1,28 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+    --color-neumorphic-50: #f5f8fa;
+    --color-neumorphic-100: #ecf0f3;
+    --color-neumorphic-150: #e0e4e8;
+    --color-neumorphic-200: #dbdfe3;
+    --color-neumorphic-300: #c9ced4;
+    --color-neumorphic-400: #9a9ca1;
+    --color-neumorphic-500: #6a6c73;
+    --color-neumorphic-600: #4a4c52;
+    --color-neumorphic-700: #3b3d43;
+    --color-neumorphic-750: #303135;
+    --color-neumorphic-800: #242528;
+    --color-neumorphic-850: #1b1c1f;
+    --color-neumorphic-900: #111217;
+    --color-neumorphic-950: #04050a;
+    --color-white-neumorphic-accent-bright: rgb(255, 255, 255);
+    --color-white-neumorphic-accent-shadow: rgb(209, 217, 230);
+    --color-gray-neumorphic-accent-bright: rgb(62, 63, 70);
+    --color-gray-neumorphic-accent-shadow: rgb(35, 35, 35);
+}
 
 html {
     background-color: var(--neumorphic-background-color);

@@ -61,7 +61,7 @@ function Tooltip({ className, children }: { className?: string, children?: React
                 transition-all
                 top-1/2
                 translate-x-full -translate-y-1/2
-                w-max max-w-[30rem]
+                w-max max-w-120
             `}>
                 <div className={`
                         transition-all
