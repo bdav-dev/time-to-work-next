@@ -1,14 +1,13 @@
 import Dialog from "@/components/primitives/Dialog";
 import Hyperlink from "@/components/misc/link/Hyperlink";
-import MaterialSymbol from "@/components/icon/MaterialSymbol";
-import { MaterialSymbols } from "@/icon/MaterialSymbols";
 import Image from "next/image";
 import appIconDark from '@/../public/app-icons/ttw-app-icon-dark.png';
 import appIconLight from '@/../public/app-icons/ttw-app-icon-light.png';
 import { useTheme } from "@/hooks/UseTheme";
 import SocialLink from "@/components/misc/link/SocialLink";
-import GitHubIcon from "@/icon/GitHubIcon";
 import IconSection from "@/components/layout/section/IconSection";
+import MaterialSymbol, { MaterialSymbols } from "@/icons/material/MaterialSymbol";
+import GitHubInvertocat from "@/icons/logo/GitHubInvertocat";
 
 
 type AboutDialogProps = {
@@ -46,15 +45,15 @@ export default function AboutDialog(props: AboutDialogProps) {
                     Version 0.0.1-SNAPSHOT
                 </div>
 
-                <div className={'flex flex-row gap-5'}>
+                <div className={'flex flex-row gap-5 items-end'}>
                     <SocialLink
                         href={'https://www.bdav.dev/code/time-to-work'}
-                        icon={({ className }) => <MaterialSymbol symbol={MaterialSymbols.CAPTIVE_PORTAL} className={className}/>}
+                        icon={<MaterialSymbol symbol={MaterialSymbols.CAPTIVE_PORTAL} className={'text-[1.205em]'}/>}
                         text={"bdav.dev"}
                     />
                     <SocialLink
                         href={'https://github.com/bdav-dev/time-to-work-next'}
-                        icon={GitHubIcon}
+                        icon={<GitHubInvertocat className={'text-[1.15em]'}/>}
                         text={"GitHub"}
                     />
                 </div>

@@ -1,0 +1,11 @@
+.icon {
+    display: inline-flex;
+    line-height: 1;
+    fill: currentColor;
+    stroke: currentColor;
+}
+
+.icon svg {
+    width: 1.5em;
+    height: 1.5em;
+}

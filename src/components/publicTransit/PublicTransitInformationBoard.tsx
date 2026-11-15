@@ -5,9 +5,8 @@ import Time from "@/time/Time";
 import TimeSpan from "@/time/TimeSpan";
 import { ReactNode } from "react";
 import { compare } from "@/util/CompareUtils";
-import { MaterialSymbols } from "@/icon/MaterialSymbols";
-import MaterialSymbol from "@/components/icon/MaterialSymbol";
 import Arrow from "@/components/misc/Arrow";
+import MaterialSymbol, { MaterialSymbols } from "@/icons/material/MaterialSymbol";
 
 
 type PublicTransitInformationBoardProps = {
@@ -36,7 +35,7 @@ export default function PublicTransitInformationBoard(props: PublicTransitInform
                 props.config.travelTime &&
                 <>
                     <TimeEvent
-                        icon={<MaterialSymbol symbol={humanSymbol} opticalSize={"40px"} className={"size-8 mr-0.5"}/>}
+                        icon={<MaterialSymbol symbol={humanSymbol} opticalSize={40} className={"text-[1.325em] mr-0.5"}/>}
                         atTime={leaveTime}
                         timeRemaining={timeUntilLeave}
                     />
@@ -46,7 +45,7 @@ export default function PublicTransitInformationBoard(props: PublicTransitInform
                 </>
             }
             <TimeEvent
-                icon={<MaterialSymbol symbol={props.config.type.icon} opticalSize={"40px"} className={'size-8 mr-1'}/>}
+                icon={<MaterialSymbol symbol={props.config.type.icon} opticalSize={40} className={'text-[1.325em] mr-1'}/>}
                 atTime={nextDeparture}
                 timeRemaining={timeUntilNextDeparture}
             />

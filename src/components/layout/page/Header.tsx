@@ -4,11 +4,10 @@ import TimeComponent from "@/components/time/Time";
 import Elevation from "@/components/layout/Elevation";
 import { useContext } from "react";
 import { TimeContext } from "@/contexts/TimeContext";
-import MaterialSymbol from "@/components/icon/MaterialSymbol";
 import Menu from "@/components/primitives/Menu";
-import { MaterialSymbols } from "@/icon/MaterialSymbols";
 import { useTheme } from "@/hooks/UseTheme";
 import IconText from "@/components/misc/IconText";
+import MaterialSymbol, { MaterialSymbols } from "@/icons/material/MaterialSymbol";
 
 
 type HeaderProps = {
@@ -69,7 +68,7 @@ export default function Header(props: HeaderProps) {
                     ]
                 ]}
             >
-                <MaterialSymbol className={'size-7'} symbol={MaterialSymbols.MENU} weight={300}/>
+                <MaterialSymbol className={'text-[1.2em]'}  symbol={MaterialSymbols.MENU} weight={300}/>
             </Menu>
 
             <VerticalRuler className={'h-8'}/>

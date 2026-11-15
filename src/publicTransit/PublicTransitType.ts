@@ -1,5 +1,4 @@
-import { MaterialSymbols } from "@/icon/MaterialSymbols";
-
+import { MaterialSymbols } from "@/icons/material/MaterialSymbol";
 
 export type PublicTransitTypeIdentifier = 'bus' | 'train' | 'subway' | 'tram';
 

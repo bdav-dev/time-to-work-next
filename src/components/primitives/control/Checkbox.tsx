@@ -1,8 +1,7 @@
 import NeumorphicButton from "@/components/primitives/neumorphic/NeumorphicButton";
 import { NeumorphicBlueprintFactory } from "@/neumorphic/NeumorphicStyle";
 import { ReactNode } from "react";
-import MaterialSymbol from "@/components/icon/MaterialSymbol";
-import { MaterialSymbols } from "@/icon/MaterialSymbols";
+import MaterialSymbol, { MaterialSymbols } from "@/icons/material/MaterialSymbol";
 
 
 type CheckboxProps = {

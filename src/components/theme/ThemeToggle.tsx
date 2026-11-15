@@ -2,8 +2,7 @@
 
 import { useTheme } from "@/hooks/UseTheme";
 import Button from "@/components/primitives/control/Button";
-import { MaterialSymbols } from "@/icon/MaterialSymbols";
-import MaterialSymbol from "@/components/icon/MaterialSymbol";
+import MaterialSymbol, { MaterialSymbols } from "@/icons/material/MaterialSymbol";
 
 type ThemeToggleProps = {
     overrideMargin?: boolean,
@@ -20,13 +19,12 @@ export default function ThemeToggle(props: ThemeToggleProps) {
             overrideMargin={props.overrideMargin}
             circular
             onClick={() => setDarkTheme(isDark => !isDark)}
-            className={`${props.className} size-12 flex items-center justify-center`}
+            className={`${props.className} size-12`}
         >
             <MaterialSymbol
                 symbol={icon}
-                opticalSize={'24px'}
                 weight={300}
-                className={'size-7'}
+                className={'text-[1.15em]'}
             />
         </Button>
     );

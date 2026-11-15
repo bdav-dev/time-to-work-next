@@ -1,8 +1,7 @@
 import { ScheduleBlock } from "@/schedule/Schedule";
 import Time from "@/time/Time";
-import MaterialSymbol from "@/components/icon/MaterialSymbol";
-import { MaterialSymbols } from "@/icon/MaterialSymbols";
 import TimeSpan from "@/time/TimeSpan";
+import MaterialSymbol, { MaterialSymbols } from "@/icons/material/MaterialSymbol";
 
 export function TimelineBlockContent(props: { scheduleBlock: ScheduleBlock, now: Time }) {
 
@@ -28,8 +27,8 @@ export function TimelineBlockContent(props: { scheduleBlock: ScheduleBlock, now:
                 <div className={'flex flex-row gap-px justify-center items-center'}>
                     <MaterialSymbol
                         symbol={MaterialSymbols.TIMER}
-                        opticalSize={"20px"}
-                        style={{ width: 'clamp(0px, 2vw, 1.05rem)', height: 'clamp(0px, 2vw, 1.05rem)' }}
+                        opticalSize={20}
+                        weight={350}
                     />
                     {TimeSpan.ofTimeDifference(props.scheduleBlock.startTime, props.scheduleBlock.endTime ?? props.now).toString()}
                 </div>

@@ -14,6 +14,7 @@ import { CascadiaCode } from "@/font/CascadiaCode";
 import ModifyScheduleContextProvider from "@/contexts/ModifyScheduleContext";
 import NotificationProvider from "@/contexts/NotificationContext";
 import BrowserNotificationProvider from "@/contexts/BrowserNotificationContext";
+import { MATERIAL_SYMBOLS_API_URL } from "@/icons/material/MaterialSymbol";
 
 export const metadata: Metadata = {
     title: "time-to-work",
@@ -23,6 +24,9 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
     return (
         <html lang="de">
+        <head>
+            <link rel="stylesheet" href={MATERIAL_SYMBOLS_API_URL}/>
+        </head>
         <ContextProvider>
             <body className={CascadiaCode.className}>
             <ThemeApplier>
