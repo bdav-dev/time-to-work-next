@@ -1,9 +1,8 @@
-import MaterialSymbol from "@/components/icon/MaterialSymbol";
-import { MaterialSymbols } from "@/icon/MaterialSymbols";
 import { CSSProperties } from "react";
 import { Notification as NotificationType } from "@/contexts/NotificationContext";
 import StatusIndicator from "@/components/misc/StatusIndicator";
 import { MessageTypeToStatusIndicator } from "@/contexts/MessageContext";
+import MaterialSymbol, { MaterialSymbols } from "@/icons/material/MaterialSymbol";
 
 
 type NotificationProps = {

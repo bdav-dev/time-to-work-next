@@ -2,8 +2,7 @@
 
 import { useTheme } from "@/hooks/UseTheme";
 import Button from "@/components/primitives/control/Button";
-import { MaterialSymbols } from "@/icon/MaterialSymbols";
-import MaterialSymbol from "@/components/icon/MaterialSymbol";
+import MaterialSymbol, { MaterialSymbols } from "@/icons/material/MaterialSymbol";
 
 type ThemeToggleProps = {
     overrideMargin?: boolean,
@@ -11,22 +10,19 @@ type ThemeToggleProps = {
 }
 
 export default function ThemeToggle(props: ThemeToggleProps) {
-    const { darkTheme, setDarkTheme } = useTheme();
-
-    const icon =  darkTheme ? MaterialSymbols.DARK_MODE : MaterialSymbols.LIGHT_MODE;
+    const { theme, toggleTheme } = useTheme();
 
     return (
         <Button
             overrideMargin={props.overrideMargin}
             circular
-            onClick={() => setDarkTheme(isDark => !isDark)}
-            className={`${props.className} size-12 flex items-center justify-center`}
+            onClick={() => toggleTheme()}
+            className={`${props.className} size-12`}
         >
             <MaterialSymbol
-                symbol={icon}
-                opticalSize={'24px'}
+                symbol={{ dark: MaterialSymbols.DARK_MODE, light: MaterialSymbols.LIGHT_MODE }[theme]}
                 weight={300}
-                className={'size-7'}
+                className={'text-[1.15em]'}
             />
         </Button>
     );

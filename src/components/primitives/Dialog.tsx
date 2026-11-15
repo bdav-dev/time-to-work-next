@@ -1,7 +1,6 @@
 import { ReactNode, useEffect, useRef } from "react";
 import Button from "@/components/primitives/control/Button";
-import MaterialSymbol from "@/components/icon/MaterialSymbol";
-import { MaterialSymbols } from "@/icon/MaterialSymbols";
+import MaterialSymbol, { MaterialSymbols } from "@/icons/material/MaterialSymbol";
 
 
 type DialogProps = {
@@ -76,7 +75,7 @@ export default function Dialog({ closableWithEscKey = true, ...props }: DialogPr
                             >
                                 <MaterialSymbol
                                     symbol={MaterialSymbols.CLOSE}
-                                    className={'size-7 fill-neumorphic-600 dark:fill-neumorphic-300'}
+                                    className={'fill-neumorphic-600 dark:fill-neumorphic-300'}
                                 />
                             </Button>
                         </div>

@@ -1,6 +1,6 @@
 import SegmentedControls, { Segment } from "@/components/primitives/control/SegmentedControls";
 import { PublicTransitType, PublicTransitTypeIdentifier, PublicTransitTypes } from "@/publicTransit/PublicTransitType";
-import MaterialSymbol from "@/components/icon/MaterialSymbol";
+import MaterialSymbol from "@/icons/material/MaterialSymbol";
 
 
 export default function PublicTransitTypeSelect(props: SelectProps<PublicTransitType>) {
@@ -26,7 +26,7 @@ const PublicTransitTypeSegments = (
                 value: type,
                 displayAs: (
                     <span className={'flex items-center gap-1'}>
-                        <MaterialSymbol symbol={type.icon} opticalSize={"20px"} className={"size-5"}/>
+                        <MaterialSymbol symbol={type.icon} opticalSize={20} className={"text-[0.85em]"}/>
                         {type.displayAs}
                     </span>
                 )

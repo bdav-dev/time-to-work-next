@@ -22,7 +22,7 @@ export default function TimelineBlock(props: TimelineBlockProps) {
         <button
             className={props.block.className}
             style={{
-                cursor: !props.block.onClick && 'default' || undefined,
+                cursor: !props.block.onClick && 'default' || 'pointer',
                 position: 'absolute',
                 borderRadius: `${borderRadiusLeft} ${borderRadiusRight} ${borderRadiusRight} ${borderRadiusLeft}`,
                 left: `${props.position}%`,

@@ -1,8 +1,7 @@
 import { Message as Msg, MessageTypeToStatusIndicator } from "@/contexts/MessageContext";
 import { CSSProperties } from "react";
 import StatusIndicator from "@/components/misc/StatusIndicator";
-import MaterialSymbol from "@/components/icon/MaterialSymbol";
-import { MaterialSymbols } from "@/icon/MaterialSymbols";
+import MaterialSymbol, { MaterialSymbols } from "@/icons/material/MaterialSymbol";
 
 type MessageProps = {
     message: Msg,

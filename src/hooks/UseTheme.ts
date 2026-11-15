@@ -3,5 +3,9 @@ import { ThemeContext } from "@/contexts/ThemeContext";
 
 
 export function useTheme() {
-    return useContext(ThemeContext);
+    const context = useContext(ThemeContext);
+    if (!context) {
+        throw new Error("useTheme must be used within a ThemeContextProvider.");
+    }
+    return context;
 }

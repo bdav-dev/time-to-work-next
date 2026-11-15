@@ -1,6 +1,5 @@
 import SegmentedControls, { Segment } from "@/components/primitives/control/SegmentedControls";
-import { MaterialSymbols } from "@/icon/MaterialSymbols";
-import MaterialSymbol from "@/components/icon/MaterialSymbol";
+import MaterialSymbol, { MaterialSymbols } from "@/icons/material/MaterialSymbol";
 
 
 export default function SignSelect(props: SelectProps<number>) {

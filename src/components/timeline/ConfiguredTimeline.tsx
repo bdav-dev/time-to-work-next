@@ -22,11 +22,11 @@ type ConfiguredTimelineProps = {
 
 export default function ConfiguredTimeline({ showCurrentTimeMarker = true, ...props }: ConfiguredTimelineProps) {
     const now = props.overrideConfiguration?.currentTime ?? useTime();
-    const { darkTheme } = useTheme();
+    const { theme } = useTheme();
     const timelineConfig = useConfiguration(config => config.timeline);
 
     const defaultConfigurationOverride = {
-        theme: darkTheme ? DefaultTimelineThemes.DARK : DefaultTimelineThemes.LIGHT,
+        theme: { dark: DefaultTimelineThemes.DARK, light: DefaultTimelineThemes.LIGHT }[theme],
         currentTime: now,
         startTime: timelineConfig.startTime,
         endTime: timelineConfig.endTime,

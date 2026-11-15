@@ -1,25 +1,25 @@
-import Hyperlink from "@/components/misc/link/Hyperlink";
-import { ReactNode, SVGProps } from "react";
+import { ReactNode } from "react";
+import Link from "next/link";
 
 
 type SocialLinkProps = {
     href: string,
-    icon: (props: SVGProps<SVGSVGElement>) => ReactNode,
+    icon: ReactNode,
     text: string
 }
 
 export default function SocialLink(props: SocialLinkProps) {
-
     return (
-        <Hyperlink
+        <Link
             href={props.href}
-            openInNewTab
-            className={"inline-flex flex-col items-center gap-0.5"}
+            className={'inline-flex flex-col items-center gap-0.5 group'}
+            target={"_blank"}
+            rel={"noopener noreferrer"}
         >
-            {props.icon({ className: "size-7" })}
-            <span className={"text-xs"}>
+            {props.icon}
+            <span className={"text-xs group-hover:underline"}>
                 {props.text}
             </span>
-        </Hyperlink>
+        </Link>
     );
 }

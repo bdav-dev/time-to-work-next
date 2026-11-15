@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import "./globals.css";
 import './neumorphic.css';
 import { ReactNode } from "react";
-import ThemeApplier from "@/components/theme/ThemeApplier";
 import StyledJsxRegistry from "@/app/registry";
 import ThemeProvider from "@/contexts/ThemeContext";
 import { TimeProvider } from "@/contexts/TimeContext";
@@ -14,45 +13,51 @@ import { CascadiaCode } from "@/font/CascadiaCode";
 import ModifyScheduleContextProvider from "@/contexts/ModifyScheduleContext";
 import NotificationProvider from "@/contexts/NotificationContext";
 import BrowserNotificationProvider from "@/contexts/BrowserNotificationContext";
+import { MATERIAL_SYMBOLS_API_URL } from "@/icons/material/MaterialSymbol";
+import { parseTheme, Theme, THEME_COOKIE } from "@/library/theme";
+import { cookies } from "next/headers";
 
 export const metadata: Metadata = {
     title: "time-to-work",
     description: "Arbeitszeitdashboard"
 };
 
-export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
+export default async function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
+    const initialTheme = parseTheme((await cookies()).get(THEME_COOKIE)?.value);
+
     return (
-        <html lang="de">
-        <ContextProvider>
-            <body className={CascadiaCode.className}>
-            <ThemeApplier>
-                <StyledJsxRegistry>
-                    <div
-                        className={`
-                            flex flex-col min-h-screen
-                            antialiased
-                            bg-neumorphic-100 dark:bg-neumorphic-750 
-                            text-neumorphic-700 dark:text-neumorphic-150 
-                            stroke-neumorphic-700 dark:stroke-neumorphic-150
-                            fill-neumorphic-700 dark:fill-neumorphic-150
-                        `}
-                    >
-                        <div className={'flex-1 flex flex-col'}>
-                            {children}
-                        </div>
-                        <Footer/>
-                    </div>
-                </StyledJsxRegistry>
-            </ThemeApplier>
+        <html
+            lang={"de"}
+            className={`${CascadiaCode.className} ${initialTheme === 'dark' ? 'dark' : ''}`}
+            suppressHydrationWarning
+        >
+        <head>
+            <link rel="stylesheet" href={MATERIAL_SYMBOLS_API_URL}/>
+        </head>
+        <ContextProvider initialTheme={initialTheme}>
+            <body
+                className={`
+                    flex flex-col min-h-dvh
+                    text-neumorphic-700 dark:text-neumorphic-150 
+                    stroke-neumorphic-700 dark:stroke-neumorphic-150
+                    fill-neumorphic-700 dark:fill-neumorphic-150
+                `}
+            >
+            <StyledJsxRegistry>
+                <div className={'flex-1 flex flex-col'}>
+                    {children}
+                </div>
+                <Footer/>
+            </StyledJsxRegistry>
             </body>
         </ContextProvider>
         </html>
     );
 }
 
-function ContextProvider({ children }: { children: ReactNode }) {
+function ContextProvider({ initialTheme, children }: { initialTheme: Theme, children: ReactNode }) {
     return (
-        <ThemeProvider>
+        <ThemeProvider initialTheme={initialTheme}>
             <TimeProvider>
                 <ScheduleProvider>
                     <MessageProvider>
