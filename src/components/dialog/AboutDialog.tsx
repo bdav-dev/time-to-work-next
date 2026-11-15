@@ -1,13 +1,12 @@
 import Dialog from "@/components/primitives/Dialog";
 import Hyperlink from "@/components/misc/link/Hyperlink";
-import Image from "next/image";
-import appIconDark from '@/../public/app-icons/ttw-app-icon-dark.png';
-import appIconLight from '@/../public/app-icons/ttw-app-icon-light.png';
 import { useTheme } from "@/hooks/UseTheme";
 import SocialLink from "@/components/misc/link/SocialLink";
 import IconSection from "@/components/layout/section/IconSection";
 import MaterialSymbol, { MaterialSymbols } from "@/icons/material/MaterialSymbol";
 import GitHubInvertocat from "@/icons/logo/GitHubInvertocat";
+import DarkAppIcon from "@/icons/appIcon/DarkAppIcon";
+import LightAppIcon from "@/icons/appIcon/LightAppIcon";
 
 
 type AboutDialogProps = {
@@ -29,17 +28,11 @@ export default function AboutDialog(props: AboutDialogProps) {
             <div className={'flex flex-col items-center justify-center gap-7 flex-1'}>
 
                 <div className={'flex flex-col items-center gap-1.5 mt-4'}>
-                    <Image
-                        src={darkTheme ? appIconDark : appIconLight}
-                        placeholder={"blur"}
-                        alt={""}
-                        className={'size-32 rounded-4xl border-neumorphic-300 dark:border-neumorphic-700'}
-                        style={{
-                            filter: darkTheme
-                                ? 'drop-shadow(0 -3px 9px rgb(0 0 0 / 0.3))'
-                                : 'drop-shadow(0 3px 6px rgb(0 0 0 / 0.175))'
-                        }}
-                    />
+                    {
+                        darkTheme
+                            ? <DarkAppIcon className={'size-32 drop-shadow-xl'}/>
+                            : <LightAppIcon className={'size-32 drop-shadow-lg'}/>
+                    }
                     <div className={'font-bold text-4xl'}>time-to-work</div>
                     <div className={'text-xl'}>Arbeitszeitdashboard</div>
                     Version 0.0.1-SNAPSHOT
