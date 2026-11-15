@@ -2,7 +2,6 @@
 
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { createSerialization, Serialization } from "@/serialization/Serialization";
-import LocalStorage from "@/storage/LocalStorage";
 
 
 /**
@@ -10,16 +9,39 @@ import LocalStorage from "@/storage/LocalStorage";
  * Storing undefined or null values (in local storage) is not supported by this hook.
  */
 export default function useStateWithLocalStorage<T>(key: string, fallback: T, serialization: Serialization<T> = createSerialization()): [T, Dispatch<SetStateAction<T>>] {
-    const [value, setValue] = useState<T>(fallback);
+    const [firstLoadDone, setFirstLoadDone] = useState(false);
+    const [storedValue, setStoredValue] = useState(fallback);
+
+    function fromLocalStorage() {
+        if (window == undefined) {
+            return fallback;
+        }
+
+        try {
+            const item = window.localStorage.getItem(key);
+            return item ? serialization.decode(item) : fallback;
+        } catch (error) {
+            return fallback;
+        }
+    }
 
     useEffect(() => {
-        const raw = LocalStorage.get(key);
-        setValue(raw == null ? fallback : serialization.decode(raw));
+        setStoredValue(fromLocalStorage());
+        setFirstLoadDone(true);
     }, []);
 
     useEffect(() => {
-        LocalStorage.set(key, serialization.encode(value));
-    }, [value]);
+        if (!firstLoadDone) {
+            return;
+        }
 
-    return [value, setValue];
+        try {
+            if (window != undefined) {
+                window.localStorage.setItem(key, serialization.encode(storedValue));
+            }
+        } catch (error) {
+        }
+    }, [storedValue]);
+
+    return [storedValue, setStoredValue];
 }
