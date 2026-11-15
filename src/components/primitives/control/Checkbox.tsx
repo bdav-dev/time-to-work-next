@@ -29,7 +29,7 @@ export default function Checkbox(props: CheckboxProps) {
                 className={`rounded-lg size-8 dark:border-zinc-600 border-zinc-400 border-2 text-center content-center text-xl select-none flex items-center justify-center ${props.checkboxClassName}`}
                 onClick={() => props.setValue(!props.value)}
             >
-                {props.value ? <MaterialSymbol symbol={MaterialSymbols.CHECK}/> : ''}
+                {props.value ? <MaterialSymbol symbol={MaterialSymbols.CHECK} className={'text-[0.8em]'}/> : ''}
             </NeumorphicButton>
             {props.label}
         </div>
