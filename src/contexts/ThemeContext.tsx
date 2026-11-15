@@ -1,41 +1,37 @@
 'use client';
 
-import { createContext, Dispatch, SetStateAction, useEffect } from "react";
-import useStateWithLocalStorage from "@/hooks/UseStateWithLocalStorage";
-import { ContextProviderProps } from "@/contexts/ContextTypes";
+import { createContext, ReactNode, useEffect, useLayoutEffect, useState, useTransition } from "react";
+import { Theme } from "@/library/theme";
+import { persistTheme } from "@/app/actions/theme";
 
 
 type ThemeContextType = {
-    darkTheme: boolean,
-    setDarkTheme: Dispatch<SetStateAction<boolean>>
+    theme: Theme,
+    toggleTheme: () => void
 }
 
-export const ThemeContext = createContext<ThemeContextType>({
-    darkTheme: true,
-    setDarkTheme: () => { }
-});
+export const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
-export default function ThemeProvider({ children }: ContextProviderProps) {
-    const [darkTheme, setDarkTheme] = useStateWithLocalStorage("ttw-n.useDarkTheme", true);
+export default function ThemeContextProvider(props: { initialTheme: Theme, children?: ReactNode }) {
+    const [theme, setTheme] = useState<Theme>(props.initialTheme);
+    const [, startTransition] = useTransition();
 
-    useEffect(() => {
-        document.documentElement.style.setProperty(
-            '--neumorphic-background-color', (darkTheme ? "var(--gray-neumorphic-background-color)" : "var(--white-neumorphic-background-color)")
-        );
-        document.documentElement.style.setProperty(
-            '--neumorphic-light-shadow-color', (darkTheme ? "var(--gray-neumorphic-light-shadow-color)" : "var(--white-neumorphic-light-shadow-color)")
-        );
-        document.documentElement.style.setProperty(
-            '--neumorphic-dark-shadow-color', (darkTheme ? "var(--gray-neumorphic-dark-shadow-color)" : "var(--white-neumorphic-dark-shadow-color)")
-        );
-        document.documentElement.style.setProperty(
-            '--neumorphic-scrollbar-color', (darkTheme ? "var(--gray-neumorphic-scrollbar-color)" : "var(--white-neumorphic-scrollbar-color)")
-        );
-    }, [darkTheme]);
+    useIsomorphicLayoutEffect(
+        () => { document.documentElement.classList.toggle("dark", theme === 'dark') },
+        [theme]
+    );
+
+    function toggleTheme() {
+        const nextTheme: Theme = theme === 'dark' ? 'light' : 'dark';
+        setTheme(nextTheme);
+        startTransition(() => { persistTheme(nextTheme) });
+    }
 
     return (
-        <ThemeContext.Provider value={{ darkTheme, setDarkTheme }}>
-            {children}
-        </ThemeContext.Provider>
+        <ThemeContext value={{ theme, toggleTheme }}>
+            {props.children}
+        </ThemeContext>
     );
 }
+
+const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;

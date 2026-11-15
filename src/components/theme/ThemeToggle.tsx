@@ -10,19 +10,17 @@ type ThemeToggleProps = {
 }
 
 export default function ThemeToggle(props: ThemeToggleProps) {
-    const { darkTheme, setDarkTheme } = useTheme();
-
-    const icon =  darkTheme ? MaterialSymbols.DARK_MODE : MaterialSymbols.LIGHT_MODE;
+    const { theme, toggleTheme } = useTheme();
 
     return (
         <Button
             overrideMargin={props.overrideMargin}
             circular
-            onClick={() => setDarkTheme(isDark => !isDark)}
+            onClick={() => toggleTheme()}
             className={`${props.className} size-12`}
         >
             <MaterialSymbol
-                symbol={icon}
+                symbol={{ dark: MaterialSymbols.DARK_MODE, light: MaterialSymbols.LIGHT_MODE }[theme]}
                 weight={300}
                 className={'text-[1.15em]'}
             />

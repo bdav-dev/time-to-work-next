@@ -15,7 +15,7 @@ type AboutDialogProps = {
 }
 
 export default function AboutDialog(props: AboutDialogProps) {
-    const { darkTheme } = useTheme();
+    const { theme } = useTheme();
 
     return (
         <Dialog
@@ -29,9 +29,10 @@ export default function AboutDialog(props: AboutDialogProps) {
 
                 <div className={'flex flex-col items-center gap-1.5 mt-4'}>
                     {
-                        darkTheme
-                            ? <DarkAppIcon className={'size-32 drop-shadow-xl'}/>
-                            : <LightAppIcon className={'size-32 drop-shadow-lg'}/>
+                        {
+                            light: <LightAppIcon className={'size-32 drop-shadow-xl'}/>,
+                            dark: <DarkAppIcon className={'size-32 drop-shadow-xl'}/>
+                        }[theme]
                     }
                     <div className={'font-bold text-4xl'}>time-to-work</div>
                     <div className={'text-xl'}>Arbeitszeitdashboard</div>

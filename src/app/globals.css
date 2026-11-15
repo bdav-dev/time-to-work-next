@@ -26,8 +26,15 @@
     --color-gray-neumorphic-accent-shadow: rgb(35, 35, 35);
 }
 
-html {
-    background-color: var(--neumorphic-background-color);
+@layer base {
+    :root {
+        color-scheme: light;
+        background-color: var(--neumorphic-background-color);
+    }
+
+    :root.dark {
+        color-scheme: dark;
+    }
 }
 
 body {

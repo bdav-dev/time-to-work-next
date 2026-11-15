@@ -18,7 +18,7 @@ type HeaderProps = {
 
 export default function Header(props: HeaderProps) {
     const now = useContext(TimeContext);
-    const { darkTheme, setDarkTheme } = useTheme();
+    const { theme, toggleTheme } = useTheme();
 
     return (
         <Elevation
@@ -58,17 +58,17 @@ export default function Header(props: HeaderProps) {
                     [
                         {
                             label: <IconText
-                                icon={<MaterialSymbol symbol={darkTheme ? MaterialSymbols.DARK_MODE : MaterialSymbols.LIGHT_MODE}/>}
+                                icon={<MaterialSymbol symbol={{ dark: MaterialSymbols.DARK_MODE, light: MaterialSymbols.LIGHT_MODE }[theme]}/>}
                                 text={'Farbschema'}
                                 className={"w-full justify-center"}
                             />,
-                            action: () => setDarkTheme(isDark => !isDark),
+                            action: () => toggleTheme(),
                             closeMenuAfterAction: false
                         }
                     ]
                 ]}
             >
-                <MaterialSymbol className={'text-[1.2em]'}  symbol={MaterialSymbols.MENU} weight={300}/>
+                <MaterialSymbol className={'text-[1.2em]'} symbol={MaterialSymbols.MENU} weight={300}/>
             </Menu>
 
             <VerticalRuler className={'h-8'}/>
