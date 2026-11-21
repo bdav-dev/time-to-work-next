@@ -5,6 +5,7 @@ import { TimelineMarker } from "@/components/timeline/module/TimelineTypes";
 import ScheduleCalculations from "@/schedule/ScheduleCalculations";
 import { TimelineMarkerColors } from "@/components/timeline/TimelineColors";
 import useSchedule from "@/hooks/UseSchedule";
+import { compare } from "@/util/CompareUtils";
 
 
 export default function useOptimalBreakEndTimeMarker(): TimelineMarker | undefined {
@@ -21,11 +22,12 @@ export default function useOptimalBreakEndTimeMarker(): TimelineMarker | undefin
         }
 
         const sumOfBreakTime = ScheduleCalculations.getSumOfBreakTime(schedule, now);
-        const remainingBreakTime = minBreakDuration.subtract(sumOfBreakTime);
-        if (remainingBreakTime.isNegative() && ScheduleCalculations.getAmountOfBreakTimeBlocks(schedule) > 1) {
+        const sumOfClosedBreakTime = ScheduleCalculations.getSumOfClosedBreakTime(schedule);
+        if (compare(sumOfClosedBreakTime, 'greaterOrEqualThan', minBreakDuration)) {
             return undefined;
         }
 
+        const remainingBreakTime = minBreakDuration.subtract(sumOfBreakTime);
         const optimalBreakEndTime = now.asTimeSpan().add(remainingBreakTime).asTime(true);
 
         return {
