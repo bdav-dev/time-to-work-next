@@ -2,6 +2,7 @@ import TimeSpan from "@/time/TimeSpan";
 import { Schedule, ScheduleBlock, scheduleBlockEquals } from "@/schedule/Schedule";
 import Time from "@/time/Time";
 import { compare } from "@/util/CompareUtils";
+import { MinBreak } from "@/hooks/configuration/instances/UseWorkingTimeConfiguration";
 
 
 export default class ScheduleCalculations {
@@ -23,6 +24,10 @@ export default class ScheduleCalculations {
         return schedule.find(block => block.endTime == undefined && block.timeType.identifier === 'workTime');
     }
 
+    static getOpenBreakTimeStamp(schedule: Schedule) {
+        return schedule.find(block => block.endTime == undefined && block.timeType.identifier === 'breakTime');
+    }
+
     static getSumOfWorkTime(schedule: Schedule, now: Time) {
         return schedule
             .filter(block => block.timeType.identifier === 'workTime')
@@ -37,6 +42,13 @@ export default class ScheduleCalculations {
             .filter(block => block.timeType.identifier === 'breakTime')
             .filter(block => block.endTime != undefined)
             .map(block => TimeSpan.ofTimeDifference(block.startTime, block.endTime!))
+            .some(blockDuration => compare(blockDuration, 'greaterOrEqualThan', timeSpan));
+    }
+
+    static hasBreakTimeBlockGreaterThanOrEqualToTimeSpan(schedule: Schedule, timeSpan: TimeSpan, now: Time) {
+        return schedule
+            .filter(block => block.timeType.identifier === 'breakTime')
+            .map(block => TimeSpan.ofTimeDifference(block.startTime, block.endTime ?? now))
             .some(blockDuration => compare(blockDuration, 'greaterOrEqualThan', timeSpan));
     }
 
@@ -63,17 +75,30 @@ export default class ScheduleCalculations {
         return dailyWorkingTime.subtract(this.getSumOfWorkTime(schedule, now));
     }
 
-    static getEndOfWork(schedule: Schedule, now: Time, dailyWorkingTime: TimeSpan, minBreak?: TimeSpan): Time | undefined {
+    static getEndOfWork(schedule: Schedule, now: Time, dailyWorkingTime: TimeSpan, minBreak: MinBreak): Time | undefined {
         const remainingTimeToWork = this.getRemainingTimeToWork(schedule, now, dailyWorkingTime);
 
         const calculateMinBreakOverhead = () => {
-            if (!minBreak) {
+            if (!minBreak.duration) {
                 return;
             }
 
-            const breakTime = this.getSumOfBreakTime(schedule, now);
-            if (compare(breakTime, "lessThan", minBreak)) {
-                return minBreak.subtract(breakTime);
+            if (minBreak.mode === 'straight') {
+                const minBreakAlreadyTaken = this.hasBreakTimeBlockGreaterThanOrEqualToTimeSpan(schedule, minBreak.duration, now);
+                if (minBreakAlreadyTaken) {
+                    return;
+                }
+                const openBreakTimeStamp = this.getOpenBreakTimeStamp(schedule);
+                if (!openBreakTimeStamp) {
+                    return minBreak.duration;
+                }
+                return minBreak.duration.subtract(TimeSpan.ofTimeDifference(openBreakTimeStamp.startTime, now));
+
+            } else if (minBreak.mode === 'total') {
+                const breakTime = this.getSumOfBreakTime(schedule, now);
+                if (compare(breakTime, "lessThan", minBreak.duration)) {
+                    return minBreak.duration.subtract(breakTime);
+                }
             }
         }
 

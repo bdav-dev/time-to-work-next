@@ -8,7 +8,7 @@ import useSchedule from "@/hooks/UseSchedule";
 import { compare } from "@/util/CompareUtils";
 import useConfigurationBundle from "@/hooks/configuration/UseConfigurationBundle";
 import TimeSpan from "@/time/TimeSpan";
-import { MinBreakMode } from "@/hooks/configuration/instances/UseWorkingTimeConfiguration";
+import { MinBreak } from "@/hooks/configuration/instances/UseWorkingTimeConfiguration";
 import { Schedule, ScheduleBlock } from "@/schedule/Schedule";
 import Time from "@/time/Time";
 
@@ -22,11 +22,11 @@ export default function useOptimalBreakEndTimeMarker(): TimelineMarker | undefin
 
     return useMemo(() => {
         const openTimeStamp = ScheduleCalculations.getOpenTimestamp(schedule);
-        if (!showOptimalBreakTime || !minBreak.duration || !openTimeStamp || openTimeStamp.timeType.identifier != "breakTime") {
+        if (!showOptimalBreakTime || !openTimeStamp || openTimeStamp.timeType.identifier != "breakTime") {
             return;
         }
 
-        const remainingBreakTime = calculateRemainingBreakTime(schedule, openTimeStamp, { mode: minBreak.mode, duration: minBreak.duration }, now);
+        const remainingBreakTime = calculateRemainingBreakTime(schedule, openTimeStamp, minBreak, now);
         if (!remainingBreakTime) {
             return;
         }
@@ -46,7 +46,11 @@ export default function useOptimalBreakEndTimeMarker(): TimelineMarker | undefin
     }, [schedule, minBreak.duration, minBreak.mode, showOptimalBreakTime]);
 }
 
-function calculateRemainingBreakTime(schedule: Schedule, openBreakTimeStamp: ScheduleBlock, minBreak: { duration: TimeSpan, mode: MinBreakMode }, now: Time) {
+function calculateRemainingBreakTime(schedule: Schedule, openBreakTimeStamp: ScheduleBlock, minBreak: MinBreak, now: Time) {
+    if (!minBreak.duration) {
+        return;
+    }
+
     if (minBreak.mode === 'straight') {
         const minBreakTimeAlreadyTaken = ScheduleCalculations.hasClosedBreakTimeBlockGreaterThanOrEqualToTimeSpan(schedule, minBreak.duration);
         if (minBreakTimeAlreadyTaken) {

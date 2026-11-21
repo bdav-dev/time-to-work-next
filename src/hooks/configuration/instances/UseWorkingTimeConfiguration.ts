@@ -7,14 +7,15 @@ import { optional } from "@/util/OptionalUtils";
 
 
 export type MinBreakMode = 'total' | 'straight';
+export type MinBreak = {
+    duration: TimeSpan | undefined,
+    mode: MinBreakMode
+};
 
 export type WorkingTimeConfiguration = {
     dailyWorkingTime: TimeSpan | undefined,
     timeBalance: TimeSpan | undefined,
-    _minBreak: {
-        duration: TimeSpan | undefined,
-        mode: MinBreakMode
-    },
+    _minBreak: MinBreak,
     maxWorkTimeBlockDuration: TimeSpan | undefined,
     _impendingWorkTimeViolation: {
         notify: boolean,

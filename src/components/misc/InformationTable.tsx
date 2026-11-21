@@ -8,11 +8,11 @@ import { useVerifiedPublicTransitConfiguration } from "@/hooks/configuration/ins
 import useSchedule from "@/hooks/UseSchedule";
 import useTime from "@/hooks/UseTime";
 import TimeBalanceInformationBoard from "@/components/timeBalance/TimeBalanceInformationBoard";
-import useConfigurationValue from "@/hooks/configuration/UseConfigurationValue";
+import useConfigurationBundle from "@/hooks/configuration/UseConfigurationBundle";
 
 export default function InformationTable() {
     const workingTimeConfig = useConfiguration(config => config.workingTime);
-    const minBreakDuration = useConfigurationValue(config => config.workingTime._minBreak.duration);
+    const minBreak = useConfigurationBundle(config => config.workingTime._minBreak);
     const publicTransitConfig = useVerifiedPublicTransitConfiguration();
     const { schedule } = useSchedule();
     const now = useTime();
@@ -44,7 +44,7 @@ export default function InformationTable() {
                                     schedule,
                                     now,
                                     workingTimeConfig.dailyWorkingTime,
-                                    minBreakDuration
+                                    minBreak
                                 )
                             }
                         />
