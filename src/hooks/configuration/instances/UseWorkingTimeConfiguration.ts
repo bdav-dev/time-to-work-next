@@ -6,12 +6,14 @@ import TimeSpan from "@/time/TimeSpan";
 import { optional } from "@/util/OptionalUtils";
 
 
+export type MinBreakMode = 'total' | 'straight';
+
 export type WorkingTimeConfiguration = {
     dailyWorkingTime: TimeSpan | undefined,
     timeBalance: TimeSpan | undefined,
     _minBreak: {
         duration: TimeSpan | undefined,
-        mode: 'total' | 'straight'
+        mode: MinBreakMode
     },
     maxWorkTimeBlockDuration: TimeSpan | undefined,
     _impendingWorkTimeViolation: {
