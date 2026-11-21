@@ -11,17 +11,17 @@ export default function useOptimalBreakEndTimeMarker(): TimelineMarker | undefin
     const { schedule } = useSchedule();
     const now = useTime();
 
-    const minBreak = useConfigurationValue(config => config.workingTime.minBreak);
+    const minBreakDuration = useConfigurationValue(config => config.workingTime._minBreak.duration);
     const showOptimalBreakTime = useConfigurationValue(config => config.workingTime.showOptimalBreakTime);
 
     return useMemo(() => {
         const openTimeStamp = ScheduleCalculations.getOpenTimestamp(schedule);
-        if (!showOptimalBreakTime || !minBreak || !openTimeStamp || openTimeStamp.timeType.identifier != "breakTime") {
+        if (!showOptimalBreakTime || !minBreakDuration || !openTimeStamp || openTimeStamp.timeType.identifier != "breakTime") {
             return undefined;
         }
 
         const sumOfBreakTime = ScheduleCalculations.getSumOfBreakTime(schedule, now);
-        const remainingBreakTime = minBreak.subtract(sumOfBreakTime);
+        const remainingBreakTime = minBreakDuration.subtract(sumOfBreakTime);
         if (remainingBreakTime.isNegative() && ScheduleCalculations.getAmountOfBreakTimeBlocks(schedule) > 1) {
             return undefined;
         }
@@ -38,5 +38,5 @@ export default function useOptimalBreakEndTimeMarker(): TimelineMarker | undefin
             height: 1.11
         };
 
-    }, [schedule, minBreak, showOptimalBreakTime]);
+    }, [schedule, minBreakDuration, showOptimalBreakTime]);
 }

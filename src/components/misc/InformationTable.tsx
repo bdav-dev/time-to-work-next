@@ -12,7 +12,7 @@ import useConfigurationValue from "@/hooks/configuration/UseConfigurationValue";
 
 export default function InformationTable() {
     const workingTimeConfig = useConfiguration(config => config.workingTime);
-    const minBreak = useConfigurationValue(config => config.workingTime.minBreak);
+    const minBreakDuration = useConfigurationValue(config => config.workingTime._minBreak.duration);
     const publicTransitConfig = useVerifiedPublicTransitConfiguration();
     const { schedule } = useSchedule();
     const now = useTime();
@@ -44,7 +44,7 @@ export default function InformationTable() {
                                     schedule,
                                     now,
                                     workingTimeConfig.dailyWorkingTime,
-                                    minBreak
+                                    minBreakDuration
                                 )
                             }
                         />

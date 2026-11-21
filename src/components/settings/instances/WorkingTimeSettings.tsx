@@ -12,7 +12,7 @@ import useInputGuard from "@/hooks/UseInputGuard";
 export default function WorkingTimeSettings() {
     const [dailyWorkingTime, setDailyWorkingTime] = useMutatingConfigurationValue(config => config.workingTime.dailyWorkingTime);
     const [timeBalance, setTimeBalance] = useMutatingConfigurationValue(config => config.workingTime.timeBalance);
-    const [minBreak, setMinBreak] = useMutatingConfigurationValue(config => config.workingTime.minBreak);
+    const [minBreakDuration, setMinBreakDuration] = useMutatingConfigurationValue(config => config.workingTime._minBreak.duration);
     const [showOptimalBreakTime, setShowOptimalBreakTime] = useMutatingConfigurationValue(config => config.workingTime.showOptimalBreakTime);
     const [maxWorkTimeBlockViolationNotificationThreshold, setMaxWorkTimeBlockViolationNotificationThreshold] = useMutatingConfigurationValue(config => config.workingTime._impendingWorkTimeViolation.threshold);
     const [notifyOnImpendingMaxWorkTimeBlockViolation, setNotifyOnImpendingMaxWorkTimeBlockViolation] = useMutatingConfigurationValue(config => config.workingTime._impendingWorkTimeViolation.notify);
@@ -69,14 +69,14 @@ export default function WorkingTimeSettings() {
                             {
                                 label: "Mindestpause",
                                 setting: <TimeSpanPicker
-                                    value={minBreak}
-                                    onValueChange={setMinBreak}
+                                    value={minBreakDuration}
+                                    onValueChange={setMinBreakDuration}
                                 />
                             },
                             {
                                 label: "Zeige Ende von optimaler Pause auf Timeline",
-                                setting: disabled => <Toggle disabled={disabled} value={!minBreak ? false : showOptimalBreakTime} onValueChange={setShowOptimalBreakTime}/>,
-                                disabled: !minBreak
+                                setting: disabled => <Toggle disabled={disabled} value={!minBreakDuration ? false : showOptimalBreakTime} onValueChange={setShowOptimalBreakTime}/>,
+                                disabled: !minBreakDuration
                             }
                         ]
                     },
