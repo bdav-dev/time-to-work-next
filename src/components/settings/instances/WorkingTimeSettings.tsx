@@ -7,12 +7,14 @@ import Toggle from "@/components/primitives/control/Toggle";
 import useBrowserNotifications from "@/hooks/UseBrowserNotifications";
 import Checkbox from "@/components/primitives/control/Checkbox";
 import useInputGuard from "@/hooks/UseInputGuard";
+import MinBreakModeSelect from "@/components/select/MinBreakModeSelect";
 
 
 export default function WorkingTimeSettings() {
     const [dailyWorkingTime, setDailyWorkingTime] = useMutatingConfigurationValue(config => config.workingTime.dailyWorkingTime);
     const [timeBalance, setTimeBalance] = useMutatingConfigurationValue(config => config.workingTime.timeBalance);
     const [minBreakDuration, setMinBreakDuration] = useMutatingConfigurationValue(config => config.workingTime._minBreak.duration);
+    const [minBreakMode, setMinBreakMode] = useMutatingConfigurationValue(config => config.workingTime._minBreak.mode);
     const [showOptimalBreakTime, setShowOptimalBreakTime] = useMutatingConfigurationValue(config => config.workingTime.showOptimalBreakTime);
     const [maxWorkTimeBlockViolationNotificationThreshold, setMaxWorkTimeBlockViolationNotificationThreshold] = useMutatingConfigurationValue(config => config.workingTime._impendingWorkTimeViolation.threshold);
     const [notifyOnImpendingMaxWorkTimeBlockViolation, setNotifyOnImpendingMaxWorkTimeBlockViolation] = useMutatingConfigurationValue(config => config.workingTime._impendingWorkTimeViolation.notify);
@@ -71,6 +73,13 @@ export default function WorkingTimeSettings() {
                                 setting: <TimeSpanPicker
                                     value={minBreakDuration}
                                     onValueChange={setMinBreakDuration}
+                                />
+                            },
+                            {
+                                label: "Zählweise",
+                                setting: <MinBreakModeSelect
+                                    value={minBreakMode}
+                                    onValueChange={setMinBreakMode}
                                 />
                             },
                             {
