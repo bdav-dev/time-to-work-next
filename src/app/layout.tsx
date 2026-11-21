@@ -9,7 +9,7 @@ import ScheduleProvider from "@/contexts/ScheduleContext";
 import MessageProvider from "@/contexts/MessageContext";
 import ConfigurationProvider from "@/contexts/ConfigurationContext";
 import Footer from "@/components/layout/page/Footer";
-import { CascadiaCode } from "@/font/CascadiaCode";
+import { cascadiaCode } from "@/styles/fonts";
 import ModifyScheduleContextProvider from "@/contexts/ModifyScheduleContext";
 import NotificationProvider from "@/contexts/NotificationContext";
 import BrowserNotificationProvider from "@/contexts/BrowserNotificationContext";
@@ -28,7 +28,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
     return (
         <html
             lang={"de"}
-            className={`${CascadiaCode.className} ${initialTheme === 'dark' ? 'dark' : ''}`}
+            className={`${cascadiaCode.className} ${initialTheme === 'dark' ? 'dark' : ''}`}
             suppressHydrationWarning
         >
         <head>

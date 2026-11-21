@@ -6,10 +6,16 @@ import TimeSpan from "@/time/TimeSpan";
 import { optional } from "@/util/OptionalUtils";
 
 
+export type MinBreakMode = 'total' | 'straight';
+export type MinBreak = {
+    duration: TimeSpan | undefined,
+    mode: MinBreakMode
+};
+
 export type WorkingTimeConfiguration = {
     dailyWorkingTime: TimeSpan | undefined,
     timeBalance: TimeSpan | undefined,
-    minBreak: TimeSpan | undefined,
+    _minBreak: MinBreak,
     maxWorkTimeBlockDuration: TimeSpan | undefined,
     _impendingWorkTimeViolation: {
         notify: boolean,
@@ -21,7 +27,10 @@ export type WorkingTimeConfiguration = {
 export const DefaultWorkingTimeConfiguration: WorkingTimeConfiguration = {
     dailyWorkingTime: undefined,
     timeBalance: undefined,
-    minBreak: undefined,
+    _minBreak: {
+        duration: undefined,
+        mode: 'total'
+    },
     maxWorkTimeBlockDuration: undefined,
     _impendingWorkTimeViolation: {
         notify: true,
@@ -43,7 +52,10 @@ const WorkingTimeConfigurationSerialization: Serialization<WorkingTimeConfigurat
     encode: source => ({
         dailyWorkingTime: source.dailyWorkingTime?.toString(),
         timeBalance: source.timeBalance?.toString(),
-        minBreak: source.minBreak?.toString(),
+        minBreak: {
+            duration: source._minBreak.duration?.toString(),
+            mode: source._minBreak.mode
+        },
         maxWorkTimeBlockDuration: source.maxWorkTimeBlockDuration?.toString(),
         showOptimalBreakTime: source.showOptimalBreakTime,
         impendingWorkTimeViolation: {
@@ -54,7 +66,10 @@ const WorkingTimeConfigurationSerialization: Serialization<WorkingTimeConfigurat
     decode: target => ({
         dailyWorkingTime: optional(target.dailyWorkingTime).map(TimeSpan.ofString).orUndefined(),
         timeBalance: optional(target.timeBalance).map(TimeSpan.ofString).orUndefined(),
-        minBreak: optional(target.minBreak).map(TimeSpan.ofString).orUndefined(),
+        _minBreak: {
+            duration: optional(target.minBreak.duration).map(TimeSpan.ofString).orUndefined(),
+            mode: target.minBreak.mode
+        },
         maxWorkTimeBlockDuration: optional(target.maxWorkTimeBlockDuration).map(TimeSpan.ofString).orUndefined(),
         showOptimalBreakTime: target.showOptimalBreakTime,
         _impendingWorkTimeViolation: {
