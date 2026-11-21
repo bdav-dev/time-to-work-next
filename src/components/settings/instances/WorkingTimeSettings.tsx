@@ -77,10 +77,12 @@ export default function WorkingTimeSettings() {
                             },
                             {
                                 label: "Zählweise",
-                                setting: <MinBreakModeSelect
+                                setting: disabled => <MinBreakModeSelect
                                     value={minBreakMode}
                                     onValueChange={setMinBreakMode}
-                                />
+                                    disabled={disabled}
+                                />,
+                                disabled: !minBreakDuration
                             },
                             {
                                 label: "Zeige Ende von optimaler Pause auf Timeline",
