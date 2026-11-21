@@ -32,6 +32,14 @@ export default class ScheduleCalculations {
             );
     }
 
+    static hasClosedBreakTimeBlockGreaterThanOrEqualToTimeSpan(schedule: Schedule, timeSpan: TimeSpan) {
+        return schedule
+            .filter(block => block.timeType.identifier === 'breakTime')
+            .filter(block => block.endTime != undefined)
+            .map(block => TimeSpan.ofTimeDifference(block.startTime, block.endTime!))
+            .some(blockDuration => compare(blockDuration, 'greaterOrEqualThan', timeSpan));
+    }
+
     static getSumOfBreakTime(schedule: Schedule, now: Time) {
         return schedule
             .filter(block => block.timeType.identifier === 'breakTime')
