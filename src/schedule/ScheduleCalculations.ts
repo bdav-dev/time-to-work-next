@@ -41,6 +41,16 @@ export default class ScheduleCalculations {
             );
     }
 
+    static getSumOfClosedBreakTime(schedule: Schedule) {
+        return schedule
+            .filter(block => block.timeType.identifier === 'breakTime')
+            .filter(block => block.endTime != undefined)
+            .reduce(
+                (sumOfBreakTime, block) => sumOfBreakTime.add(TimeSpan.ofTimeDifference(block.startTime, block.endTime!)),
+                TimeSpan.zero()
+            );
+    }
+
     static getRemainingTimeToWork(schedule: Schedule, now: Time, dailyWorkingTime: TimeSpan) {
         return dailyWorkingTime.subtract(this.getSumOfWorkTime(schedule, now));
     }
